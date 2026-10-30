@@ -152,10 +152,59 @@ export default function UmkmPage() {
           </div>
         </section>
 
-        {/* Catalog Grid */}
+        {/* Catalog Grid / Empty State */}
         <section className="py-12">
           <div className="max-w-[1120px] w-[calc(100%-40px)] mx-auto">
-            {filteredUmkm.length === 0 ? (
+            {siteConfig.umkmList.length === 0 ? (
+              <div className="max-w-2xl mx-auto py-12 px-6 sm:px-10 rounded-2xl border border-rosewood/30 bg-white/80 shadow-sm text-center">
+                <div className="w-16 h-16 rounded-full bg-rosewood/10 text-rosewood flex items-center justify-center mx-auto mb-4">
+                  <Store className="w-8 h-8" />
+                </div>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rosewood/10 text-rosewood border border-rosewood/20 mb-3">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Pendaftaran Perdana Dibuka
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-serif font-normal text-ink leading-tight mb-3">
+                  Etalase Lapak UMKM Sedang Dibuka
+                </h2>
+                <p className="text-muted text-[0.98rem] leading-relaxed max-w-lg mx-auto mb-6">
+                  Belum ada produk atau usaha yang terdaftar di etalase ini. Mari menjadi yang pertama mempromosikan produk dan usahamu kepada para ibu di Cipanas!
+                </p>
+
+                {/* Price pill */}
+                <div className="p-4 rounded-xl bg-warm-sand/35 border border-line mb-6 max-w-md mx-auto flex items-center justify-between gap-3 text-left">
+                  <div>
+                    <span className="text-[0.72rem] font-bold uppercase tracking-wider text-muted">
+                      Biaya Iklan Komunitas:
+                    </span>
+                    <div className="text-xl font-serif font-bold text-rosewood">
+                      Rp 55.000 / Tahun
+                    </div>
+                  </div>
+                  <span className="text-xs text-muted max-w-[180px]">
+                    Masa tayang 1 tahun penuh di website resmi Umma.
+                  </span>
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setIsAdvertiseOpen(true)}
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-[4px] bg-rosewood text-[#fffaf2] text-sm font-bold shadow-md hover:bg-[#9f5d54] transition-all cursor-pointer"
+                  >
+                    <Store className="w-4 h-4" />
+                    <span>Daftarkan Usahamu Sekarang</span>
+                    <ArrowUpRight className="w-4 h-4 opacity-80" />
+                  </button>
+                  <Link
+                    href="/#lapak"
+                    className="w-full sm:w-auto inline-flex items-center justify-center px-5 py-3 rounded-[4px] border border-line text-ink text-sm font-medium hover:bg-warm-sand/30 transition-colors"
+                  >
+                    Kembali ke Beranda
+                  </Link>
+                </div>
+              </div>
+            ) : filteredUmkm.length === 0 ? (
               <div className="py-16 text-center bg-white/60 rounded-2xl border border-line p-8 max-w-lg mx-auto">
                 <ShoppingBag className="w-12 h-12 text-muted/40 mx-auto mb-3" />
                 <h3 className="text-xl font-serif font-medium text-ink">
