@@ -46,43 +46,34 @@ export function ClassesSection() {
           </div>
 
           <div className="border-t border-line">
-            {siteConfig.classes.map((item, index) => {
-              const indentClass =
-                index === 1
-                  ? "md:pl-16 lg:pl-24"
-                  : index === 2
-                  ? "md:pl-8 lg:pl-12"
-                  : "";
-
-              return (
-                <button
-                  key={item.number}
-                  type="button"
-                  onClick={() => handleOpenDetail(item)}
-                  className={`w-full text-left group grid grid-cols-[36px_1fr] sm:grid-cols-[48px_1fr] md:grid-cols-[70px_minmax(0,0.85fr)_minmax(0,1.15fr)_40px] items-start gap-3 sm:gap-5 md:gap-7 py-7 border-b border-line transition-all duration-200 hover:bg-warm-sand/25 hover:pl-2 cursor-pointer ${indentClass}`}
-                >
-                  <span className="text-rosewood font-serif text-[1.2rem] font-semibold group-hover:scale-110 transition-transform">
-                    {item.number}
+            {siteConfig.classes.map((item) => (
+              <button
+                key={item.number}
+                type="button"
+                onClick={() => handleOpenDetail(item)}
+                className="w-full text-left group grid grid-cols-[36px_1fr] sm:grid-cols-[48px_1fr] md:grid-cols-[70px_minmax(0,0.85fr)_minmax(0,1.15fr)_40px] items-start gap-3 sm:gap-5 md:gap-7 py-7 border-b border-line transition-all duration-200 hover:bg-warm-sand/25 hover:pl-2 cursor-pointer"
+              >
+                <span className="text-rosewood font-serif text-[1.2rem] font-semibold group-hover:scale-110 transition-transform">
+                  {item.number}
+                </span>
+                <div>
+                  <h3 className="text-ink font-serif text-[clamp(1.25rem,2.5vw,1.65rem)] font-medium leading-tight group-hover:text-rosewood transition-colors">
+                    {item.title}
+                  </h3>
+                  <span className="inline-block md:hidden text-xs text-rosewood font-semibold mt-1">
+                    Klik untuk info rincian →
                   </span>
-                  <div>
-                    <h3 className="text-ink font-serif text-[clamp(1.25rem,2.5vw,1.65rem)] font-medium leading-tight group-hover:text-rosewood transition-colors">
-                      {item.title}
-                    </h3>
-                    <span className="inline-block md:hidden text-xs text-rosewood font-semibold mt-1">
-                      Klik untuk info rincian →
-                    </span>
-                  </div>
-                  <p className="col-start-2 md:col-start-3 text-muted text-[1.02rem] leading-relaxed">
-                    {item.description}
-                  </p>
-                  <div className="hidden md:flex justify-end pt-1">
-                    <span className="w-7 h-7 rounded-full bg-paper flex items-center justify-center text-muted group-hover:text-rosewood group-hover:bg-warm-sand/50 group-hover:translate-x-0.5 transition-all">
-                      <ArrowUpRight className="w-4 h-4" />
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
+                </div>
+                <p className="col-start-2 md:col-start-3 text-muted text-[1.02rem] leading-relaxed">
+                  {item.description}
+                </p>
+                <div className="hidden md:flex justify-end pt-1">
+                  <span className="w-7 h-7 rounded-full bg-paper flex items-center justify-center text-muted group-hover:text-rosewood group-hover:bg-warm-sand/50 group-hover:translate-x-0.5 transition-all">
+                    <ArrowUpRight className="w-4 h-4" />
+                  </span>
+                </div>
+              </button>
+            ))}
           </div>
         </div>
       </section>
