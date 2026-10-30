@@ -63,7 +63,7 @@ export const siteConfig = {
     whatsappGroup:
       "https://chat.whatsapp.com/FTkoEa3rXxnHK9gy7wLPYK?s=cl&p=a&iam=2",
     whatsappShierly: "https://wa.me/6287883370039",
-    instagram: "https://instagram.com/ummamotherhood",
+    instagram: "https://www.instagram.com/lindashirlyv/",
     volunteerWa:
       "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20tertarik%20untuk%20mendaftar%20sebagai%20Relawan%20di%20Umma%20Motherhood%20Cipanas.",
     donationWa:
@@ -74,6 +74,8 @@ export const siteConfig = {
       "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20ingin%20mendaftarkan%20usaha%20saya%20ke%20Lapak%20UMKM%20Umma%20Motherhood.",
     advertiseWa:
       "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20tertarik%20untuk%20mendaftarkan%20iklan%20bisnis/lembaga%20saya%20di%20Papan%20Rekomendasi%20Umma%20Motherhood%20Cipanas.",
+    helpAdvertiseWa:
+      "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20ingin%20mendaftarkan%20jasa%20harian%20saya%20di%20Direktori%20Bantuan%20Umma%20Motherhood%20Cipanas.",
     whatsappOjek:
       "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20ingin%20info%20kontak%20Ojek%20Perempuan%20di%20Cipanas.",
     whatsappCleaning:
@@ -318,6 +320,58 @@ export const siteConfig = {
       },
     ],
     ctaButtonText: "Klik di Sini untuk Mendaftar via WA Umma Shierly",
+  },
+
+  helpAdvertise: {
+    bannerTitle: "Iklankan Jasa Harianmu Gratis di Sini",
+    bannerSubtitle:
+      "Kami membuka ruang bagi warga Cipanas yang menyediakan jasa bantuan operasional harian di rumah untuk bergabung dalam direktori ini tanpa biaya pengiklanan.",
+    price: "Gratis (0 Rupiah)",
+    heroText:
+      "Kami membuka ruang bagi warga Cipanas yang menyediakan jasa bantuan operasional harian di rumah untuk bergabung dalam direktori ini tanpa biaya pengiklanan.",
+    requirements: [
+      {
+        title: "Bukti Testimoni",
+        desc: "Wajib melampirkan tangkapan layar (screenshot) yang berisi ulasan atau testimoni positif dari pelanggan asli yang sudah pernah menggunakan jasa Anda.",
+      },
+      {
+        title: "Relevansi Jasa",
+        desc: "Layanan yang ditawarkan harus berkaitan langsung dengan kebutuhan harian ibu dan rumah tangga, seperti jasa bersih-bersih, ojek perempuan, atau asisten rumah tangga.",
+      },
+      {
+        title: "Verifikasi Identitas",
+        desc: "Bersedia memberikan foto kartu identitas (KTP) dan kejelasan domisili area Cipanas untuk verifikasi keamanan demi melindungi kenyamanan seluruh anggota Umma Motherhood.",
+      },
+    ],
+    ctaButtonText: "Klik di Sini untuk Mendaftar via WA Umma Shierly",
+    waUrl:
+      "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20ingin%20mendaftarkan%20jasa%20harian%20saya%20di%20Direktori%20Bantuan%20Umma%20Motherhood%20Cipanas.",
+  },
+
+  umkmAdvertise: {
+    bannerTitle: "Iklankan UMKM-mu di Sini",
+    bannerSubtitle:
+      "Mari bertumbuh bersama dan jangkau lebih banyak pembeli di lingkungan komunitas kita sendiri!",
+    price: "Rp 55.000 / Tahun",
+    heroText:
+      "Mari bertumbuh bersama dan jangkau lebih banyak pembeli di lingkungan komunitas kita sendiri!",
+    requirements: [
+      {
+        title: "Domisili Lokal",
+        desc: "Pemilik usaha wajib berdomisili atau memiliki area operasional di wilayah Cipanas dan sekitarnya.",
+      },
+      {
+        title: "Kualitas & Relevansi",
+        desc: "Produk atau jasa yang ditawarkan dipastikan aman, berkualitas, dan relevan dengan kebutuhan sehari-hari keluarga, ibu, maupun anak.",
+      },
+      {
+        title: "Katalog & Informasi Jelas",
+        desc: "Wajib melampirkan foto produk yang jelas, deskripsi singkat, serta rentang harga untuk dimuat di dalam etalase website agar memudahkan calon pembeli.",
+      },
+    ],
+    ctaButtonText: "Daftarkan Usahamu via WA Umma Shierly",
+    waUrl:
+      "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20ingin%20mendaftarkan%20usaha%20UMKM%20saya%20ke%20Lapak%20Umma%20Motherhood%20Cipanas.",
   },
 
   helpContacts: [
