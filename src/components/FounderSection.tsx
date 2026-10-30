@@ -1,4 +1,5 @@
 import Image from "next/image";
+import logoBadge from "../../public/images/logo-badge.jpg";
 import { siteConfig } from "@/config/site";
 
 export function FounderSection() {
@@ -14,7 +15,7 @@ export function FounderSection() {
           <div className="relative overflow-hidden rounded-2xl border border-line bg-white/80 p-6 md:p-8 shadow-lg shadow-warm-sand/20 flex flex-col items-center justify-center text-center">
             <div className="relative w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-paper-deep/60 shadow-inner mb-4">
               <Image
-                src="/images/logo-badge.jpg"
+                src={logoBadge}
                 alt="Umma Motherhood Cipanas Badge"
                 fill
                 className="object-cover"

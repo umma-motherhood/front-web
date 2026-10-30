@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import logoMark from "../../public/images/logo-mark.png";
 import { siteConfig } from "@/config/site";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 
@@ -20,7 +21,7 @@ export function Navbar() {
         >
           <div className="relative w-9 h-9 flex-shrink-0 transition-transform duration-200 group-hover:scale-105">
             <Image
-              src="/images/logo-mark.png"
+              src={logoMark}
               alt="Umma Motherhood Cipanas Logo"
               width={36}
               height={36}

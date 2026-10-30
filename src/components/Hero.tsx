@@ -1,4 +1,5 @@
 import Image from "next/image";
+import logoImg from "../../public/images/logo.png";
 import { siteConfig } from "@/config/site";
 import { ArrowUpRight, ArrowDown, Heart } from "lucide-react";
 
@@ -82,10 +83,9 @@ export function Hero() {
               <div className="flex flex-col items-center text-center">
                 <div className="relative w-44 h-44 sm:w-48 sm:h-48 mb-4">
                   <Image
-                    src="/images/logo.png"
+                    src={logoImg}
                     alt="Logo Resmi Umma Motherhood Cipanas"
-                    fill
-                    className="object-contain"
+                    className="w-full h-full object-contain"
                     priority
                   />
                 </div>

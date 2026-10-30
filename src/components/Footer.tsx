@@ -1,4 +1,5 @@
 import Image from "next/image";
+import logoMark from "../../public/images/logo-mark.png";
 import { siteConfig } from "@/config/site";
 import { ArrowUpRight } from "lucide-react";
 
@@ -10,7 +11,7 @@ export function Footer() {
           <div className="flex items-center gap-3.5">
             <div className="relative w-11 h-11 rounded-full bg-white/95 p-1.5 flex items-center justify-center flex-shrink-0 shadow-sm">
               <Image
-                src="/images/logo-mark.png"
+                src={logoMark}
                 alt="Logo Umma"
                 width={32}
                 height={32}
