@@ -490,18 +490,5 @@ export const siteConfig = {
       waMessage:
         "Halo Umma Shierly, saya tertarik memesan produk kriya & aksesoris rajut buatan ibu anggota Umma.",
     },
-    {
-      id: "snack-sehat-balita",
-      name: "Dapur Camilan Sehat Umma",
-      category: "kuliner",
-      categoryLabel: "Kue & Camilan Anak",
-      owner: "Ibu Komunitas Umma",
-      priceRange: "Mulai Rp 20.000",
-      location: "Cipanas",
-      description:
-        "Camilan sehat tanpa bahan pengawet dan pemanis buatan untuk anak dan balita. Pilihan favorit: cookies oat gandum, finger food sayur MPASI, serta puding susu buah asli yang digemari si kecil.",
-      waMessage:
-        "Halo Umma Shierly, saya ingin memesan camilan sehat balita dari UMKM Umma Motherhood.",
-    },
   ] as UmkmItem[],
 };
