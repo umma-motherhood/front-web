@@ -1,0 +1,55 @@
+import { siteConfig } from "@/config/site";
+import { ArrowUpRight } from "lucide-react";
+
+export function Footer() {
+  return (
+    <footer className="bg-ink text-[#f6efe4] pt-12 pb-8">
+      <div className="max-w-[1120px] w-[calc(100%-40px)] mx-auto">
+        <div className="flex flex-col sm:flex-row justify-between items-start gap-8 pb-8 border-b border-[#f6efe4]/20">
+          <div>
+            <a
+              href="#beranda"
+              className="font-serif text-2xl font-medium tracking-tight text-[#f6efe4] hover:text-white transition-colors"
+            >
+              {siteConfig.name}
+            </a>
+            <p className="mt-2 text-[#d2c7b8] text-sm">
+              {siteConfig.domain}
+            </p>
+          </div>
+
+          <nav
+            className="flex flex-wrap items-center gap-6"
+            aria-label="Tautan komunitas"
+          >
+            <a
+              href={siteConfig.links.whatsappGroup}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-[#f6efe4] hover:text-white underline underline-offset-4 text-sm font-medium transition-colors"
+            >
+              <span>Grup WhatsApp</span>
+              <ArrowUpRight className="w-3.5 h-3.5 opacity-70" />
+            </a>
+            <a
+              href={siteConfig.links.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-[#f6efe4] hover:text-white underline underline-offset-4 text-sm font-medium transition-colors"
+            >
+              <span>Instagram</span>
+              <ArrowUpRight className="w-3.5 h-3.5 opacity-70" />
+            </a>
+          </nav>
+        </div>
+
+        <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[#d2c7b8] text-xs">
+          <p>© 2024–{new Date().getFullYear()} Umma Motherhood Cipanas. Hak Cipta Dilindungi.</p>
+          <p className="text-right">
+            Dibuat dengan Next.js &amp; Tailwind CSS
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}
