@@ -120,7 +120,7 @@ export function DetailModal({ isOpen, onClose, data }: DetailModalProps) {
             <h4 className="text-lg font-serif font-medium text-ink mb-2">
               {data.classEvent.name}
             </h4>
-            <div className="flex flex-wrap items-center gap-3 text-xs text-muted">
+            <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-muted mb-3">
               <span className="inline-flex items-center gap-1">
                 <Calendar className="w-3.5 h-3.5 text-rosewood" />
                 {data.classEvent.date}
@@ -130,6 +130,19 @@ export function DetailModal({ isOpen, onClose, data }: DetailModalProps) {
                 Pengisi: {data.classEvent.speaker}
               </span>
             </div>
+
+            {data.classEvent.slug && (
+              <div className="pt-2 border-t border-line/60">
+                <Link
+                  href={`/artikel/${data.classEvent.slug}/`}
+                  onClick={onClose}
+                  className="inline-flex items-center gap-1 text-xs font-bold text-rosewood hover:underline"
+                >
+                  <span>Buka Halaman Detail Kelas &amp; Rangkuman</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            )}
           </div>
         )}
 
@@ -159,15 +172,27 @@ export function DetailModal({ isOpen, onClose, data }: DetailModalProps) {
                       </p>
                     )}
                   </div>
-                  <a
-                    href={art.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-[4px] bg-rosewood text-[#fffaf2] text-xs font-bold hover:bg-[#9f5d54] transition-colors self-start sm:self-center flex-shrink-0"
-                  >
-                    <span>Baca Artikel</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
+                  <div className="flex flex-wrap items-center gap-2 self-start sm:self-center flex-shrink-0">
+                    {art.slug && (
+                      <Link
+                        href={`/artikel/${art.slug}/`}
+                        onClick={onClose}
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-[4px] bg-rosewood text-[#fffaf2] text-xs font-bold hover:bg-[#9f5d54] transition-colors"
+                      >
+                        <span>Ringkasan</span>
+                        <ArrowUpRight className="w-3 h-3" />
+                      </Link>
+                    )}
+                    <a
+                      href={art.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-[4px] border border-line text-muted hover:text-rosewood text-xs font-semibold hover:bg-white transition-colors"
+                    >
+                      <span>Blog Asli</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
                 </div>
               ))}
             </div>

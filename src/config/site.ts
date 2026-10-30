@@ -20,6 +20,7 @@ export interface ClassEventInfo {
   speaker: string;
   date: string;
   materiStatus: string;
+  slug?: string;
 }
 
 export interface ClassArticleInfo {
@@ -28,6 +29,7 @@ export interface ClassArticleInfo {
   author: string;
   url: string;
   excerpt?: string;
+  slug?: string;
 }
 
 export interface ClassItem {
@@ -46,15 +48,30 @@ export interface ClassItem {
   };
 }
 
+export interface ArticleOutsideReference {
+  platform: string;
+  url: string;
+  description: string;
+  buttonLabel: string;
+}
+
 export interface CommunityArticle {
   id: string;
   title: string;
+  subtitle?: string;
   author: string;
+  authorRole?: string;
+  authorInstagram?: string;
   date: string;
+  readingTime?: string;
   category: "ruang-berbagi" | "kelas-profesional" | "arsip-diskusi";
   categoryLabel: string;
   tags: string[];
   excerpt: string;
+  overviewParagraphs?: string[];
+  keyTakeaways?: string[];
+  quote?: string;
+  outsideReference?: ArticleOutsideReference;
   url?: string;
   isExternal?: boolean;
   eventDate?: string;
@@ -174,6 +191,7 @@ export const siteConfig = {
           speaker: "Hasna",
           date: "07 November 2026",
           materiStatus: "Coming Soon",
+          slug: "online-montessori-class-hasna",
         },
         points: [
           "Online Montessori Class with Hasna — 07 Nov 2026",
@@ -210,6 +228,7 @@ export const siteConfig = {
             title: "Ikhtiar Menjaga Keutuhan Cinta Saat Keluarga Bertumbuh",
             date: "01 September 2026",
             author: "Shierly",
+            slug: "ikhtiar-menjaga-keutuhan-cinta",
             url: "https://shirlyv.github.io/2026/09/01/Ikhtiar-Menjaga-Keutuhan-Cinta-Saat-Keluarga-Bertumbuh/",
             excerpt:
               "Refleksi mendalam dan ikhtiar merawat rasa cinta, komunikasi pasangan, serta keharmonisan rumah tangga saat kehadiran buah hati menuntut adaptasi peran yang luar biasa.",
@@ -218,6 +237,7 @@ export const siteConfig = {
             title: "Warisan Cinta untuk Masa Pubertas",
             date: "02 Agustus 2026",
             author: "Shierly",
+            slug: "warisan-cinta-untuk-masa-pubertas",
             url: "https://shirlyv.github.io/2026/08/02/Warisan-Cinta-untuk-Masa-Pubertas/",
             excerpt:
               "Bekal cinta, pemahaman emosional, dan komunikasi terbuka bagi orang tua dalam mendampingi anak menyongsong masa akil baligh dan fase pubertas dengan tenang.",
@@ -676,13 +696,38 @@ export const siteConfig = {
     {
       id: "ikhtiar-menjaga-keutuhan-cinta",
       title: "Ikhtiar Menjaga Keutuhan Cinta Saat Keluarga Bertumbuh",
+      subtitle:
+        "Catatan Reflektif & Peta Jalan Mempersiapkan Buah Hati Menyambut Kehadiran Adik Tanpa Merasa Tersisihkan",
       author: "Shierly",
+      authorRole: "Founder Umma Motherhood Cipanas & Penulis Journal Umma",
+      authorInstagram: "https://www.instagram.com/lindashirlyv/",
       date: "01 September 2026",
+      readingTime: "±8 Menit Baca di Naskah Asli",
       category: "ruang-berbagi",
       categoryLabel: "Ruang Berbagi Sesama Ibu",
-      tags: ["Journal Umma", "Pernikahan & Keluarga", "Parenting"],
+      tags: ["Journal Umma", "Pernikahan & Keluarga", "Parenting", "Sibling Without Rivalry"],
       excerpt:
         "Refleksi mendalam dan ikhtiar merawat rasa cinta, komunikasi pasangan, serta keharmonisan rumah tangga saat kehadiran buah hati menuntut adaptasi peran yang luar biasa.",
+      quote:
+        "Cinta saja tidak cukup; cinta membutuhkan ilmu dan strategi agar pesan kasih sayang kita sampai dengan utuh ke dalam tangki emosi anak.",
+      overviewParagraphs: [
+        "Pernahkah sebuah pertanyaan hening tiba-tiba melintas di kepala saat menatap wajah anak yang tertidur pulas: 'Nanti, kalau ada anggota keluarga baru, anakku akan merasa aku tidak adil tidak, ya?'",
+        "Pertanyaan itu tampak sederhana di permukaan, namun menyimpan beban emosional yang sangat dalam. Tidak sedikit dari kita yang masih menyimpan serpihan luka masa kecil karena pernah merasa dibandingkan atau merasa tergeser di dalam rumah sendiri. Secara naluriah, kita tentu tidak ingin mewariskan rasa sakit yang sama kepada anak-anak kita.",
+        "Kesadaran itulah yang menjadi titik tolak bagi Shierly dan suami (Huzair) untuk belajar dengan sangat serius. Membaca literatur psikologi perkembangan, mendalami konsep Sibling Without Rivalry, hingga berkonsultasi dengan psikolog serta praktisi pengasuhan anak. Persiapan tersebut diterjemahkan ke dalam langkah nyata yang dijalani dari hari ke hari.",
+      ],
+      keyTakeaways: [
+        "Melibatkan anak pertama sejak hari pertama kehamilan, bukan memberi kejutan mendadak di akhir.",
+        "Membangun pemahaman konkret lewat media buku cerita bergambar, sentuhan perut, dan obrolan ramah balita.",
+        "Menjaga tangki emosi anak pertama tetap penuh agar rasa aman tidak terkikis oleh kehadiran adik bayi.",
+        "Komunikasi terbuka dan pembagian peran yang sadar antara suami dan istri demi menjaga keharmonisan rumah tangga.",
+      ],
+      outsideReference: {
+        platform: "Blog Pribadi Shierly (Journal Umma)",
+        url: "https://shirlyv.github.io/2026/09/01/Ikhtiar-Menjaga-Keutuhan-Cinta-Saat-Keluarga-Bertumbuh/",
+        description:
+          "Naskah utuh dan lengkap dari tulisan ini dipublikasikan secara mandiri di blog pribadi Shierly. Anda dapat membaca seluruh paparan 4 langkah ikhtiar dan pengalaman personal keluarga Shierly melalui tautan referensi resmi berikut:",
+        buttonLabel: "Buka & Baca Artikel Lengkap di Blog Penulis",
+      },
       url: "https://shirlyv.github.io/2026/09/01/Ikhtiar-Menjaga-Keutuhan-Cinta-Saat-Keluarga-Bertumbuh/",
       isExternal: true,
       status: "published",
@@ -690,13 +735,38 @@ export const siteConfig = {
     {
       id: "warisan-cinta-untuk-masa-pubertas",
       title: "Warisan Cinta untuk Masa Pubertas",
+      subtitle:
+        "Mempersiapkan Bekal Menghadapi Akil Baligh dan Pendidikan Seksualitas Sehat dengan Kehangatan Hati",
       author: "Shierly",
+      authorRole: "Founder Umma Motherhood Cipanas & Penulis Journal Umma",
+      authorInstagram: "https://www.instagram.com/lindashirlyv/",
       date: "02 Agustus 2026",
+      readingTime: "±10 Menit Baca di Naskah Asli",
       category: "ruang-berbagi",
       categoryLabel: "Ruang Berbagi Sesama Ibu",
-      tags: ["Journal Umma", "Parenting Anak & Remaja", "Pubertas"],
+      tags: ["Journal Umma", "Parenting Anak & Remaja", "Pubertas", "Edukasi Tubuh"],
       excerpt:
         "Bekal cinta, pemahaman emosional, dan komunikasi terbuka bagi orang tua dalam mendampingi anak menyongsong masa akil baligh dan fase pubertas dengan tenang tanpa kecanggungan.",
+      quote:
+        "Pendidikan tentang tubuh dan kehormatan diri tidak boleh ditunda sampai anak belasan tahun. Semuanya harus ditanamkan sejak hari ini melalui kebiasaan sehari-hari di dalam rumah.",
+      overviewParagraphs: [
+        "Di tengah keheningan malam saat menatap wajah anak-anak yang tertidur lelap, sebuah kecemasan eksistensial bisa menyergap dada orang tua: 'Bagaimana jika umurku tidak sampai untuk mendampingi mereka memasuki gerbang kedewasaan? Siapa yang akan memeluk kebingungan dan menjawab rasa malu mereka saat tubuh mereka mulai berubah?'",
+        "Pertanyaan sunyi itu mengingatkan kita bahwa usia adalah rahasia semesta. Di samping menyiapkan dana pendidikan dan warisan materi, pernahkah kita menyiapkan warisan ilmu tentang tubuh dan benteng adab saat anak-anak menghadapi pubertas?",
+        "Bagi Shierly dan suami (Huzair), rasa takut tersebut diubah menjadi bahan bakar untuk bertindak sedini mungkin. Mereka merancang empat ikhtiar besar kurikulum pendidikan tubuh dan persiapan pubertas yang berakar pada nilai agama, sains biologis, dan kehangatan komunikasi di meja makan.",
+      ],
+      keyTakeaways: [
+        "Menghapus tabu komunikasi tubuh: mengganti rasa canggung dengan percakapan ilmiah yang santun dan jujur.",
+        "Mengenalkan konsep batasan privasi fisik (consent dan bodily autonomy) sejak balita.",
+        "Menyiapkan perangkat panduan tertulis dan arsip cinta yang bisa dibaca anak saat memasuki masa akil baligh.",
+        "Menjadikan rumah sebagai tempat pertama dan paling aman bagi anak untuk bertanya seputar perubahan tubuhnya.",
+      ],
+      outsideReference: {
+        platform: "Blog Pribadi Shierly (Journal Umma)",
+        url: "https://shirlyv.github.io/2026/08/02/Warisan-Cinta-untuk-Masa-Pubertas/",
+        description:
+          "Naskah komprehensif yang memaparkan 4 ikhtiar kurikulum pendidikan tubuh dan persiapan pubertas ini tersedia lengkap di blog pribadi Shierly. Silakan jelajahi tulisan aslinya melalui tautan referensi resmi berikut:",
+        buttonLabel: "Buka & Baca Artikel Lengkap di Blog Penulis",
+      },
       url: "https://shirlyv.github.io/2026/08/02/Warisan-Cinta-untuk-Masa-Pubertas/",
       isExternal: true,
       status: "published",
@@ -704,15 +774,38 @@ export const siteConfig = {
     {
       id: "online-montessori-class-hasna",
       title: "Online Montessori Class with Hasna",
+      subtitle:
+        "Penerapan Prinsip Montessori yang Menyenangkan, Aplikatif, dan Mandiri di Rumah",
       author: "Hasna",
+      authorRole: "Montessori Educator & Praktisi PAUD",
       speaker: "Hasna",
       date: "07 November 2026",
       eventDate: "07 November 2026",
       category: "kelas-profesional",
       categoryLabel: "Materi Kelas Profesional",
-      tags: ["Montessori", "Pendidikan Anak", "Sensori & Motorik"],
+      tags: ["Montessori", "Pendidikan Anak Usia Dini", "Sensori & Kemandirian"],
       excerpt:
         "Sesi edukasi daring interaktif bersama praktisi Montessori Hasna mengenai stimulasi sensori anak usia dini dan aplikasi prinsip Montessori di rumah.",
+      quote:
+        "Esensi terdalam Montessori adalah menyiapkan lingkungan yang menghargai kemandirian alami anak: 'Bantu aku melakukannya sendiri'.",
+      overviewParagraphs: [
+        "Banyak orang tua mengira metode Montessori membutuhkan aparatus kayu impor yang mahal dan rumit. Padahal esensi terdalam filosofi Montessori berpusat pada penataan lingkungan yang ramah anak (prepared environment) dan penghormatan terhadap fase sensitif anak.",
+        "Dalam kelas daring interaktif ini, Hasna akan mengupas tuntas cara praktis mengadaptasi prinsip Montessori menggunakan benda-benda sederhana di rumah untuk melatih motorik, fokus, dan kemandirian anak.",
+        "Materi rangkuman digital dan rekaman sesi kelas akan diarsipkan secara rapi di ruang ini setelah kegiatan kelas selesai diselenggarakan pada 07 November 2026.",
+      ],
+      keyTakeaways: [
+        "Memahami prinsip dasar 'Practical Life' dengan perlengkapan ramah anak di rumah.",
+        "Stimulasi sensori alami tanpa ketergantungan pada gawai atau layar digital.",
+        "Kiat mendampingi anak tanpa tergesa-gesa mengambil alih tugas belajarnya.",
+        "Sesi tanya-jawab interaktif dan konsultasi studi kasus pengasuhan anak usia dini.",
+      ],
+      outsideReference: {
+        platform: "Pendaftaran WhatsApp Resmi Komunitas",
+        url: "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20tertarik%20untuk%20mendaftar%20dan%20meminta%20info%20Online%20Montessori%20Class%20with%20Hasna.",
+        description:
+          "Pendaftaran peserta dan pembagian tautan sesi interaktif Zoom dikoordinasikan langsung melalui WhatsApp Umma Shierly.",
+        buttonLabel: "Daftar & Minta Info via WhatsApp Umma Shierly",
+      },
       status: "coming-soon",
       materiStatus: "Coming Soon",
     },

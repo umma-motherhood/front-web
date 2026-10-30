@@ -225,19 +225,13 @@ export default function ArtikelPage() {
 
                         {/* Title */}
                         <h2 className="text-xl font-serif font-medium text-ink leading-snug mb-2 group">
-                          {item.url ? (
-                            <a
-                              href={item.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="hover:text-rosewood transition-colors inline-flex items-start gap-1"
-                            >
-                              <span>{item.title}</span>
-                              <ExternalLink className="w-4 h-4 text-rosewood flex-shrink-0 mt-1 opacity-70" />
-                            </a>
-                          ) : (
-                            item.title
-                          )}
+                          <Link
+                            href={`/artikel/${item.id}/`}
+                            className="hover:text-rosewood transition-colors inline-flex items-start gap-1"
+                          >
+                            <span>{item.title}</span>
+                            <ArrowUpRight className="w-4 h-4 text-rosewood flex-shrink-0 mt-1 opacity-70 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                          </Link>
                         </h2>
 
                         {/* Meta info */}
@@ -274,31 +268,28 @@ export default function ArtikelPage() {
                       </div>
 
                       {/* Footer Actions */}
-                      <div className="pt-4 border-t border-line/60">
-                        {item.url ? (
-                          <a
-                            href={item.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-[4px] bg-rosewood text-[#fffaf2] text-xs font-bold shadow-xs hover:bg-[#9f5d54] transition-colors"
-                          >
-                            <span>Baca Artikel Lengkap</span>
-                            <ExternalLink className="w-3.5 h-3.5" />
-                          </a>
-                        ) : isKelas ? (
-                          <a
-                            href={`https://wa.me/6287883370039?text=${encodeURIComponent(
-                              `Halo Umma Shierly, saya ingin informasi pendaftaran dan link untuk "${item.title}" pada tanggal ${item.eventDate}.`
-                            )}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-[4px] bg-rosewood text-[#fffaf2] text-xs font-bold shadow-xs hover:bg-[#9f5d54] transition-colors"
-                          >
-                            <MessageCircle className="w-3.5 h-3.5" />
-                            <span>Daftar / Info via WA Umma</span>
-                            <ArrowUpRight className="w-3.5 h-3.5 opacity-80" />
-                          </a>
-                        ) : null}
+                      <div className="pt-4 border-t border-line/60 flex flex-col gap-2">
+                        <Link
+                          href={`/artikel/${item.id}/`}
+                          className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-[4px] bg-rosewood text-[#fffaf2] text-xs font-bold shadow-xs hover:bg-[#9f5d54] transition-colors"
+                        >
+                          <span>Buka Ringkasan &amp; Referensi</span>
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        </Link>
+
+                        {item.url && (
+                          <div className="text-center">
+                            <a
+                              href={item.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-[11px] text-muted hover:text-rosewood transition-colors font-medium"
+                            >
+                              <span>Tautan luar ke blog {item.author}</span>
+                              <ExternalLink className="w-3 h-3" />
+                            </a>
+                          </div>
+                        )}
                       </div>
                     </article>
                   );
