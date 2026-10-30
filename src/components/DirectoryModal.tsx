@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { X, ArrowUpRight, MessageCircle, MapPin } from "lucide-react";
+import Link from "next/link";
+import { X, ArrowUpRight, MessageCircle, MapPin, Clock, Star } from "lucide-react";
 import { DirectoryItem } from "@/config/site";
 
 interface DirectoryModalProps {
@@ -52,13 +53,24 @@ export function DirectoryModal({ isOpen, onClose, data }: DirectoryModalProps) {
         </button>
 
         {/* Modal Header */}
-        <div className="flex items-center gap-2 mb-1">
-          <span className="text-rosewood font-serif text-xl sm:text-2xl font-bold">
-            {data.code}
-          </span>
-          <span className="text-xs uppercase tracking-wider font-sans font-bold text-muted">
-            Direktori Rekomendasi
-          </span>
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-2 pr-10">
+          <div className="flex items-center gap-2">
+            <span className="text-rosewood font-serif text-xl sm:text-2xl font-bold">
+              {data.code}
+            </span>
+            <span className="text-xs uppercase tracking-wider font-sans font-bold text-muted">
+              Direktori Rekomendasi
+            </span>
+          </div>
+
+          <Link
+            href={`/direktori?kategori=${data.id}`}
+            onClick={onClose}
+            className="inline-flex items-center gap-1 text-xs font-bold text-rosewood hover:underline"
+          >
+            <span>Buka di Halaman Lengkap</span>
+            <ArrowUpRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
 
         <h3
@@ -87,7 +99,7 @@ export function DirectoryModal({ isOpen, onClose, data }: DirectoryModalProps) {
                 </div>
               )}
 
-              <div className="grid grid-cols-1 gap-4">
+              <div className="grid grid-cols-1 gap-5">
                 {group.places.map((place, pIdx) => {
                   const placeWaUrl = `https://wa.me/6287883370039?text=${encodeURIComponent(
                     place.waMessage
@@ -96,7 +108,7 @@ export function DirectoryModal({ isOpen, onClose, data }: DirectoryModalProps) {
                   return (
                     <div
                       key={pIdx}
-                      className="p-5 rounded-xl bg-white/70 border border-line shadow-xs hover:border-rosewood/50 transition-colors"
+                      className="p-5 rounded-xl bg-white/80 border border-line shadow-xs hover:border-rosewood/50 transition-colors"
                     >
                       <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                         <h5 className="text-lg font-serif font-semibold text-ink">
@@ -107,15 +119,44 @@ export function DirectoryModal({ isOpen, onClose, data }: DirectoryModalProps) {
                         </span>
                       </div>
 
-                      <p className="text-muted text-sm leading-relaxed mb-4">
+                      <p className="text-muted text-sm leading-relaxed mb-3.5">
                         {place.description}
                       </p>
 
-                      <div className="flex items-center justify-between pt-3 border-t border-line/50">
-                        <span className="text-xs text-muted flex items-center gap-1">
-                          <MapPin className="w-3.5 h-3.5 text-rosewood" />
-                          Area Cipanas &amp; Sekitarnya
-                        </span>
+                      {/* Location & Schedule summary */}
+                      <div className="p-3 rounded-lg bg-warm-sand/20 border border-line/60 space-y-1.5 mb-3.5 text-xs text-ink">
+                        <div className="flex items-start gap-2">
+                          <MapPin className="w-3.5 h-3.5 text-rosewood flex-shrink-0 mt-0.5" />
+                          <span className="text-muted">{place.address}</span>
+                        </div>
+                        {place.schedule && (
+                          <div className="flex items-start gap-2">
+                            <Clock className="w-3.5 h-3.5 text-moss flex-shrink-0 mt-0.5" />
+                            <span className="text-muted">{place.schedule}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Review snippet */}
+                      <div className="p-3 rounded-lg bg-paper border border-line/70 mb-4 text-xs italic text-ink flex items-start gap-2">
+                        <Star className="w-3.5 h-3.5 text-amber-500 fill-current flex-shrink-0 mt-0.5" />
+                        <div>
+                          <span>&ldquo;{place.review.text}&rdquo;</span>
+                          <span className="block font-semibold not-italic text-rosewood mt-1 text-[0.72rem]">
+                            — {place.review.author}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-line/50">
+                        <Link
+                          href={`/direktori?kategori=${data.id}`}
+                          onClick={onClose}
+                          className="text-xs font-semibold text-ink hover:text-rosewood transition-colors inline-flex items-center gap-1"
+                        >
+                          <span>Lihat di Halaman Direktori</span>
+                          <ArrowUpRight className="w-3 h-3 text-rosewood" />
+                        </Link>
 
                         <a
                           href={placeWaUrl}
@@ -124,7 +165,7 @@ export function DirectoryModal({ isOpen, onClose, data }: DirectoryModalProps) {
                           className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-[4px] bg-rosewood text-[#fffaf2] text-xs font-bold shadow-2xs hover:bg-[#9f5d54] transition-all"
                         >
                           <MessageCircle className="w-3.5 h-3.5" />
-                          <span>Minta Kontak ke Umma Shierly</span>
+                          <span>Hubungi via WA Umma</span>
                           <ArrowUpRight className="w-3.5 h-3.5 opacity-80" />
                         </a>
                       </div>
@@ -138,7 +179,14 @@ export function DirectoryModal({ isOpen, onClose, data }: DirectoryModalProps) {
 
         {/* Footer info */}
         <div className="mt-8 pt-4 border-t border-line flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted">
-          <p>Rekomendasi dikurasi dari pengalaman nyata para ibu di Cipanas.</p>
+          <Link
+            href={`/direktori?kategori=${data.id}`}
+            onClick={onClose}
+            className="inline-flex items-center gap-1 font-bold text-rosewood hover:underline"
+          >
+            <span>Buka Semua Tempat di Kategori Ini</span>
+            <ArrowUpRight className="w-3.5 h-3.5" />
+          </Link>
           <button
             type="button"
             onClick={onClose}

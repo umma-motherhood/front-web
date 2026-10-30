@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { siteConfig, DirectoryItem } from "@/config/site";
 import { DirectoryModal } from "@/components/DirectoryModal";
 import { AdvertiseModal } from "@/components/AdvertiseModal";
@@ -31,14 +32,23 @@ export function DirectorySection() {
                 Direktori Rekomendasi Cipanas
               </h2>
             </div>
-            <div className="flex flex-col md:items-end gap-2 md:mb-1">
-              <p className="text-muted text-[1.05rem] leading-relaxed">
+            <div className="flex flex-col md:items-end gap-3 md:mb-1">
+              <p className="text-muted text-[1.05rem] leading-relaxed md:text-right">
                 Pusat informasi hiper-lokal hasil kurasi dan pengalaman nyata para ibu.
               </p>
-              <span className="text-xs text-rosewood font-semibold bg-white/80 px-3 py-1 rounded-full border border-line/70 self-start md:self-auto flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5" />
-                Klik kategori untuk melihat daftar dokter, kelas &amp; toko
-              </span>
+              <div className="flex flex-wrap items-center gap-2">
+                <Link
+                  href="/direktori"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-[4px] bg-rosewood text-[#fffaf2] text-xs font-bold shadow-xs hover:bg-[#9f5d54] transition-all"
+                >
+                  <span>Buka Halaman Direktori Lengkap</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </Link>
+                <span className="text-xs text-rosewood font-semibold bg-white/80 px-3 py-1.5 rounded-full border border-line/70 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Klik baris untuk rincian cepat
+                </span>
+              </div>
             </div>
           </div>
 
@@ -49,7 +59,7 @@ export function DirectorySection() {
                 key={item.code}
                 type="button"
                 onClick={() => setSelectedDirectory(item)}
-                className="w-full text-left group grid grid-cols-[36px_1fr_32px] sm:grid-cols-[48px_1fr_40px] md:grid-cols-[56px_minmax(200px,0.85fr)_minmax(0,1.4fr)_44px] items-center gap-4 sm:gap-6 py-6 md:min-h-[112px] border-b border-line no-underline transition-all duration-200 hover:bg-black/[0.03] hover:pl-2 cursor-pointer"
+                className="w-full text-left group grid grid-cols-[36px_1fr_auto] sm:grid-cols-[48px_1fr_auto] md:grid-cols-[56px_minmax(200px,0.85fr)_minmax(0,1.3fr)_auto] items-center gap-4 sm:gap-6 py-6 md:min-h-[112px] border-b border-line no-underline transition-all duration-200 hover:bg-black/[0.03] hover:pl-2 cursor-pointer"
               >
                 <span className="text-rosewood font-serif text-[1.2rem] font-semibold group-hover:scale-110 transition-transform">
                   {item.code}
@@ -61,14 +71,31 @@ export function DirectorySection() {
                   <span className="text-xs text-muted block mt-0.5">
                     {item.subtitle}
                   </span>
-                  <span className="inline-block md:hidden text-xs text-rosewood font-semibold mt-1">
-                    Buka rekomendasi ({item.subgroups.reduce((acc, g) => acc + g.places.length, 0)} tempat) →
-                  </span>
+                  <div className="flex flex-wrap items-center gap-2 mt-1.5 md:hidden">
+                    <span className="text-xs text-rosewood font-semibold">
+                      Buka rincian ({item.subgroups.reduce((acc, g) => acc + g.places.length, 0)} tempat) →
+                    </span>
+                    <Link
+                      href={`/direktori?kategori=${item.id}`}
+                      onClick={(e) => e.stopPropagation()}
+                      className="text-xs text-ink underline font-bold"
+                    >
+                      Halaman Lengkap
+                    </Link>
+                  </div>
                 </div>
                 <p className="col-start-2 col-span-1 md:col-start-3 md:col-span-1 text-muted text-[0.98rem] leading-relaxed">
                   {item.description}
                 </p>
-                <div className="flex justify-end">
+                <div className="flex items-center justify-end gap-2.5">
+                  <Link
+                    href={`/direktori?kategori=${item.id}`}
+                    onClick={(e) => e.stopPropagation()}
+                    className="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 rounded-[4px] border border-line bg-paper text-ink text-xs font-bold hover:border-rosewood hover:text-rosewood transition-colors shadow-2xs"
+                  >
+                    <span>Halaman Kategori</span>
+                    <ArrowUpRight className="w-3 h-3 text-rosewood" />
+                  </Link>
                   <span className="w-8 h-8 rounded-full flex items-center justify-center text-rosewood group-hover:bg-warm-sand/50 group-hover:translate-x-1 transition-all duration-200">
                     <ArrowUpRight className="w-5 h-5" />
                   </span>
