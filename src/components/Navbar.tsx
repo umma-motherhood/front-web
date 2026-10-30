@@ -15,7 +15,7 @@ export function Navbar() {
       <div className="max-w-[1120px] w-[calc(100%-40px)] mx-auto min-h-[76px] flex items-center justify-between gap-5">
         {/* Official Brand Logo */}
         <Link
-          href="#beranda"
+          href="/"
           className="inline-flex items-center gap-3 text-ink text-[1.15rem] leading-tight font-serif no-underline group"
           aria-label="Umma Motherhood Cipanas, ke beranda"
         >

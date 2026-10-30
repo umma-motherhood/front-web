@@ -4,6 +4,7 @@ import path from "path";
 // On custom domain (ummamotherhood.my.id), all assets are served from root "/"
 const nextConfig: NextConfig = {
   output: "export",
+  trailingSlash: true,
   basePath: "",
   images: {
     unoptimized: true,

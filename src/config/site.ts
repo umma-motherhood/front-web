@@ -3,6 +3,18 @@ export interface NavItem {
   href: string;
 }
 
+export interface UmkmItem {
+  id: string;
+  name: string;
+  category: "semua" | "busana" | "kuliner" | "bayi" | "kriya" | "jasa";
+  categoryLabel: string;
+  owner: string;
+  priceRange: string;
+  location: string;
+  description: string;
+  waMessage: string;
+}
+
 export interface ClassItem {
   id: string;
   number: string;
@@ -87,12 +99,12 @@ export const siteConfig = {
   },
 
   nav: [
-    { label: "Kelas & Berbagi", href: "#kelas" },
-    { label: "Direktori", href: "#direktori" },
-    { label: "Bantuan", href: "#bantuan" },
-    { label: "Lapak UMKM", href: "#lapak" },
-    { label: "Tentang", href: "#tentang" },
-    { label: "Dukung", href: "#dukung" },
+    { label: "Kelas & Berbagi", href: "/#kelas" },
+    { label: "Direktori", href: "/#direktori" },
+    { label: "Bantuan", href: "/#bantuan" },
+    { label: "Lapak UMKM", href: "/umkm" },
+    { label: "Tentang", href: "/#tentang" },
+    { label: "Dukung", href: "/#dukung" },
   ] as NavItem[],
 
   classes: [
@@ -424,4 +436,72 @@ export const siteConfig = {
       href: "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20ingin%20berdonasi%20/%20berbagi%20ilmu%20sebagai%20pengisi%20kelas%20di%20Umma%20Motherhood%20Cipanas.",
     },
   ] as SupportItem[],
+
+  umkmList: [
+    {
+      id: "shierenity-scribe",
+      name: "Shierenity Scribe",
+      category: "busana",
+      categoryLabel: "Busana Bayi & Anak",
+      owner: "Shierly",
+      priceRange: "Mulai Rp 35.000",
+      location: "Cipanas (Online / Delivery)",
+      description:
+        "Distributor pakaian bayi dan anak terkurasi: busana harian berkualitas, adem, dan awet. Menghadirkan pilihan brand lokal terpercaya, brand Eropa, hingga Singapura tanpa perlu repot keluar rumah.",
+      waMessage:
+        "Halo Umma Shierly, saya ingin melihat koleksi pakaian bayi dan anak di Shierenity Scribe Cipanas.",
+    },
+    {
+      id: "dapur-sangkilang",
+      name: "Dapur Sangkilang",
+      category: "kuliner",
+      categoryLabel: "Kuliner & Katering Keluarga",
+      owner: "Warga Komunitas Umma",
+      priceRange: "Paket mulai Rp 25.000 / porsi",
+      location: "Cipanas & Sekitarnya",
+      description:
+        "Layanan katering harian keluarga yang higienis, halal, dan lezat. Menu rumahan bergizi bervariasi setiap hari, diolah dengan bahan segar ramah anak tanpa MSG berlebih. Solusi praktis santap sehat di rumah.",
+      waMessage:
+        "Halo Umma Shierly, saya ingin info daftar menu dan berlangganan katering harian Dapur Sangkilang.",
+    },
+    {
+      id: "jan-baby-store",
+      name: "Jan Baby Store Cipanas",
+      category: "bayi",
+      categoryLabel: "Perlengkapan Bayi & MPASI",
+      owner: "Mitra Lokal Cipanas",
+      priceRange: "Harga terjangkau & lengkap",
+      location: "Jl. Raya Cipanas",
+      description:
+        "Toko fisik andalan perlengkapan bayi dan balita. Mulai dari set pakaian baru lahir, botol susu, perlengkapan mandi, hingga alat makan dan MPASI komprehensif dengan pelayanan ramah.",
+      waMessage:
+        "Halo Umma Shierly, saya mencari informasi ketersediaan perlengkapan bayi di Jan Baby Store Cipanas.",
+    },
+    {
+      id: "kriya-rajut-ibu",
+      name: "Kriya Rajut & Aksesoris Umma",
+      category: "kriya",
+      categoryLabel: "Kriya & Kerajinan Tangan",
+      owner: "Karya Ibu Komunitas",
+      priceRange: "Mulai Rp 15.000",
+      location: "Cipanas",
+      description:
+        "Aksesoris rambut anak buatan tangan, bandana lembut bayi, sepatu rajut hangat, dan totebag serbaguna. Dibuat dengan cinta dan ketelitian tinggi di sela rutinitas harian ibu mengasuh buah hati.",
+      waMessage:
+        "Halo Umma Shierly, saya tertarik memesan produk kriya & aksesoris rajut buatan ibu anggota Umma.",
+    },
+    {
+      id: "snack-sehat-balita",
+      name: "Dapur Camilan Sehat Umma",
+      category: "kuliner",
+      categoryLabel: "Kue & Camilan Anak",
+      owner: "Ibu Komunitas Umma",
+      priceRange: "Mulai Rp 20.000",
+      location: "Cipanas",
+      description:
+        "Camilan sehat tanpa bahan pengawet dan pemanis buatan untuk anak dan balita. Pilihan favorit: cookies oat gandum, finger food sayur MPASI, serta puding susu buah asli yang digemari si kecil.",
+      waMessage:
+        "Halo Umma Shierly, saya ingin memesan camilan sehat balita dari UMKM Umma Motherhood.",
+    },
+  ] as UmkmItem[],
 };
