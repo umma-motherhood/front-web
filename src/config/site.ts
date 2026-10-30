@@ -119,7 +119,7 @@ export const siteConfig = {
     { label: "Kelas & Berbagi", href: "/#kelas" },
     { label: "Direktori", href: "/#direktori" },
     { label: "Bantuan", href: "/#bantuan" },
-    { label: "Lapak UMKM", href: "/umkm" },
+    { label: "Lapak UMKM", href: "/umkm/" },
     { label: "Tentang", href: "/#tentang" },
     { label: "Dukung", href: "/#dukung" },
   ] as NavItem[],

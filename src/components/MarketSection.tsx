@@ -44,7 +44,7 @@ export function MarketSection() {
 
             <div className="flex flex-col sm:flex-row lg:justify-end gap-3.5">
               <Link
-                href="/umkm"
+                href="/umkm/"
                 className="inline-flex min-h-[48px] items-center justify-center gap-2 px-6 py-3 border border-paper rounded-[4px] bg-paper text-ink text-[0.95rem] font-bold no-underline transition-all duration-200 hover:bg-[#fffaf2] hover:-translate-y-0.5"
               >
                 <span>Lihat List UMKM</span>

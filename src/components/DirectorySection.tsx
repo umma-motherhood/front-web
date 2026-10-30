@@ -38,7 +38,7 @@ export function DirectorySection() {
               </p>
               <div className="flex flex-wrap items-center gap-2">
                 <Link
-                  href="/direktori"
+                  href="/direktori/"
                   className="inline-flex items-center gap-1.5 px-4 py-2 rounded-[4px] bg-rosewood text-[#fffaf2] text-xs font-bold shadow-xs hover:bg-[#9f5d54] transition-all"
                 >
                   <span>Buka Halaman Direktori Lengkap</span>
