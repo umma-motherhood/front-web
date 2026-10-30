@@ -6,7 +6,7 @@ export interface NavItem {
 export interface UmkmItem {
   id: string;
   name: string;
-  category: "semua" | "busana" | "kuliner" | "bayi" | "kriya" | "jasa";
+  category: "semua" | "toserba" | "busana" | "kuliner" | "bayi" | "kriya" | "jasa";
   categoryLabel: string;
   owner: string;
   priceRange: string;
@@ -598,5 +598,19 @@ export const siteConfig = {
     },
   ] as SupportItem[],
 
-  umkmList: [] as UmkmItem[],
+  umkmList: [
+    {
+      id: "toshierba",
+      name: "Toshierba (Toko Shierly Serba Ada)",
+      category: "toserba",
+      categoryLabel: "Toko Serba Ada",
+      owner: "Shierly",
+      priceRange: "Menunggu Detail Produk",
+      location: "Cipanas & Sekitarnya",
+      description:
+        "Toko serba ada milik Shierly yang menyediakan aneka kebutuhan harian keluarga, perlengkapan ibu, dan produk pilihan di area Cipanas. Rincian daftar barang dan katalog lengkap sedang disiapkan.",
+      waMessage:
+        "Halo Umma Shierly, saya ingin bertanya seputar produk yang tersedia di Toshierba (Toko Shierly Serba Ada).",
+    },
+  ] as UmkmItem[],
 };

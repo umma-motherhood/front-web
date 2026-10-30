@@ -18,10 +18,11 @@ import {
   ShoppingBag,
 } from "lucide-react";
 
-type CategoryFilter = "semua" | "busana" | "kuliner" | "bayi" | "kriya";
+type CategoryFilter = "semua" | "toserba" | "busana" | "kuliner" | "bayi" | "kriya";
 
 const CATEGORIES: { key: CategoryFilter; label: string }[] = [
   { key: "semua", label: "Semua Usaha" },
+  { key: "toserba", label: "Toko Serba Ada" },
   { key: "busana", label: "Busana Anak" },
   { key: "kuliner", label: "Kuliner & Katering" },
   { key: "bayi", label: "Perlengkapan Bayi" },
