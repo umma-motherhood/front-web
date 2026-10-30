@@ -15,6 +15,21 @@ export interface UmkmItem {
   waMessage: string;
 }
 
+export interface ClassEventInfo {
+  name: string;
+  speaker: string;
+  date: string;
+  materiStatus: string;
+}
+
+export interface ClassArticleInfo {
+  title: string;
+  date: string;
+  author: string;
+  url: string;
+  excerpt?: string;
+}
+
 export interface ClassItem {
   id: string;
   number: string;
@@ -24,7 +39,28 @@ export interface ClassItem {
     subtitle: string;
     points: string[];
     note: string;
+    isEmpty?: boolean;
+    classEvent?: ClassEventInfo;
+    articles?: ClassArticleInfo[];
+    archiveUrl?: string;
   };
+}
+
+export interface CommunityArticle {
+  id: string;
+  title: string;
+  author: string;
+  date: string;
+  category: "ruang-berbagi" | "kelas-profesional" | "arsip-diskusi";
+  categoryLabel: string;
+  tags: string[];
+  excerpt: string;
+  url?: string;
+  isExternal?: boolean;
+  eventDate?: string;
+  speaker?: string;
+  status: "published" | "coming-soon" | "empty";
+  materiStatus?: string;
 }
 
 export interface PlaceReview {
@@ -133,13 +169,19 @@ export const siteConfig = {
         "Akses rangkuman dan materi lengkap dari pakar, praktisi, dan ahli yang mengisi sesi edukasi di komunitas kami.",
       detail: {
         subtitle: "Edukasi Berbobot dari Para Ahli & Praktisi",
+        classEvent: {
+          name: "Online Montessori Class with Hasna",
+          speaker: "Hasna",
+          date: "07 November 2026",
+          materiStatus: "Coming Soon",
+        },
         points: [
-          "Tumbuh Kembang & Stimulasi Sensori Anak Usia Dini",
-          "Nutrisi, MPASI Sehat & Solusi Mengatasi Gerakan Tutup Mulut (GTM)",
-          "Kesehatan Mental Ibu & Manajemen Stres Pasca Melahirkan",
-          "Pertolongan Pertama Gawat Darurat pada Bayi & Balita di Rumah",
+          "Online Montessori Class with Hasna — 07 Nov 2026",
+          "Materi Sesi: Coming Soon",
+          "Edukasi stimulasi sensori & kemandirian anak usia dini",
+          "Panduan praktis pengasuhan Montessori aplikatif di rumah",
         ],
-        note: "Materi dan rangkuman sesi kelas sedang kami siapkan dalam format arsip digital. Hubungi Umma Shierly untuk informasi jadwal kelas terdekat.",
+        note: "Kelas interaktif terdekat: Online Montessori Class with Hasna pada 07 November 2026. Materi dan rangkuman akan diarsipkan setelah kelas selesai. Hubungi Umma Shierly untuk pendaftaran.",
       },
     },
     {
@@ -150,13 +192,9 @@ export const siteConfig = {
         "Rangkuman rapi dari sesi tanya-jawab dan diskusi grup WhatsApp agar wawasan berharga tidak tenggelam di ruang obrolan.",
       detail: {
         subtitle: "Intisari Tanya Jawab Grup WhatsApp Komunitas",
-        points: [
-          "Tanya Jawab Seputar Menyusui, Pelekatan & Manajemen ASI Perah",
-          "Tips Mengatasi Tantrum Anak dengan Welas Asih",
-          "Rekomendasi Solusi Masalah Harian yang Sudah Teruji Sesama Ibu",
-          "Kiat Menjaga Keharmonisan Keluarga di Tengah Rutinitas Mengasuh",
-        ],
-        note: "Rangkuman obrolan mingguan grup WhatsApp sedang dalam proses kurasi tim agar rapi dan mudah dicari oleh anggota baru.",
+        isEmpty: true,
+        points: [],
+        note: "Saat ini arsip tanya-jawab WhatsApp masih kosong. Tim kurasi komunitas sedang merangkum diskusi berbobot agar ilmu dan tips bermanfaat tidak tenggelam di ruang obrolan.",
       },
     },
     {
@@ -167,13 +205,31 @@ export const siteConfig = {
         "Artikel, tips praktis, dan pengalaman berharga yang ditulis langsung oleh anggota. Setiap tulisan akan mencantumkan nama penulis sebagai apresiasi.",
       detail: {
         subtitle: "Catatan & Tips Praktis Tulisan Asli Anggota Komunitas",
-        points: [
-          "Kisah Perjalanan & Suka Duka Menjadi Ibu Baru di Area Cipanas",
-          "Resep Masakan Rumahan Favorit Balita yang Praktis dan Bergizi",
-          "Tips Manajemen Waktu bagi Ibu Bekerja & Ibu Rumah Tangga",
-          "Rekomendasi Aktivitas Bermain Bersama Anak di Rumah",
+        articles: [
+          {
+            title: "Ikhtiar Menjaga Keutuhan Cinta Saat Keluarga Bertumbuh",
+            date: "01 September 2026",
+            author: "Shierly",
+            url: "https://shirlyv.github.io/2026/09/01/Ikhtiar-Menjaga-Keutuhan-Cinta-Saat-Keluarga-Bertumbuh/",
+            excerpt:
+              "Refleksi mendalam dan ikhtiar merawat rasa cinta, komunikasi pasangan, serta keharmonisan rumah tangga saat kehadiran buah hati menuntut adaptasi peran yang luar biasa.",
+          },
+          {
+            title: "Warisan Cinta untuk Masa Pubertas",
+            date: "02 Agustus 2026",
+            author: "Shierly",
+            url: "https://shirlyv.github.io/2026/08/02/Warisan-Cinta-untuk-Masa-Pubertas/",
+            excerpt:
+              "Bekal cinta, pemahaman emosional, dan komunikasi terbuka bagi orang tua dalam mendampingi anak menyongsong masa akil baligh dan fase pubertas dengan tenang.",
+          },
         ],
-        note: "Punya pengalaman atau tulisan bermanfaat yang ingin dibagikan ke sesama ibu? Kirimkan tulisan Anda langsung ke Umma Shierly untuk dipublikasikan di halaman ini.",
+        archiveUrl: "https://shirlyv.github.io/archive/?tag=journal-umma",
+        points: [
+          "Ikhtiar Menjaga Keutuhan Cinta Saat Keluarga Bertumbuh (Oleh Shierly)",
+          "Warisan Cinta untuk Masa Pubertas (Oleh Shierly)",
+          "Koleksi Lengkap Arsip Journal Umma di Blog",
+        ],
+        note: "Artikel di atas merupakan karya asli yang ditulis oleh Shierly di Journal Umma. Anggota komunitas yang ingin berbagi tulisan dan pengalaman parenting juga dapat mengirimkan naskah ke Umma Shierly.",
       },
     },
   ] as ClassItem[],
@@ -613,4 +669,52 @@ export const siteConfig = {
         "Halo Umma Shierly, saya ingin bertanya seputar produk yang tersedia di Toshierba (Toko Shierly Serba Ada).",
     },
   ] as UmkmItem[],
+
+  journalUmmaArchiveUrl: "https://shirlyv.github.io/archive/?tag=journal-umma",
+
+  communityArticles: [
+    {
+      id: "ikhtiar-menjaga-keutuhan-cinta",
+      title: "Ikhtiar Menjaga Keutuhan Cinta Saat Keluarga Bertumbuh",
+      author: "Shierly",
+      date: "01 September 2026",
+      category: "ruang-berbagi",
+      categoryLabel: "Ruang Berbagi Sesama Ibu",
+      tags: ["Journal Umma", "Pernikahan & Keluarga", "Parenting"],
+      excerpt:
+        "Refleksi mendalam dan ikhtiar merawat rasa cinta, komunikasi pasangan, serta keharmonisan rumah tangga saat kehadiran buah hati menuntut adaptasi peran yang luar biasa.",
+      url: "https://shirlyv.github.io/2026/09/01/Ikhtiar-Menjaga-Keutuhan-Cinta-Saat-Keluarga-Bertumbuh/",
+      isExternal: true,
+      status: "published",
+    },
+    {
+      id: "warisan-cinta-untuk-masa-pubertas",
+      title: "Warisan Cinta untuk Masa Pubertas",
+      author: "Shierly",
+      date: "02 Agustus 2026",
+      category: "ruang-berbagi",
+      categoryLabel: "Ruang Berbagi Sesama Ibu",
+      tags: ["Journal Umma", "Parenting Anak & Remaja", "Pubertas"],
+      excerpt:
+        "Bekal cinta, pemahaman emosional, dan komunikasi terbuka bagi orang tua dalam mendampingi anak menyongsong masa akil baligh dan fase pubertas dengan tenang tanpa kecanggungan.",
+      url: "https://shirlyv.github.io/2026/08/02/Warisan-Cinta-untuk-Masa-Pubertas/",
+      isExternal: true,
+      status: "published",
+    },
+    {
+      id: "online-montessori-class-hasna",
+      title: "Online Montessori Class with Hasna",
+      author: "Hasna",
+      speaker: "Hasna",
+      date: "07 November 2026",
+      eventDate: "07 November 2026",
+      category: "kelas-profesional",
+      categoryLabel: "Materi Kelas Profesional",
+      tags: ["Montessori", "Pendidikan Anak", "Sensori & Motorik"],
+      excerpt:
+        "Sesi edukasi daring interaktif bersama praktisi Montessori Hasna mengenai stimulasi sensori anak usia dini dan aplikasi prinsip Montessori di rumah.",
+      status: "coming-soon",
+      materiStatus: "Coming Soon",
+    },
+  ] as CommunityArticle[],
 };

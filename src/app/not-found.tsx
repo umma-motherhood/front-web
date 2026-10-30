@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, Home, Store, Compass, MessageCircle } from "lucide-react";
+import { ArrowLeft, Home, Store, Compass, MessageCircle, BookOpen } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -35,6 +35,14 @@ export default function NotFound() {
             </Link>
 
             <Link
+              href="/artikel/"
+              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-[4px] border border-line bg-paper text-ink text-sm font-bold shadow-xs hover:bg-warm-sand/30 transition-colors"
+            >
+              <BookOpen className="w-4 h-4 text-rosewood" />
+              <span>Artikel &amp; Ruang Berbagi</span>
+            </Link>
+
+            <Link
               href="/umkm/"
               className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-[4px] border border-line bg-paper text-ink text-sm font-bold shadow-xs hover:bg-warm-sand/30 transition-colors"
             >
@@ -49,16 +57,6 @@ export default function NotFound() {
               <Compass className="w-4 h-4 text-rosewood" />
               <span>Direktori Rekomendasi</span>
             </Link>
-
-            <a
-              href="https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20mengalami%20kendala%20saat%20mengakses%20website%20Umma%20Motherhood."
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-[4px] border border-line bg-paper text-ink text-sm font-bold shadow-xs hover:bg-warm-sand/30 transition-colors"
-            >
-              <MessageCircle className="w-4 h-4 text-[#25D366]" />
-              <span>Bantuan via WA Umma</span>
-            </a>
           </div>
 
           <p className="text-xs text-muted">

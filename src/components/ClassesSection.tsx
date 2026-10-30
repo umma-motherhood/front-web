@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { siteConfig, ClassItem } from "@/config/site";
 import { DetailModal, ModalData } from "@/components/DetailModal";
 import { ArrowUpRight } from "lucide-react";
@@ -16,6 +17,10 @@ export function ClassesSection() {
       description: item.description,
       items: item.detail.points,
       note: item.detail.note,
+      isEmpty: item.detail.isEmpty,
+      classEvent: item.detail.classEvent,
+      articles: item.detail.articles,
+      archiveUrl: item.detail.archiveUrl,
       whatsappMessage: `Halo Umma Shierly, saya tertarik dengan info "${item.title}" di Umma Motherhood Cipanas. Apakah bisa minta informasi lebih lanjut?`,
     });
   };
@@ -40,9 +45,18 @@ export function ClassesSection() {
                 Kelas &amp; Ruang Berbagi
               </h2>
             </div>
-            <p className="text-xs text-muted font-medium bg-warm-sand/30 px-3 py-1.5 rounded-full border border-line/60 self-start sm:self-auto">
-              💡 Klik setiap topik untuk melihat rincian
-            </p>
+            <div className="flex flex-wrap items-center gap-2.5 self-start sm:self-auto">
+              <Link
+                href="/artikel/"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-[4px] bg-rosewood text-[#fffaf2] text-xs font-bold shadow-xs hover:bg-[#9f5d54] transition-all"
+              >
+                <span>Buka Halaman Artikel Komunitas</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </Link>
+              <p className="text-xs text-muted font-medium bg-warm-sand/30 px-3 py-1.5 rounded-full border border-line/60">
+                💡 Klik setiap topik untuk melihat rincian
+              </p>
+            </div>
           </div>
 
           <div className="border-t border-line">
