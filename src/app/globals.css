@@ -1,27 +1,38 @@
 @import "tailwindcss";
 
 @theme {
-  --color-paper: #f6efe4;
-  --color-paper-deep: #eee3d3;
-  --color-ink: #2b211b;
-  --color-muted: #5b5148;
-  --color-clay: #a84225;
-  --color-clay-hover: #87371f;
-  --color-moss: #4f5d3a;
-  --color-line: #cfc1ae;
+  /* Official Umma Motherhood Brand Color Palette */
+  --color-dusty-peach: #eeab96;
+  --color-rosewood: #b9756b;
+  --color-warm-sand: #ead0ad;
+  --color-warm-cocoa: #6a4638;
+  --color-umma-pink: #ce1c72;
+  --color-umma-pink-hover: #b0155f;
+
+  /* Semantic UI Tokens based on the Palette */
+  --color-paper: #fbf7f2;
+  --color-paper-deep: #ead0ad;
+  --color-ink: #3b2820;
+  --color-muted: #6a4638;
+  --color-clay: #b9756b;
+  --color-clay-hover: #9f5d54;
+  --color-moss: #5a6b4a;
+  --color-line: #e2d2bf;
 
   --font-serif: var(--font-lora), "Georgia", serif;
   --font-signature: var(--font-signature), "Caveat", cursive;
 }
 
 :root {
-  --paper: #f6efe4;
-  --paper-deep: #eee3d3;
-  --ink: #2b211b;
-  --muted: #5b5148;
-  --clay: #a84225;
-  --moss: #4f5d3a;
-  --line: #cfc1ae;
+  color-scheme: light;
+  --paper: #fbf7f2;
+  --paper-deep: #ead0ad;
+  --ink: #3b2820;
+  --muted: #6a4638;
+  --clay: #b9756b;
+  --moss: #5a6b4a;
+  --line: #e2d2bf;
+  --umma-pink: #ce1c72;
 }
 
 html {
@@ -29,20 +40,20 @@ html {
   scroll-padding-top: 90px;
 }
 
-/* Texture pattern for photo slots */
+/* Texture pattern for photo slots and accent backgrounds */
 .pattern-stripes {
   background: repeating-linear-gradient(
     135deg,
     transparent 0 11px,
-    #cfc1ae25 11px 12px
+    #ead0ad40 11px 12px
   );
 }
 
-/* Clean focus visible for accessibility */
+/* Accessible focus ring using the brand Rosewood/Pink */
 a:focus-visible,
 button:focus-visible,
 summary:focus-visible {
-  outline: 3px solid var(--clay);
+  outline: 3px solid var(--umma-pink);
   outline-offset: 3px;
-  border-radius: 3px;
+  border-radius: 4px;
 }

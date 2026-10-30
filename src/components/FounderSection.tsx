@@ -1,5 +1,5 @@
+import Image from "next/image";
 import { siteConfig } from "@/config/site";
-import { Heart } from "lucide-react";
 
 export function FounderSection() {
   return (
@@ -9,27 +9,28 @@ export function FounderSection() {
       className="py-[clamp(68px,9vw,120px)]"
     >
       <div className="max-w-[1120px] w-[calc(100%-40px)] mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-[minmax(240px,0.85fr)_minmax(0,1.15fr)] gap-8 md:gap-14 lg:gap-20 items-center">
-          {/* Photo Slot */}
-          <div
-            className="pattern-stripes min-h-[280px] md:min-h-[380px] p-6 border border-line rounded-[3px] flex flex-col items-center justify-center text-center text-muted"
-            role="img"
-            aria-label="Placeholder foto founder Umma Motherhood Cipanas"
-          >
-            <div className="w-12 h-12 rounded-full bg-paper border border-line flex items-center justify-center mb-3 text-clay">
-              <Heart className="w-5 h-5 fill-clay/20" />
+        <div className="grid grid-cols-1 md:grid-cols-[minmax(260px,0.85fr)_minmax(0,1.15fr)] gap-8 md:gap-14 lg:gap-20 items-center">
+          {/* Photo Slot / Community Visual */}
+          <div className="relative overflow-hidden rounded-2xl border border-line bg-white/80 p-6 md:p-8 shadow-lg shadow-warm-sand/20 flex flex-col items-center justify-center text-center">
+            <div className="relative w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-paper-deep/60 shadow-inner mb-4">
+              <Image
+                src="/images/logo-badge.jpg"
+                alt="Umma Motherhood Cipanas Badge"
+                fill
+                className="object-cover"
+              />
             </div>
-            <span className="max-w-[240px] px-3 py-2 bg-paper border border-line/60 rounded text-xs font-medium text-ink shadow-2xs">
-              [Foto komunitas: ganti dengan foto asli]
+            <span className="px-3 py-1 bg-warm-sand/50 rounded-full text-xs font-semibold text-ink">
+              Komunitas Ibu Cipanas &amp; Sekitarnya
             </span>
             <p className="text-xs text-muted mt-2">
-              (Letakkan foto di folder public)
+              (Dapat diganti dengan foto founder di folder public)
             </p>
           </div>
 
           {/* Letter / Story */}
           <div>
-            <span className="inline-flex items-center gap-2.5 text-moss text-[0.76rem] font-bold tracking-[0.12em] uppercase before:content-[''] before:w-7 before:h-px before:bg-current">
+            <span className="inline-flex items-center gap-2.5 text-rosewood text-[0.76rem] font-bold tracking-[0.12em] uppercase before:content-[''] before:w-7 before:h-px before:bg-current">
               05 / Sepucuk surat
             </span>
             <h2
@@ -44,7 +45,7 @@ export function FounderSection() {
 
             {/* Signature */}
             <div className="mt-6">
-              <p className="text-clay font-signature text-4xl sm:text-5xl select-none">
+              <p className="text-rosewood font-signature text-4xl sm:text-5xl select-none">
                 {siteConfig.founder.name}
               </p>
               <p className="text-muted text-xs uppercase tracking-wider font-sans font-semibold mt-1">

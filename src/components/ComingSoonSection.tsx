@@ -6,8 +6,8 @@ export function ComingSoonSection() {
     >
       <div className="grid grid-cols-1 md:grid-cols-[minmax(220px,0.75fr)_minmax(0,1.25fr)] gap-6 md:gap-10 items-start">
         <div>
-          <span className="inline-flex items-center gap-2 px-2.5 py-1 border border-moss rounded-[2px] text-moss text-[0.74rem] font-bold tracking-[0.08em] uppercase">
-            <span className="w-1.5 h-1.5 rounded-full bg-moss animate-pulse" />
+          <span className="inline-flex items-center gap-2 px-2.5 py-1 border border-rosewood rounded-[4px] text-rosewood text-[0.74rem] font-bold tracking-[0.08em] uppercase">
+            <span className="w-1.5 h-1.5 rounded-full bg-rosewood animate-pulse" />
             Segera Hadir
           </span>
           <h2

@@ -6,12 +6,12 @@ export function SupportSection() {
     <section
       id="dukung"
       aria-labelledby="dukung-title"
-      className="py-[clamp(68px,9vw,115px)] bg-paper-deep border-t border-[#cfc1ae]"
+      className="py-[clamp(68px,9vw,115px)] bg-warm-sand/35 border-t border-line"
     >
       <div className="max-w-[1120px] w-[calc(100%-40px)] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-[0.8fr_1.2fr] gap-8 md:gap-14 lg:gap-20 items-start">
           <div>
-            <span className="inline-flex items-center gap-2.5 text-moss text-[0.76rem] font-bold tracking-[0.12em] uppercase before:content-[''] before:w-7 before:h-px before:bg-current">
+            <span className="inline-flex items-center gap-2.5 text-rosewood text-[0.76rem] font-bold tracking-[0.12em] uppercase before:content-[''] before:w-7 before:h-px before:bg-current">
               06 / Ikut mengambil bagian
             </span>
             <h2
@@ -27,11 +27,11 @@ export function SupportSection() {
           </div>
 
           <div>
-            <div className="border-t border-[#bbae9c]">
+            <div className="border-t border-line">
               {siteConfig.supportItems.map((item) => (
                 <article
                   key={item.title}
-                  className="py-6 border-b border-[#bbae9c]"
+                  className="py-6 border-b border-line"
                 >
                   <h3 className="text-ink font-serif text-[1.45rem] font-medium leading-snug">
                     {item.title}
@@ -48,7 +48,7 @@ export function SupportSection() {
                 href={siteConfig.links.volunteerForm}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-[48px] items-center justify-center gap-2 px-6 py-3 border border-clay rounded-[3px] bg-clay text-[#fffaf2] text-[0.95rem] font-bold no-underline transition-all duration-200 hover:bg-[#87371f] hover:-translate-y-0.5"
+                className="inline-flex min-h-[48px] items-center justify-center gap-2 px-6 py-3 border border-rosewood rounded-[4px] bg-rosewood text-[#fffaf2] text-[0.95rem] font-bold no-underline transition-all duration-200 hover:bg-[#9f5d54] hover:-translate-y-0.5 shadow-sm"
               >
                 <span>Daftar Jadi Relawan</span>
                 <ArrowUpRight className="w-4 h-4" />
@@ -57,10 +57,10 @@ export function SupportSection() {
                 href={siteConfig.links.donationForm}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-[48px] items-center justify-center gap-2 px-6 py-3 border border-line rounded-[3px] bg-transparent text-ink text-[0.95rem] font-bold no-underline transition-all duration-200 hover:bg-paper hover:-translate-y-0.5"
+                className="inline-flex min-h-[48px] items-center justify-center gap-2 px-6 py-3 border border-line rounded-[4px] bg-paper text-ink text-[0.95rem] font-bold no-underline transition-all duration-200 hover:bg-white hover:-translate-y-0.5"
               >
                 <span>Donasi / Jadi Pengisi Kelas</span>
-                <HeartHandshake className="w-4 h-4 text-clay" />
+                <HeartHandshake className="w-4 h-4 text-rosewood" />
               </a>
             </div>
           </div>

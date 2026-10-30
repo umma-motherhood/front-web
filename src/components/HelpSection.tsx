@@ -5,15 +5,15 @@ export function HelpSection() {
   const getIcon = (type: string) => {
     switch (type) {
       case "bike":
-        return <Bike className="w-6 h-6 text-moss" />;
+        return <Bike className="w-5 h-5 text-rosewood" />;
       case "sparkles":
-        return <Sparkles className="w-6 h-6 text-moss" />;
+        return <Sparkles className="w-5 h-5 text-rosewood" />;
       case "baby":
-        return <Baby className="w-6 h-6 text-moss" />;
+        return <Baby className="w-5 h-5 text-rosewood" />;
       case "home":
-        return <Home className="w-6 h-6 text-moss" />;
+        return <Home className="w-5 h-5 text-rosewood" />;
       default:
-        return <MessageSquare className="w-6 h-6 text-moss" />;
+        return <MessageSquare className="w-5 h-5 text-rosewood" />;
     }
   };
 
@@ -26,7 +26,7 @@ export function HelpSection() {
       <div className="max-w-[1120px] w-[calc(100%-40px)] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-[minmax(220px,0.75fr)_minmax(0,1.25fr)] gap-6 md:gap-10 items-start mb-10">
           <div>
-            <span className="inline-flex items-center gap-2.5 text-moss text-[0.76rem] font-bold tracking-[0.12em] uppercase before:content-[''] before:w-7 before:h-px before:bg-current">
+            <span className="inline-flex items-center gap-2.5 text-rosewood text-[0.76rem] font-bold tracking-[0.12em] uppercase before:content-[''] before:w-7 before:h-px before:bg-current">
               03 / Saling bantu
             </span>
             <h2
@@ -45,9 +45,9 @@ export function HelpSection() {
           {siteConfig.helpContacts.map((contact) => (
             <div
               key={contact.id}
-              className="grid grid-cols-[40px_1fr] sm:grid-cols-[48px_1fr_auto] items-center gap-4 sm:gap-6 py-4 border-b border-line hover:bg-paper-deep/30 transition-colors"
+              className="grid grid-cols-[40px_1fr] sm:grid-cols-[48px_1fr_auto] items-center gap-4 sm:gap-6 py-4 border-b border-line hover:bg-warm-sand/20 transition-colors"
             >
-              <div className="w-10 h-10 rounded-full bg-paper-deep/60 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full bg-warm-sand/40 flex items-center justify-center">
                 {getIcon(contact.icon)}
               </div>
               <p className="text-ink font-medium text-[1rem] leading-relaxed">
@@ -58,7 +58,7 @@ export function HelpSection() {
                   href={contact.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="min-h-[42px] px-4 py-2 inline-flex items-center gap-2 border border-line rounded-[3px] bg-paper text-clay text-[0.85rem] font-bold tracking-wide hover:bg-paper-deep hover:border-clay transition-all shadow-xs"
+                  className="min-h-[42px] px-4 py-2 inline-flex items-center gap-2 border border-line rounded-[4px] bg-paper text-rosewood text-[0.85rem] font-bold tracking-wide hover:bg-warm-sand/40 hover:border-rosewood transition-all shadow-xs"
                 >
                   <MessageSquare className="w-3.5 h-3.5" />
                   <span>Hubungi via WhatsApp</span>
