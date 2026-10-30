@@ -36,17 +36,19 @@ export function MarketSection() {
 
           <div className="flex flex-col sm:flex-row lg:justify-end gap-3.5">
             <a
-              href={siteConfig.links.umkmCatalog}
-              className="inline-flex min-h-[48px] items-center justify-center gap-2 px-6 py-3 border border-paper rounded-[3px] bg-paper text-ink text-[0.95rem] font-bold no-underline transition-all duration-200 hover:bg-[#fffaf2] hover:-translate-y-0.5"
-            >
-              <span>Lihat Lapak</span>
-              <ArrowUpRight className="w-4 h-4 text-clay" />
-            </a>
-            <a
-              href={siteConfig.links.umkmRegister}
+              href={siteConfig.links.umkmCatalogWa}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-[48px] items-center justify-center gap-2 px-6 py-3 border border-[#d8d1c1] rounded-[3px] bg-transparent text-[#fff9ee] text-[0.95rem] font-bold no-underline transition-all duration-200 hover:bg-white/10 hover:-translate-y-0.5"
+              className="inline-flex min-h-[48px] items-center justify-center gap-2 px-6 py-3 border border-paper rounded-[4px] bg-paper text-ink text-[0.95rem] font-bold no-underline transition-all duration-200 hover:bg-[#fffaf2] hover:-translate-y-0.5"
+            >
+              <span>Lihat Lapak via WA</span>
+              <ArrowUpRight className="w-4 h-4 text-rosewood" />
+            </a>
+            <a
+              href={siteConfig.links.umkmRegisterWa}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-[48px] items-center justify-center gap-2 px-6 py-3 border border-[#d8d1c1] rounded-[4px] bg-transparent text-[#fff9ee] text-[0.95rem] font-bold no-underline transition-all duration-200 hover:bg-white/10 hover:-translate-y-0.5"
             >
               <span>Daftarkan Usahamu</span>
               <ArrowUpRight className="w-4 h-4" />

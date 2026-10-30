@@ -45,7 +45,7 @@ export function SupportSection() {
 
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 mt-8">
               <a
-                href={siteConfig.links.volunteerForm}
+                href={siteConfig.links.volunteerWa}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex min-h-[48px] items-center justify-center gap-2 px-6 py-3 border border-rosewood rounded-[4px] bg-rosewood text-[#fffaf2] text-[0.95rem] font-bold no-underline transition-all duration-200 hover:bg-[#9f5d54] hover:-translate-y-0.5 shadow-sm"
@@ -54,7 +54,7 @@ export function SupportSection() {
                 <ArrowUpRight className="w-4 h-4" />
               </a>
               <a
-                href={siteConfig.links.donationForm}
+                href={siteConfig.links.donationWa}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex min-h-[48px] items-center justify-center gap-2 px-6 py-3 border border-line rounded-[4px] bg-paper text-ink text-[0.95rem] font-bold no-underline transition-all duration-200 hover:bg-white hover:-translate-y-0.5"
