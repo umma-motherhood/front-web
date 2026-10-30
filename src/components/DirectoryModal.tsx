@@ -31,14 +31,14 @@ export function DirectoryModal({ isOpen, onClose, data }: DirectoryModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-ink/65 backdrop-blur-sm animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-ink/65 modal-backdrop"
       role="dialog"
       aria-modal="true"
       aria-labelledby="directory-modal-title"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-2xl bg-paper border border-line rounded-2xl shadow-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto"
+        className="relative w-full max-w-2xl bg-paper border border-line rounded-2xl shadow-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto modal-dialog"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}

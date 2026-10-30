@@ -24,9 +24,6 @@ export function FounderSection() {
             <span className="px-3 py-1 bg-warm-sand/50 rounded-full text-xs font-semibold text-ink">
               Komunitas Ibu Cipanas &amp; Sekitarnya
             </span>
-            <p className="text-xs text-muted mt-2">
-              (Dapat diganti dengan foto founder di folder public)
-            </p>
           </div>
 
           {/* Letter / Story */}

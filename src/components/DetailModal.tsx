@@ -44,14 +44,14 @@ export function DetailModal({ isOpen, onClose, data }: DetailModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-ink/60 backdrop-blur-sm animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-ink/65 modal-backdrop"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-lg bg-paper border border-line rounded-xl shadow-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto"
+        className="relative w-full max-w-lg bg-paper border border-line rounded-xl shadow-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto modal-dialog"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
