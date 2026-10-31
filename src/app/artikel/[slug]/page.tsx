@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import fs from "fs";
+import path from "path";
+import { marked } from "marked";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { siteConfig, CommunityArticle } from "@/config/site";
@@ -18,7 +21,6 @@ import {
   CheckCircle,
   Quote,
   Bookmark,
-  Share2,
 } from "lucide-react";
 
 function InstagramIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
@@ -38,6 +40,24 @@ function InstagramIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
       <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
     </svg>
   );
+}
+
+function getArticleFullHtml(slug: string): string | null {
+  try {
+    const filePath = path.join(
+      process.cwd(),
+      "src",
+      "content",
+      "articles",
+      `${slug}.md`
+    );
+    if (!fs.existsSync(filePath)) return null;
+    const raw = fs.readFileSync(filePath, "utf8");
+    const body = raw.replace(/^---[\s\S]*?---\s*/, "");
+    return marked.parse(body) as string;
+  } catch {
+    return null;
+  }
 }
 
 export function generateStaticParams() {
@@ -96,6 +116,8 @@ export default async function SingleArticlePage({
   if (!article) {
     notFound();
   }
+
+  const fullHtml = getArticleFullHtml(article.id);
 
   const otherArticles = siteConfig.communityArticles.filter(
     (a) => a.id !== article.id
@@ -209,70 +231,54 @@ export default async function SingleArticlePage({
           </div>
         </header>
 
-        {/* Article Content Body */}
+        {/* Article Content Area */}
         <div className="pt-8 sm:pt-12">
           <div className="max-w-[880px] w-[calc(100%-40px)] mx-auto">
-            {/* PROMINENT OUTSIDE REFERENCE BOX */}
+            {/* Top Outside Reference Note */}
             {article.outsideReference && (
-              <section className="mb-10 p-6 sm:p-8 rounded-2xl border-2 border-rosewood/40 bg-warm-sand/25 shadow-sm">
-                <div className="flex items-start gap-4">
-                  <div className="w-11 h-11 rounded-full bg-rosewood text-[#fffaf2] flex items-center justify-center flex-shrink-0 mt-0.5 shadow-xs">
-                    <Bookmark className="w-5 h-5" />
-                  </div>
-
-                  <div className="flex-1">
-                    <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-rosewood mb-1">
-                      <span>Sumber Referensi Artikel Lengkap</span>
-                    </span>
-
-                    <h2 className="text-xl sm:text-2xl font-serif font-medium text-ink leading-snug mb-2">
-                      Baca Naskah Utuh di {article.outsideReference.platform}
-                    </h2>
-
-                    <p className="text-muted text-sm sm:text-[0.96rem] leading-relaxed mb-5">
-                      {article.outsideReference.description}
+              <aside className="mb-10 p-5 sm:p-6 rounded-xl border border-rosewood/30 bg-warm-sand/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-start gap-3">
+                  <Bookmark className="w-5 h-5 text-rosewood flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-rosewood mb-0.5">
+                      Rujukan Sumber Asli
+                    </h3>
+                    <p className="text-xs sm:text-sm text-muted leading-relaxed">
+                      Artikel ini ditulis oleh <strong>{article.author}</strong> dan dipublikasikan secara utuh di sini. Sumber publikasi asli:{" "}
+                      <strong>{article.outsideReference.platform}</strong>.
                     </p>
-
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                      <a
-                        href={article.outsideReference.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex min-h-[48px] items-center justify-center gap-2 px-6 py-3 rounded-[4px] bg-rosewood text-[#fffaf2] text-sm font-bold shadow-md hover:bg-[#9f5d54] hover:-translate-y-0.5 transition-all"
-                      >
-                        <span>{article.outsideReference.buttonLabel}</span>
-                        <ExternalLink className="w-4 h-4" />
-                      </a>
-
-                      <span className="text-xs text-muted italic text-center sm:text-left">
-                        ↗ Terhubung langsung ke situs eksternal
-                      </span>
-                    </div>
                   </div>
                 </div>
-              </section>
+
+                <a
+                  href={article.outsideReference.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-[4px] border border-rosewood text-rosewood text-xs font-bold hover:bg-rosewood hover:text-white transition-colors self-start sm:self-center flex-shrink-0"
+                >
+                  <span>Buka Tautan Luar</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </aside>
             )}
 
-            {/* Overview / Introduction Paragraphs */}
-            {article.overviewParagraphs && article.overviewParagraphs.length > 0 && (
-              <section className="mb-10">
-                <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-muted mb-4 pb-2 border-b border-line/60">
-                  Pengantar &amp; Gambaran Isi Tulisan
-                </h3>
-
-                <div className="space-y-4 text-ink/90 text-base sm:text-lg leading-[1.75]">
-                  {article.overviewParagraphs.map((para, pIdx) => (
-                    <p key={pIdx} className="leading-relaxed">
-                      {para}
-                    </p>
-                  ))}
-                </div>
-              </section>
+            {/* FULL ARTICLE BODY RENDERED FROM MARKDOWN */}
+            {fullHtml ? (
+              <article
+                className="article-body font-serif mb-16"
+                dangerouslySetInnerHTML={{ __html: fullHtml }}
+              />
+            ) : (
+              <div className="space-y-4 text-ink/90 text-base sm:text-lg leading-[1.8] mb-16">
+                {article.overviewParagraphs?.map((para, pIdx) => (
+                  <p key={pIdx}>{para}</p>
+                ))}
+              </div>
             )}
 
             {/* Quote Callout */}
             {article.quote && (
-              <blockquote className="my-10 p-6 sm:p-7 rounded-xl border-l-4 border-rosewood bg-paper shadow-xs">
+              <blockquote className="my-12 p-6 sm:p-7 rounded-xl border-l-4 border-rosewood bg-paper shadow-xs">
                 <Quote className="w-8 h-8 text-rosewood/40 mb-2" />
                 <p className="text-lg sm:text-xl font-serif italic text-ink leading-relaxed">
                   &ldquo;{article.quote}&rdquo;
@@ -343,6 +349,33 @@ export default async function SingleArticlePage({
               </div>
             </section>
 
+            {/* Full External Archive Box */}
+            {article.outsideReference && (
+              <section className="mb-12 p-6 sm:p-8 rounded-2xl border-2 border-dashed border-rosewood/40 bg-warm-sand/20 text-center">
+                <div className="w-12 h-12 rounded-full bg-rosewood/10 text-rosewood flex items-center justify-center mx-auto mb-3">
+                  <Bookmark className="w-6 h-6" />
+                </div>
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-white text-rosewood border border-rosewood/20">
+                  Arsip Resmi Penulis
+                </span>
+                <h3 className="text-xl sm:text-2xl font-serif font-medium text-ink leading-tight mt-3 mb-2">
+                  Kunjungi Blog Resmi di {article.outsideReference.platform}
+                </h3>
+                <p className="text-muted text-sm leading-relaxed max-w-xl mx-auto mb-5">
+                  {article.outsideReference.description}
+                </p>
+                <a
+                  href={article.outsideReference.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-[46px] items-center justify-center gap-2 px-6 py-2.5 rounded-[4px] bg-rosewood text-[#fffaf2] text-xs sm:text-sm font-bold shadow-xs hover:bg-[#9f5d54] transition-colors"
+                >
+                  <span>{article.outsideReference.buttonLabel}</span>
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              </section>
+            )}
+
             {/* Interactive Community Discussion Card */}
             <section className="mb-14 p-6 sm:p-8 rounded-2xl bg-[#3b2820] text-[#fbf7f2] flex flex-col sm:flex-row items-center justify-between gap-6">
               <div className="text-center sm:text-left">
@@ -356,7 +389,7 @@ export default async function SingleArticlePage({
 
               <a
                 href={`https://wa.me/6287883370039?text=${encodeURIComponent(
-                  `Halo Umma Shierly, saya telah membaca ringkasan "${article.title}" di website Umma Motherhood dan ingin berdiskusi lebih lanjut.`
+                  `Halo Umma Shierly, saya telah membaca artikel lengkap "${article.title}" di website Umma Motherhood dan ingin berdiskusi lebih lanjut.`
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -422,7 +455,7 @@ export default async function SingleArticlePage({
                           href={`/artikel/${other.id}/`}
                           className="text-xs font-bold text-rosewood hover:underline inline-flex items-center gap-1"
                         >
-                          <span>Buka Ringkasan &amp; Referensi</span>
+                          <span>Baca Tulisan Lengkap</span>
                           <ArrowUpRight className="w-3 h-3" />
                         </Link>
                       </div>
