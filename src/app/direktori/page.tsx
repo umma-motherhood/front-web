@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { AdvertiseModal } from "@/components/AdvertiseModal";
+import { PlaceDetailModal } from "@/components/PlaceDetailModal";
 import { siteConfig, DirectoryItem, DirectoryPlaceItem } from "@/config/site";
 import {
   ArrowLeft,
@@ -24,9 +25,18 @@ import {
   Shield,
   Tag,
   Megaphone,
+  Eye,
 } from "lucide-react";
 
 type CategoryFilterKey = "semua" | "kesehatan" | "pendidikan" | "kebutuhan" | "hukum";
+
+type DirectoryPlaceEntry = {
+  place: DirectoryPlaceItem;
+  categoryId: string;
+  categoryCode: string;
+  categoryTitle: string;
+  subgroupTitle: string;
+};
 
 const CATEGORY_TABS: { key: CategoryFilterKey; label: string; code?: string }[] = [
   { key: "semua", label: "Semua Kategori" },
@@ -40,6 +50,7 @@ export default function DirektoriPage() {
   const [activeCategory, setActiveCategory] = useState<CategoryFilterKey>("semua");
   const [searchQuery, setSearchQuery] = useState("");
   const [isAdvertiseOpen, setIsAdvertiseOpen] = useState(false);
+  const [selectedPlace, setSelectedPlace] = useState<DirectoryPlaceEntry | null>(null);
 
   // Sync category from URL search params on mount
   useEffect(() => {
@@ -221,7 +232,7 @@ export default function DirektoriPage() {
             </span>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-7">
             {filteredPlaces.map((item) => {
               const cleanDigits = item.place.contact.phone.replace(/[^0-9]/g, "");
               const isDirect =
@@ -235,11 +246,11 @@ export default function DirektoriPage() {
               return (
                 <article
                   key={item.place.id}
-                  className="flex flex-col justify-between p-7 rounded-2xl bg-white/85 border border-line shadow-xs hover:border-rosewood/60 hover:shadow-md transition-all duration-200"
+                  className="flex flex-col justify-between p-6 sm:p-7 rounded-2xl bg-white/85 border border-line shadow-xs hover:border-rosewood/60 hover:shadow-md transition-all duration-200"
                 >
                   <div>
                     {/* Header Badges */}
-                    <div className="flex flex-wrap items-center justify-between gap-2 mb-3.5">
+                    <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                       <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-full bg-warm-sand/40 flex items-center justify-center">
                           {getCategoryIcon(item.categoryId)}
@@ -254,102 +265,73 @@ export default function DirektoriPage() {
                     </div>
 
                     {/* Title */}
-                    <h2 className="text-2xl sm:text-[1.65rem] font-serif font-medium text-ink leading-tight mb-3">
+                    <h2 className="text-xl sm:text-2xl font-serif font-medium text-ink leading-tight mb-2">
                       {item.place.name}
                     </h2>
 
-                    {/* Description */}
-                    <p className="text-muted text-[0.96rem] leading-relaxed mb-6">
+                    {/* Concise Description */}
+                    <p className="text-muted text-xs sm:text-[0.88rem] leading-relaxed mb-4 line-clamp-2">
                       {item.place.description}
                     </p>
 
-                    {/* Location, Schedule, Focus, Price & Contact Grid */}
-                    <div className="p-4 rounded-xl bg-warm-sand/20 border border-line/70 space-y-2.5 mb-6 text-xs text-ink">
-                      <div className="flex items-start gap-2.5">
-                        <MapPin className="w-4 h-4 text-rosewood flex-shrink-0 mt-0.5" />
-                        <div>
-                          <strong className="text-ink">Alamat:</strong>{" "}
-                          <span className="text-muted">{item.place.address}</span>
-                        </div>
+                    {/* Compact Specs Box */}
+                    <div className="p-3.5 rounded-xl bg-warm-sand/20 border border-line/70 space-y-2 mb-4 text-xs text-ink">
+                      <div className="flex items-center gap-2">
+                        <MapPin className="w-3.5 h-3.5 text-rosewood flex-shrink-0" />
+                        <span className="text-muted truncate">{item.place.address}</span>
                       </div>
 
                       {item.place.schedule && (
-                        <div className="flex items-start gap-2.5">
-                          <Clock className="w-4 h-4 text-moss flex-shrink-0 mt-0.5" />
-                          <div>
-                            <strong className="text-ink">Jadwal / Waktu:</strong>{" "}
-                            <span className="text-muted">{item.place.schedule}</span>
-                          </div>
-                        </div>
-                      )}
-
-                      {item.place.focus && (
-                        <div className="flex items-start gap-2.5">
-                          <Shield className="w-4 h-4 text-indigo-700 flex-shrink-0 mt-0.5" />
-                          <div>
-                            <strong className="text-ink">Fokus Layanan:</strong>{" "}
-                            <span className="text-muted">{item.place.focus}</span>
-                          </div>
+                        <div className="flex items-center gap-2">
+                          <Clock className="w-3.5 h-3.5 text-moss flex-shrink-0" />
+                          <span className="text-muted truncate">{item.place.schedule}</span>
                         </div>
                       )}
 
                       {item.place.priceRange && (
-                        <div className="flex items-start gap-2.5">
-                          <Tag className="w-4 h-4 text-rosewood flex-shrink-0 mt-0.5" />
-                          <div>
-                            <strong className="text-ink">Biaya / Tarif:</strong>{" "}
-                            <span className="text-rosewood font-bold">
-                              {item.place.priceRange}
-                            </span>
-                          </div>
-                        </div>
-                      )}
-
-                      <div className="flex items-start gap-2.5">
-                        <Phone className="w-4 h-4 text-rosewood flex-shrink-0 mt-0.5" />
-                        <div>
-                          <strong className="text-ink">Kontak / Person:</strong>{" "}
-                          <span className="text-muted">
-                            {item.place.contact.person} ({item.place.contact.phone})
+                        <div className="flex items-center gap-2">
+                          <Tag className="w-3.5 h-3.5 text-rosewood flex-shrink-0" />
+                          <span className="text-rosewood font-bold">
+                            Tarif: {item.place.priceRange}
                           </span>
                         </div>
-                      </div>
+                      )}
                     </div>
 
-                    {/* Community Review Quote */}
-                    <div className="p-4 rounded-xl bg-paper border border-line mb-6 relative">
-                      <div className="flex items-center gap-1 text-amber-500 mb-2">
-                        {[...Array(5)].map((_, i) => (
-                          <Star key={i} className="w-3.5 h-3.5 fill-current" />
-                        ))}
-                        <span className="text-[0.72rem] font-bold text-muted ml-1.5">
-                          Ulasan Teruji Ibu Cipanas
-                        </span>
+                    {/* Community Review Snippet */}
+                    <div className="p-3 rounded-lg bg-paper border border-line/80 mb-5 text-xs text-ink/80 flex items-center gap-2">
+                      <div className="flex items-center text-amber-500 flex-shrink-0">
+                        <Star className="w-3.5 h-3.5 fill-current" />
                       </div>
-                      <blockquote className="text-xs sm:text-sm text-ink italic leading-relaxed pl-3 border-l-2 border-rosewood/60">
+                      <p className="italic line-clamp-1 text-[0.78rem] text-ink">
                         &ldquo;{item.place.review.text}&rdquo;
-                      </blockquote>
-                      <p className="text-[0.72rem] font-bold text-rosewood text-right mt-2">
-                        — {item.place.review.author}
                       </p>
+                      <span className="text-[0.7rem] font-semibold text-rosewood not-italic whitespace-nowrap ml-auto">
+                        — {item.place.review.author}
+                      </span>
                     </div>
                   </div>
 
-                  {/* WhatsApp Action Button */}
-                  <div className="pt-3 border-t border-line/70">
+                  {/* Action Buttons: Dialog Trigger & WhatsApp */}
+                  <div className="pt-3 border-t border-line/60 grid grid-cols-2 gap-2.5">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedPlace(item)}
+                      className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-[4px] border border-line bg-paper text-ink text-xs font-bold hover:border-rosewood hover:text-rosewood transition-colors shadow-2xs cursor-pointer"
+                    >
+                      <Eye className="w-3.5 h-3.5 text-rosewood" />
+                      <span>Lihat Rincian</span>
+                    </button>
+
                     <a
                       href={waUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full inline-flex items-center justify-center gap-2.5 px-5 py-3 rounded-[4px] bg-rosewood text-[#fffaf2] text-xs sm:text-sm font-bold shadow-xs hover:bg-[#9f5d54] transition-all"
+                      className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-[4px] bg-rosewood text-[#fffaf2] text-xs font-bold shadow-xs hover:bg-[#9f5d54] transition-all"
                     >
-                      <MessageCircle className="w-4 h-4" />
-                      <span>
-                        {isDirect
-                          ? `Hubungi Langsung (${item.place.contact.person})`
-                          : "Hubungi & Minta Kontak via WA Umma"}
-                      </span>
-                      <ArrowUpRight className="w-4 h-4 opacity-80" />
+                      <MessageCircle className="w-3.5 h-3.5" />
+                      <span>{isDirect ? "Hubungi WA" : "WA Umma"}</span>
+                      <ArrowUpRight className="w-3.5 h-3.5 opacity-80" />
                     </a>
                   </div>
                 </article>
@@ -387,6 +369,12 @@ export default function DirektoriPage() {
           </div>
         </div>
       </section>
+
+      <PlaceDetailModal
+        isOpen={Boolean(selectedPlace)}
+        onClose={() => setSelectedPlace(null)}
+        item={selectedPlace}
+      />
 
       <AdvertiseModal
         isOpen={isAdvertiseOpen}

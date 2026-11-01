@@ -22,6 +22,7 @@ export interface UmkmItem {
   waMessage: string;
   phone?: string;
   images?: string[];
+  orderNotes?: string[];
   products?: UmkmProduct[];
 }
 
@@ -773,15 +774,88 @@ export const siteConfig = {
     {
       id: "toshierba",
       name: "Toshierba (Toko Shierly Serba Ada)",
+      tagline: "Sembako murah meriah, serba ada",
       category: "toserba",
-      categoryLabel: "Toko Serba Ada",
+      categoryLabel: "Toko Serba Ada & Sembako",
       owner: "Shierly",
-      priceRange: "Menunggu Detail Produk",
-      location: "Cipanas & Sekitarnya",
+      phone: "087883370039",
+      priceRange: "Mulai Rp 2.500 – Rp 70.000",
+      location:
+        "Perumahan Cipanas Regency blok C no. 5 (Sistem pre-order H-1, stok barang tidak ready)",
       description:
-        "Toko serba ada milik Shierly yang menyediakan aneka kebutuhan harian keluarga, perlengkapan ibu, dan produk pilihan di area Cipanas. Rincian daftar barang dan katalog lengkap sedang disiapkan.",
+        "Toko serba ada dan sembako online milik Shierly yang melayani berbagai kebutuhan pokok dan rumah tangga warga Cipanas dengan harga bersahabat. Menyediakan aneka sembako harian seperti beras, gas 3kg, minyak goreng, telur ayam fresh, telur omega 3, mentega, mie instan, aneka deterjen pakaian, hingga nugget dan makanan beku siap olah.",
       waMessage:
-        "Halo Umma Shierly, saya ingin bertanya seputar produk yang tersedia di Toshierba (Toko Shierly Serba Ada).",
+        "Halo Umma Shierly, saya ingin memesan kebutuhan sembako & rumah tangga di Toshierba (pre-order H-1).",
+      images: [
+        "/images/umkm/toshierba/katalog-sembako-1.jpg",
+        "/images/umkm/toshierba/katalog-sembako-2.jpg",
+        "/images/umkm/toshierba/katalog-sembako-3.jpg",
+        "/images/umkm/toshierba/katalog-sembako-4.jpg",
+        "/images/umkm/toshierba/katalog-sembako-5.jpg",
+      ],
+      orderNotes: [
+        "Sistem pre-order H-1 (stok barang tidak ready di tempat).",
+        "Kirim list pesanan via WhatsApp ke 087883370039 (Umma Shierly) atau 085117000603 (Uje).",
+        "Setelah pesanan siap, boleh diambil langsung ke rumah atau diantar ke alamat.",
+        "Belanja di atas Rp 50.000 gratis ongkir untuk delivery sekitar Perumahan Cipanas Regency.",
+      ],
+      products: [
+        {
+          name: "Beras Berkualitas",
+          price: "Rp 12.500 – Rp 13.000 / Liter",
+          desc: "Beras pulen bersih untuk konsumsi keluarga.",
+        },
+        {
+          name: "Gas Elpiji 3 Kg",
+          price: "Rp 25.000 / Tabung",
+          desc: "Tabung gas melon isi ulang resmi dan aman.",
+        },
+        {
+          name: "Minyak Goreng Kemasan (Rizki 800ml)",
+          price: "Rp 19.500",
+          desc: "Minyak goreng jernih hemat untuk keperluan dapur sehari-hari.",
+        },
+        {
+          name: "Telur Ayam Fresh & Telur Omega 3",
+          price: "Fresh: Rp 28.000/kg · Omega 3: Rp 3.000/butir",
+          desc: "Telur ayam segar pilihan langsung dari peternak.",
+        },
+        {
+          name: "Paket Hemat Mie Instan",
+          price: "Indomie: Rp 10.000/3 bks · Mie Sedaap: Rp 14.000/5 bks",
+          desc: "Pilihan rasa lengkap: Ayam Bawang, Soto Mie, Soto Koya, Goreng, Mie Tip-Top.",
+        },
+        {
+          name: "Mentega Palmia, Filma & Forvita (200gr)",
+          price: "Rp 7.500",
+          desc: "Margarin dan mentega serbaguna untuk memasak dan olesan roti.",
+        },
+        {
+          name: "Deterjen Cair Botol & Refill 700ml",
+          price: "Refill: Rp 15.000 · Botol: Rp 17.000",
+          desc: "Merk So Klin, Gentle Gen, dan So Soft wangi tahan lama.",
+        },
+        {
+          name: "Deterjen Ukuran Jerigen 4,5L – 5 Liter",
+          price: "Sayang 5L: Rp 60.000 · So Klin 5L: Rp 70.000",
+          desc: "Ukuran jumbo super hemat untuk kebutuhan mencuci rumah tangga.",
+        },
+        {
+          name: "Chicken Nugget (BenFarm & So Good)",
+          price: "Rp 25.000 – Rp 35.000",
+          desc: "Nugget ayam lezat, varian Mac & Cheese dan crispy praktis untuk lauk anak.",
+        },
+        {
+          name: "Tepung Bumbu Praktis (Perkedel, Bakso Goreng, Cireng Rujak)",
+          price: "Rp 9.000 / bks",
+          desc: "Tepung bumbu praktis siap olah untuk camilan keluarga.",
+        },
+        {
+          name: "Bandeng Cabut Duri",
+          price: "Rp 50.000",
+          desc: "Ikan bandeng segar bersih tanpa duri, higienis siap goreng/masak.",
+        },
+      ],
     },
   ] as UmkmItem[],
 
