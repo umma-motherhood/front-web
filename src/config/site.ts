@@ -42,6 +42,9 @@ export interface ClassItem {
     points: string[];
     note: string;
     isEmpty?: boolean;
+    emptyBadge?: string;
+    emptyTitle?: string;
+    emptyDescription?: string;
     classEvent?: ClassEventInfo;
     articles?: ClassArticleInfo[];
     archiveUrl?: string;
@@ -186,20 +189,13 @@ export const siteConfig = {
         "Akses rangkuman dan materi lengkap dari pakar, praktisi, dan ahli yang mengisi sesi edukasi di komunitas kami.",
       detail: {
         subtitle: "Edukasi Berbobot dari Para Ahli & Praktisi",
-        classEvent: {
-          name: "Online Montessori Class with Hasna",
-          speaker: "Hasna",
-          date: "07 November 2026",
-          materiStatus: "Coming Soon",
-          slug: "online-montessori-class-hasna",
-        },
-        points: [
-          "Online Montessori Class with Hasna — 07 Nov 2026",
-          "Materi Sesi: Coming Soon",
-          "Edukasi stimulasi sensori & kemandirian anak usia dini",
-          "Panduan praktis pengasuhan Montessori aplikatif di rumah",
-        ],
-        note: "Kelas interaktif terdekat: Online Montessori Class with Hasna pada 07 November 2026. Materi dan rangkuman akan diarsipkan setelah kelas selesai. Hubungi Umma Shierly untuk pendaftaran.",
+        isEmpty: true,
+        emptyBadge: "Segera",
+        emptyTitle: "Segera Hadir",
+        emptyDescription:
+          "Materi dan rangkuman sesi kelas bersama para pakar dan praktisi akan segera diarsipkan di ruang ini.",
+        points: [],
+        note: "Materi kelas profesional bersama pakar dan praktisi segera hadir. Jadwal dan pengumuman akan dibagikan melalui grup WhatsApp komunitas.",
       },
     },
     {
@@ -211,6 +207,10 @@ export const siteConfig = {
       detail: {
         subtitle: "Intisari Tanya Jawab Grup WhatsApp Komunitas",
         isEmpty: true,
+        emptyBadge: "Segera",
+        emptyTitle: "Segera Hadir",
+        emptyDescription:
+          "Sesi tanya jawab WhatsApp sedang dirangkum oleh tim komunitas agar wawasan berharga tidak tenggelam di ruang obrolan.",
         points: [],
         note: "Saat ini arsip tanya-jawab WhatsApp masih kosong. Tim kurasi komunitas sedang merangkum diskusi berbobot agar ilmu dan tips bermanfaat tidak tenggelam di ruang obrolan.",
       },
@@ -770,44 +770,6 @@ export const siteConfig = {
       url: "https://shirlyv.github.io/2026/08/02/Warisan-Cinta-untuk-Masa-Pubertas/",
       isExternal: true,
       status: "published",
-    },
-    {
-      id: "online-montessori-class-hasna",
-      title: "Online Montessori Class with Hasna",
-      subtitle:
-        "Penerapan Prinsip Montessori yang Menyenangkan, Aplikatif, dan Mandiri di Rumah",
-      author: "Hasna",
-      authorRole: "Montessori Educator & Praktisi PAUD",
-      speaker: "Hasna",
-      date: "07 November 2026",
-      eventDate: "07 November 2026",
-      category: "kelas-profesional",
-      categoryLabel: "Materi Kelas Profesional",
-      tags: ["Montessori", "Pendidikan Anak Usia Dini", "Sensori & Kemandirian"],
-      excerpt:
-        "Sesi edukasi daring interaktif bersama praktisi Montessori Hasna mengenai stimulasi sensori anak usia dini dan aplikasi prinsip Montessori di rumah.",
-      quote:
-        "Esensi terdalam Montessori adalah menyiapkan lingkungan yang menghargai kemandirian alami anak: 'Bantu aku melakukannya sendiri'.",
-      overviewParagraphs: [
-        "Banyak orang tua mengira metode Montessori membutuhkan aparatus kayu impor yang mahal dan rumit. Padahal esensi terdalam filosofi Montessori berpusat pada penataan lingkungan yang ramah anak (prepared environment) dan penghormatan terhadap fase sensitif anak.",
-        "Dalam kelas daring interaktif ini, Hasna akan mengupas tuntas cara praktis mengadaptasi prinsip Montessori menggunakan benda-benda sederhana di rumah untuk melatih motorik, fokus, dan kemandirian anak.",
-        "Materi rangkuman digital dan rekaman sesi kelas akan diarsipkan secara rapi di ruang ini setelah kegiatan kelas selesai diselenggarakan pada 07 November 2026.",
-      ],
-      keyTakeaways: [
-        "Memahami prinsip dasar 'Practical Life' dengan perlengkapan ramah anak di rumah.",
-        "Stimulasi sensori alami tanpa ketergantungan pada gawai atau layar digital.",
-        "Kiat mendampingi anak tanpa tergesa-gesa mengambil alih tugas belajarnya.",
-        "Sesi tanya-jawab interaktif dan konsultasi studi kasus pengasuhan anak usia dini.",
-      ],
-      outsideReference: {
-        platform: "Pendaftaran WhatsApp Resmi Komunitas",
-        url: "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20tertarik%20untuk%20mendaftar%20dan%20meminta%20info%20Online%20Montessori%20Class%20with%20Hasna.",
-        description:
-          "Pendaftaran peserta dan pembagian tautan sesi interaktif Zoom dikoordinasikan langsung melalui WhatsApp Umma Shierly.",
-        buttonLabel: "Daftar & Minta Info via WhatsApp Umma Shierly",
-      },
-      status: "coming-soon",
-      materiStatus: "Coming Soon",
     },
   ] as CommunityArticle[],
 };

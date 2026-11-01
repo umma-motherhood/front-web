@@ -25,6 +25,9 @@ export interface ModalData {
   note: string;
   whatsappMessage: string;
   isEmpty?: boolean;
+  emptyBadge?: string;
+  emptyTitle?: string;
+  emptyDescription?: string;
   classEvent?: ClassEventInfo;
   articles?: ClassArticleInfo[];
   archiveUrl?: string;
@@ -88,7 +91,7 @@ export function DetailModal({ isOpen, onClose, data }: DetailModalProps) {
           </span>
           <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rosewood/10 text-rosewood border border-rosewood/20">
             <Sparkles className="w-3 h-3" />
-            {data.isEmpty ? "Segera Hadir" : "Terverifikasi Komunitas"}
+            {data.isEmpty ? (data.emptyBadge || "Segera") : "Terverifikasi Komunitas"}
           </span>
         </div>
 
@@ -213,18 +216,21 @@ export function DetailModal({ isOpen, onClose, data }: DetailModalProps) {
           </div>
         )}
 
-        {/* State Kosong (Nomor 02) */}
+        {/* State Kosong / Segera */}
         {data.isEmpty && (
-          <div className="mb-6 p-6 rounded-xl border border-dashed border-line bg-warm-sand/20 text-center">
-            <div className="w-10 h-10 rounded-full bg-rosewood/10 text-rosewood flex items-center justify-center mx-auto mb-2">
-              <Inbox className="w-5 h-5" />
+          <div className="mb-6 p-6 rounded-xl border border-dashed border-rosewood/30 bg-warm-sand/20 text-center">
+            <div className="w-11 h-11 rounded-full bg-rosewood/10 text-rosewood flex items-center justify-center mx-auto mb-2.5">
+              <Sparkles className="w-5 h-5" />
             </div>
-            <h4 className="text-sm font-serif font-medium text-ink mb-1">
-              Arsip Tanya-Jawab Masih Kosong
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-white text-rosewood border border-rosewood/20">
+              {data.emptyBadge || "Segera"}
+            </span>
+            <h4 className="text-base font-serif font-medium text-ink mt-2.5 mb-1">
+              {data.emptyTitle || "Segera Hadir"}
             </h4>
-            <p className="text-xs text-muted max-w-[42ch] mx-auto leading-relaxed">
-              Sesi tanya jawab WhatsApp sedang dirangkum oleh tim komunitas agar
-              wawasan berharga tidak tenggelam di ruang obrolan.
+            <p className="text-xs text-muted max-w-[44ch] mx-auto leading-relaxed">
+              {data.emptyDescription ||
+                "Informasi materi sedang dalam proses penyiapan dan akan segera hadir."}
             </p>
           </div>
         )}

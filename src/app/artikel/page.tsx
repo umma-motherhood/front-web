@@ -295,6 +295,37 @@ export default function ArtikelPage() {
                   );
                 })}
 
+                {/* Section 01 Empty Notice Card (Segera) */}
+                {(selectedCategory === "semua" || selectedCategory === "kelas-profesional") && (
+                  <article className="flex flex-col justify-between p-6 sm:p-7 rounded-2xl border-2 border-dashed border-line bg-warm-sand/20 text-center">
+                    <div>
+                      <div className="w-12 h-12 rounded-full bg-rosewood/10 text-rosewood flex items-center justify-center mx-auto mb-3">
+                        <Sparkles className="w-6 h-6" />
+                      </div>
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-white text-rosewood border border-rosewood/20">
+                        Segera
+                      </span>
+                      <h2 className="text-xl sm:text-2xl font-serif font-medium text-ink leading-tight mt-3 mb-2">
+                        Materi Kelas Profesional
+                      </h2>
+                      <p className="text-muted text-sm leading-relaxed mb-4">
+                        Akses rangkuman dan materi lengkap dari pakar, praktisi, dan ahli yang mengisi sesi edukasi di komunitas kami akan segera hadir.
+                      </p>
+                    </div>
+
+                    <a
+                      href={siteConfig.links.whatsappGroup}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-[4px] border border-rosewood text-rosewood text-xs font-bold hover:bg-rosewood hover:text-[#fffaf2] transition-colors"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5" />
+                      <span>Info Jadwal via Grup WA</span>
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </a>
+                  </article>
+                )}
+
                 {/* Section 02 Empty Notice Card */}
                 {(selectedCategory === "semua" || selectedCategory === "arsip-diskusi") && (
                   <article className="flex flex-col justify-between p-6 sm:p-7 rounded-2xl border-2 border-dashed border-line bg-warm-sand/20 text-center">
