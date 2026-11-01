@@ -16,6 +16,7 @@ import {
   MessageCircle,
   Sparkles,
   ShoppingBag,
+  Phone,
 } from "lucide-react";
 
 type CategoryFilter = "semua" | "toserba" | "busana" | "kuliner" | "bayi" | "kriya";
@@ -28,6 +29,155 @@ const CATEGORIES: { key: CategoryFilter; label: string }[] = [
   { key: "bayi", label: "Perlengkapan Bayi" },
   { key: "kriya", label: "Kriya & Kerajinan" },
 ];
+
+function UmkmCard({ item }: { item: UmkmItem }) {
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+  const cleanDigits = (item.phone || "").replace(/[^0-9]/g, "");
+  const isDirect = cleanDigits.startsWith("08");
+  const phoneTarget = isDirect ? `62${cleanDigits.slice(1)}` : "6287883370039";
+  const itemWaUrl = `https://wa.me/${phoneTarget}?text=${encodeURIComponent(item.waMessage)}`;
+
+  const currentImage =
+    item.images && item.images.length > 0 ? item.images[activeImageIndex] : null;
+
+  return (
+    <article className="flex flex-col justify-between p-6 sm:p-7 rounded-2xl bg-white/85 border border-line shadow-xs hover:border-rosewood/50 hover:shadow-md transition-all duration-200">
+      <div>
+        {/* Header Badges */}
+        <div className="flex items-center justify-between gap-2 mb-3">
+          <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rosewood/10 text-rosewood border border-rosewood/20">
+            {item.categoryLabel}
+          </span>
+          <span className="text-[0.72rem] text-muted font-medium">
+            Oleh: {item.owner}
+          </span>
+        </div>
+
+        {/* Title & Tagline */}
+        <h2 className="text-xl sm:text-2xl font-serif font-medium text-ink leading-tight mb-1">
+          {item.name}
+        </h2>
+        {item.tagline && (
+          <p className="text-xs font-medium text-rosewood italic mb-3">
+            &ldquo;{item.tagline}&rdquo;
+          </p>
+        )}
+
+        {/* Product Images Gallery (if available) */}
+        {item.images && item.images.length > 0 && currentImage && (
+          <div className="mb-4 space-y-2">
+            <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-warm-sand/30 border border-line group">
+              <img
+                src={currentImage}
+                alt={`${item.name} - foto ${activeImageIndex + 1}`}
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                loading="lazy"
+              />
+              <span className="absolute bottom-2 right-2 px-2 py-0.5 rounded-full bg-ink/70 text-white text-[0.68rem] font-medium backdrop-blur-xs">
+                Foto {activeImageIndex + 1} / {item.images.length}
+              </span>
+            </div>
+
+            {/* Thumbnails row */}
+            {item.images.length > 1 && (
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 pt-0.5 scrollbar-thin">
+                {item.images.map((img, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setActiveImageIndex(idx)}
+                    className={`relative w-12 h-12 rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all cursor-pointer ${
+                      activeImageIndex === idx
+                        ? "border-rosewood shadow-xs scale-105"
+                        : "border-line opacity-70 hover:opacity-100"
+                    }`}
+                  >
+                    <img
+                      src={img}
+                      alt={`Thumbnail ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Description */}
+        <p className="text-muted text-sm leading-relaxed mb-4">
+          {item.description}
+        </p>
+
+        {/* Featured Products list */}
+        {item.products && item.products.length > 0 && (
+          <div className="p-3.5 rounded-xl bg-warm-sand/20 border border-line/60 mb-5 space-y-2">
+            <span className="text-[0.72rem] font-bold uppercase tracking-wider text-ink block">
+              Menu &amp; Pilihan Produk:
+            </span>
+            <ul className="space-y-1.5 text-xs text-muted">
+              {item.products.map((prod, pIdx) => (
+                <li key={pIdx} className="flex items-start gap-1.5">
+                  <span className="text-rosewood font-bold mt-0.5">•</span>
+                  <div>
+                    <strong className="text-ink">{prod.name}</strong>
+                    {prod.price && (
+                      <span className="text-rosewood font-semibold ml-1">
+                        ({prod.price})
+                      </span>
+                    )}
+                    {prod.desc && (
+                      <span className="block text-muted/90 text-[0.72rem]">
+                        {prod.desc}
+                      </span>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+
+      {/* Meta Information & CTA */}
+      <div>
+        <div className="pt-3 border-t border-line/60 flex flex-col gap-2 text-xs text-muted mb-4">
+          <div className="flex items-center justify-between gap-2">
+            <span className="inline-flex items-center gap-1 font-semibold text-rosewood">
+              <Tag className="w-3.5 h-3.5" />
+              {item.priceRange}
+            </span>
+            {item.phone && (
+              <span className="inline-flex items-center gap-1 font-medium text-ink">
+                <Phone className="w-3.5 h-3.5 text-muted" />
+                {item.phone}
+              </span>
+            )}
+          </div>
+          <div className="flex items-start gap-1.5 text-muted">
+            <MapPin className="w-3.5 h-3.5 text-rosewood flex-shrink-0 mt-0.5" />
+            <span>{item.location}</span>
+          </div>
+        </div>
+
+        <a
+          href={itemWaUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-[4px] bg-rosewood text-[#fffaf2] text-xs font-bold shadow-xs hover:bg-[#9f5d54] transition-colors"
+        >
+          <MessageCircle className="w-3.5 h-3.5" />
+          <span>
+            {isDirect ? `Pesan via WhatsApp (${item.owner})` : "Hubungi via WA Umma"}
+          </span>
+          <ArrowUpRight className="w-3.5 h-3.5 opacity-80" />
+        </a>
+      </div>
+    </article>
+  );
+}
 
 export default function UmkmPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -227,65 +377,9 @@ export default function UmkmPage() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
-                {filteredUmkm.map((item) => {
-                  const itemWaUrl = `https://wa.me/6287883370039?text=${encodeURIComponent(
-                    item.waMessage
-                  )}`;
-
-                  return (
-                    <article
-                      key={item.id}
-                      className="flex flex-col justify-between p-6 sm:p-7 rounded-2xl bg-white/80 border border-line shadow-xs hover:border-rosewood/50 hover:shadow-md transition-all duration-200"
-                    >
-                      <div>
-                        {/* Header Badges */}
-                        <div className="flex items-center justify-between gap-2 mb-3">
-                          <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rosewood/10 text-rosewood border border-rosewood/20">
-                            {item.categoryLabel}
-                          </span>
-                          <span className="text-[0.72rem] text-muted font-medium">
-                            Oleh: {item.owner}
-                          </span>
-                        </div>
-
-                        {/* Title */}
-                        <h2 className="text-xl sm:text-2xl font-serif font-medium text-ink leading-tight mb-2.5">
-                          {item.name}
-                        </h2>
-
-                        {/* Description */}
-                        <p className="text-muted text-sm leading-relaxed mb-5">
-                          {item.description}
-                        </p>
-                      </div>
-
-                      {/* Meta Information & CTA */}
-                      <div>
-                        <div className="pt-3 border-t border-line/60 flex flex-wrap items-center justify-between gap-2 text-xs text-muted mb-4">
-                          <span className="inline-flex items-center gap-1 font-semibold text-rosewood">
-                            <Tag className="w-3.5 h-3.5" />
-                            {item.priceRange}
-                          </span>
-                          <span className="inline-flex items-center gap-1">
-                            <MapPin className="w-3.5 h-3.5 text-muted" />
-                            {item.location}
-                          </span>
-                        </div>
-
-                        <a
-                          href={itemWaUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-[4px] bg-rosewood text-[#fffaf2] text-xs font-bold shadow-xs hover:bg-[#9f5d54] transition-colors"
-                        >
-                          <MessageCircle className="w-3.5 h-3.5" />
-                          <span>Hubungi via WA Umma</span>
-                          <ArrowUpRight className="w-3.5 h-3.5 opacity-80" />
-                        </a>
-                      </div>
-                    </article>
-                  );
-                })}
+                {filteredUmkm.map((item) => (
+                  <UmkmCard key={item.id} item={item} />
+                ))}
 
                 {/* Always-present CTA Card to Join the Catalog */}
                 <article className="flex flex-col justify-between p-6 sm:p-7 rounded-2xl border-2 border-dashed border-rosewood/40 bg-warm-sand/20 text-center">

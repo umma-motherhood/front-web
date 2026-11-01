@@ -3,9 +3,16 @@ export interface NavItem {
   href: string;
 }
 
+export interface UmkmProduct {
+  name: string;
+  price?: string;
+  desc?: string;
+}
+
 export interface UmkmItem {
   id: string;
   name: string;
+  tagline?: string;
   category: "semua" | "toserba" | "busana" | "kuliner" | "bayi" | "kriya" | "jasa";
   categoryLabel: string;
   owner: string;
@@ -13,6 +20,9 @@ export interface UmkmItem {
   location: string;
   description: string;
   waMessage: string;
+  phone?: string;
+  images?: string[];
+  products?: UmkmProduct[];
 }
 
 export interface ClassEventInfo {
@@ -101,6 +111,8 @@ export interface DirectoryPlaceItem {
   description: string;
   address: string;
   schedule?: string;
+  priceRange?: string;
+  focus?: string;
   review: PlaceReview;
   contact: PlaceContact;
   waMessage: string;
@@ -273,7 +285,7 @@ export const siteConfig = {
               description:
                 "Dokter Nina merupakan salah satu dokter spesialis anak yang berpraktik di Apotek Panca Farma, Cipanas. Beliau dikenal memiliki pendekatan yang ramah dan sabar saat memeriksa anak-anak, sehingga si kecil tidak mudah rewel. Ruang tunggunya cukup memadai bagi ibu dan anak yang sedang menunggu antrean pemeriksaan. Penjelasan yang diberikan mengenai kondisi kesehatan anak maupun resep obat selalu mudah dipahami oleh para orang tua. Jadwal praktiknya sangat bisa diandalkan untuk kebutuhan konsultasi rutin maupun penanganan sakit anak di area sekitar.",
               address: "Apotek Panca Farma, Jl. Raya Cipanas No. 12, Cipanas, Cianjur",
-              schedule: "Praktik Sore: Senin – Sabtu (17.00 – 20.00 WIB)",
+              schedule: "Senin, Selasa, Kamis: 15.00 – 20.00 WIB",
               review: {
                 author: "Ibu Riana (Anggota Umma Cipanas)",
                 text: "Dokter Nina sangat ramah dan sabar saat memeriksa si kecil, penjelasannya detail dan resepnya sangat cocok. Tidak terburu-buru saat konsultasi.",
@@ -367,7 +379,7 @@ export const siteConfig = {
               categoryTag: "Pop Up Class & Sensori Motorik",
               description:
                 "Tiny Roots merupakan wadah eksplorasi seru bagi anak-anak untuk mengembangkan kreativitas melalui kegiatan pop up class tatap muka. Program ini sering menghadirkan aktivitas sensorik dan motorik yang dirancang khusus untuk menstimulasi tumbuh kembang anak usia dini. Anak-anak diajak untuk bermain sambil belajar di lingkungan yang aman, menyenangkan, dan penuh warna. Setiap sesinya dipandu oleh fasilitator yang memahami kebutuhan psikologis serta tahap perkembangan anak balita. Kelas ini sangat cocok bagi ibu yang ingin memberikan variasi kegiatan edukatif akhir pekan di sekitar Cipanas.",
-              address: "Lokasi Berpindah / Pop-up Area Cipanas & Sekitarnya",
+              address: "Perumahan Griya Asri Cipanas, Cianjur",
               schedule: "Sesi Tematik Akhir Pekan (Sabtu & Minggu Berjadwal)",
               review: {
                 author: "Ibu Kartika (Anggota Komunitas Umma)",
@@ -375,11 +387,11 @@ export const siteConfig = {
                 rating: 5,
               },
               contact: {
-                person: "Tim Fasilitator Tiny Roots",
-                phone: "087883370039 (via Umma Shierly)",
+                person: "Ibu Shofia",
+                phone: "0898-6279-287",
               },
               waMessage:
-                "Halo Umma Shierly, saya ingin info jadwal pop up class Tiny Roots Cipanas terdekat.",
+                "Halo Ibu Shofia (Tiny Roots), saya ingin informasi jadwal pop up class dan kegiatan stimulasi anak di Tiny Roots Cipanas.",
             },
             {
               id: "batutta",
@@ -387,7 +399,7 @@ export const siteConfig = {
               categoryTag: "Pendidikan Anak Informal & Praktik Nyata",
               description:
                 "Batutta hadir sebagai penyelenggara kegiatan pendidikan anak informal yang mengedepankan pengalaman belajar langsung melalui praktik nyata. Berbagai tema pop up class yang diselenggarakan bertujuan untuk mengasah rasa ingin tahu dan kemandirian anak sedini mungkin. Lingkungan belajarnya dikemas dengan sangat santai agar anak tidak merasa terbebani seperti dalam sistem sekolah formal. Anak-anak bisa leluasa bereksplorasi, bersosialisasi dengan teman sebaya, dan membangun rasa percaya diri mereka di ruang publik. Kehadiran komunitas belajar ini menjadi angin segar bagi opsi aktivitas edukasi interaktif di wilayah Cipanas.",
-              address: "Area Publik & Outdoor Cipanas, Cianjur",
+              address: "Perumahan Orchid Cipanas, Cianjur",
               schedule: "Sesi Belajar Tematik Akhir Pekan",
               review: {
                 author: "Ibu Nadia (Warga Cipanas)",
@@ -395,11 +407,11 @@ export const siteConfig = {
                 rating: 5,
               },
               contact: {
-                person: "Koordinator Batutta Cipanas",
-                phone: "087883370039 (via Umma Shierly)",
+                person: "Ibu Rizka",
+                phone: "0838-0324-5536",
               },
               waMessage:
-                "Halo Umma Shierly, saya ingin info kegiatan dan jadwal kelas Batutta Cipanas.",
+                "Halo Ibu Rizka (Batutta), saya ingin informasi kegiatan dan jadwal kelas bermain edukatif Batutta Cipanas.",
             },
           ],
         },
@@ -412,7 +424,7 @@ export const siteConfig = {
               categoryTag: "Komunitas Sepeda Keseimbangan Balita",
               description:
                 "Push Bike Cipanas adalah komunitas olahraga sepeda tanpa pedal yang sangat menyenangkan dan ramah bagi anak usia balita. Kegiatan ini sangat efektif untuk melatih keseimbangan, koordinasi motorik kasar, serta kelincahan anak sejak dini. Latihan rutin dilakukan di area yang aman dengan pengawasan langsung dari pelatih atau pendamping yang berpengalaman. Aktivitas fisik ini juga melatih mental keberanian dan sportivitas anak saat berinteraksi dengan teman-temannya di lintasan. Orang tua bisa menjadikan ajang ini sebagai momen bonding yang seru di sore hari atau akhir pekan.",
-              address: "Lintasan Latihan Aman Cipanas, Cianjur",
+              address: "Hotel Cipanas, Cianjur",
               schedule: "Latihan Rutin: Sore Hari & Akhir Pekan",
               review: {
                 author: "Ibu Farah (Cipanas)",
@@ -420,31 +432,31 @@ export const siteConfig = {
                 rating: 5,
               },
               contact: {
-                person: "Pengurus Push Bike Cipanas",
-                phone: "087883370039 (via Umma Shierly)",
+                person: "Coach Rahman",
+                phone: "0856-2466-1779",
               },
               waMessage:
-                "Halo Umma Shierly, saya ingin info bergabung dan jadwal latihan Push Bike Cipanas.",
+                "Halo Coach Rahman, saya ingin info pendaftaran dan jadwal latihan Push Bike Cipanas.",
             },
             {
               id: "dojo-katana",
-              name: "Dojo Katana Karate Kids",
+              name: "Dojo Katana Cipanas",
               categoryTag: "Bela Diri Karate Anak",
               description:
-                "Dojo Katana Karate Kids menawarkan kelas bela diri karate yang dirancang khusus dengan pendekatan yang aman bagi anak-anak. Melalui latihan yang disiplin namun menyenangkan, anak-anak diajarkan teknik dasar perlindungan diri sekaligus melatih fokus konsentrasi. Para pelatih di sini sabar dalam membimbing karakter anak agar tumbuh menjadi individu yang tangguh, tangkas, dan santun. Olahraga ini sangat baik untuk menyalurkan energi aktif anak-anak ke arah yang positif dan terstruktur rapi. Ini adalah pilihan tepat bagi ibu yang ingin menanamkan nilai kedisiplinan dan kebugaran fisik pada buah hatinya.",
-              address: "Dojo Katana Cipanas, Cianjur",
-              schedule: "Sesi Latihan: Sore Hari (2x Seminggu)",
+                "Dojo Katana Cipanas menawarkan kelas bela diri karate yang dirancang khusus dengan pendekatan yang aman bagi anak-anak. Melalui latihan yang disiplin namun menyenangkan, anak-anak diajarkan teknik dasar perlindungan diri sekaligus melatih fokus konsentrasi. Para pelatih di sini sabar dalam membimbing karakter anak agar tumbuh menjadi individu yang tangguh, tangkas, dan santun. Olahraga ini sangat baik untuk menyalurkan energi aktif anak-anak ke arah yang positif dan terstruktur rapi. Ini adalah pilihan tepat bagi ibu yang ingin menanamkan nilai kedisiplinan dan kebugaran fisik pada buah hatinya.",
+              address: "GOR Cipanas Balakang, Cipanas, Cianjur",
+              schedule: "Latihan: Senin dan Sabtu",
               review: {
                 author: "Ibu Wulan (Cipanas)",
                 text: "Anak saya jadi lebih disiplin, percaya diri, dan bisa menyalurkan energinya dengan sehat. Pelatihnya sabar dan berdedikasi.",
                 rating: 5,
               },
               contact: {
-                person: "Sensei / Pelatih Dojo Katana",
-                phone: "087883370039 (via Umma Shierly)",
+                person: "Kang Sule",
+                phone: "0877-2121-4466",
               },
               waMessage:
-                "Halo Umma Shierly, saya ingin info pendaftaran kelas Dojo Katana Karate Kids Cipanas.",
+                "Halo Kang Sule, saya ingin info pendaftaran dan latihan karate anak di Dojo Katana Cipanas.",
             },
             {
               id: "cipanas-archery",
@@ -452,19 +464,19 @@ export const siteConfig = {
               categoryTag: "Olahraga Panahan Anak & Remaja",
               description:
                 "Cipanas Archery menyediakan fasilitas olahraga panahan yang melatih ketangkasan dan fokus pikiran bagi anak-anak maupun remaja. Kegiatan memanah ini sangat bermanfaat untuk melatih kesabaran, postur tubuh yang tegak, serta ketajaman mata. Fasilitas yang disediakan cukup memadai dan aman karena dipandu langsung oleh instruktur panahan yang terlatih. Anak-anak akan diajarkan teknik memegang busur dan melepaskan anak panah dengan presisi dalam suasana yang bersahabat. Olahraga ini bisa menjadi alternatif kegiatan fisik yang unik dan minim kontak tubuh di area Cipanas.",
-              address: "Fasilitas Lapangan Panahan Cipanas, Cianjur",
-              schedule: "Kelas Pemula & Latihan Terbuka Akhir Pekan",
+              address: "Villa Pink SPBU Ciherang, Cipanas, Cianjur",
+              schedule: "Sesi: Setiap Hari Minggu",
               review: {
                 author: "Ibu Ratna (Cipanas)",
                 text: "Panahan sangat bagus untuk melatih ketenangan dan fokus konsentrasi anak. Fasilitasnya aman dan instrukturnya sabar membimbing.",
                 rating: 5,
               },
               contact: {
-                person: "Instruktur Cipanas Archery",
-                phone: "087883370039 (via Umma Shierly)",
+                person: "Pak Rizal",
+                phone: "0856-2221-996",
               },
               waMessage:
-                "Halo Umma Shierly, saya ingin info latihan panahan di Cipanas Archery.",
+                "Halo Pak Rizal, saya ingin info sesi latihan panahan anak di Cipanas Archery.",
             },
           ],
         },
@@ -540,6 +552,44 @@ export const siteConfig = {
               },
               waMessage:
                 "Halo Umma Shierly, saya ingin melihat menu dan berlangganan katering Dapur Sangkilang Cipanas.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "hukum",
+      code: "D.",
+      title: "Fasilitas Hukum",
+      subtitle: "Konseling & Advokasi Perempuan",
+      description:
+        "Layanan konseling hukum pernikahan, keluarga, advokasi perempuan penyintas KDRT, dan perlindungan hak anak di Cianjur & Cipanas.",
+      subgroups: [
+        {
+          title: "Konseling & Bantuan Hukum Perempuan",
+          places: [
+            {
+              id: "konseling-hukum-pekka",
+              name: "Konseling Hukum Pernikahan, Rumah Tangga dan Perempuan",
+              categoryTag: "Konseling & Bantuan Hukum",
+              focus:
+                "Siap mengawal isu-isu seputar perempuan penyintas KDRT, gugat cerai, isbat nikah, serta legalitas asal-usul anak.",
+              description:
+                "Layanan konseling dan bantuan hukum yang siap mengawal isu-isu krusial seputar perempuan penyintas KDRT, gugat cerai, isbat nikah, serta kejelasan asal-usul dan legalitas anak. Seluruh layanan berjalan secara amanah, solutif, menjaga kerahasiaan, dan berada di bawah pengawasan Serikat Pemberdayaan Perempuan Pekka Kab. Cianjur.",
+              address: "Jl. Mariwati Km. 5, Cipanas, Cianjur",
+              schedule: "Senin – Sabtu (Dengan Perjanjian / Konsultasi Langsung)",
+              priceRange: "Rp 50.000 – Rp 2.500.000",
+              review: {
+                author: "Klien Pendampingan Pekka (Cianjur)",
+                text: "Pendampingan yang sangat amanah, solutif, dan menguatkan hati perempuan dalam mencari keadilan serta kepastian hukum bagi keluarga dan anak.",
+                rating: 5,
+              },
+              contact: {
+                person: "Serikat Pemberdayaan Perempuan Pekka Kab. Cianjur",
+                phone: "083813711118",
+              },
+              waMessage:
+                "Halo, saya ingin berkonsultasi mengenai layanan Konseling Hukum Pernikahan, Rumah Tangga dan Perempuan di Cipanas.",
             },
           ],
         },
@@ -675,6 +725,51 @@ export const siteConfig = {
   ] as SupportItem[],
 
   umkmList: [
+    {
+      id: "opat-kadeudeuh",
+      name: "Opat Kadeudeuh",
+      tagline: "Jajanan jadul, rasa mantul",
+      category: "kuliner",
+      categoryLabel: "Kuliner & Jajanan Jadul",
+      owner: "Opat Kadeudeuh",
+      phone: "083813711118",
+      priceRange: "Rp 5.000 – Rp 65.000",
+      location:
+        "Jl. Mariwati km. 5 kp. Kawungluwuk tengah Rt. 02/Rw.07 (Juga tersedia di Toserba Selamat)",
+      description:
+        "Menjual berbagai macam jajanan jadul dengan cita rasa mantul: mulai dari Brownies Coklat lezat (Uk. 10x20), Brownies Kunafa Pistachio premium, aneka ukuran Mie Kremes gurih (Mini, Pouch, 1/4 kg, 1 kg), hingga Cireng isi aneka rasa favorit keluarga (Ayam Suwir Original, Pedas, dan Keju).",
+      waMessage:
+        "Halo Opat Kadeudeuh, saya tertarik memesan jajanan jadul (Brownies / Mie Kremes / Cireng). Boleh minta info katalog dan cara pemesanannya?",
+      images: [
+        "/images/umkm/opat-kadeudeuh/mie-kremes-display.jpg",
+        "/images/umkm/opat-kadeudeuh/cireng-kadeudeuh.jpg",
+        "/images/umkm/opat-kadeudeuh/mie-kremes-kemasan.jpg",
+        "/images/umkm/opat-kadeudeuh/brownies-coklat.jpg",
+        "/images/umkm/opat-kadeudeuh/brownies-kunafa-pistachio.jpg",
+      ],
+      products: [
+        {
+          name: "Mie Kremes Opat Kadeudeuh (Renyahnya Bikin Nagih)",
+          price: "Tersedia kemasan Mini, Pouch, 1/4 kg & 1 kg",
+          desc: "Mie kremes gurih renyah legendaris rasa original yang selalu bikin nagih.",
+        },
+        {
+          name: "Cireng Opat Kadeudeuh (Camilan Favorit Keluarga)",
+          price: "Isi: Ayam Suwir Original, Pedas & Keju",
+          desc: "Cireng hangat renyah di luar, lembut dengan isian gurih melimpah di dalam.",
+        },
+        {
+          name: "Brownies Coklat (Uk. 10 x 20)",
+          price: "Varian Loyang Uk. 10x20",
+          desc: "Brownies coklat legit manis pas dengan siraman saus coklat lumer dan buah ceri segar.",
+        },
+        {
+          name: "Brownies Kunafa Pistachio",
+          price: "Kemasan Box Premium",
+          desc: "Sensasi perpaduan mewah brownies panggang premium dilapisi kunafa krispi dan limpahan kacang pistachio asli.",
+        },
+      ],
+    },
     {
       id: "toshierba",
       name: "Toshierba (Toko Shierly Serba Ada)",

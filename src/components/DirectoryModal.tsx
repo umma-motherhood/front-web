@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import { X, ArrowUpRight, MessageCircle, MapPin, Clock, Star } from "lucide-react";
+import { X, ArrowUpRight, MessageCircle, MapPin, Clock, Star, Shield, Tag, Phone } from "lucide-react";
 import { DirectoryItem } from "@/config/site";
 
 interface DirectoryModalProps {
@@ -64,7 +64,7 @@ export function DirectoryModal({ isOpen, onClose, data }: DirectoryModalProps) {
           </div>
 
           <Link
-            href={`/direktori?kategori=${data.id}`}
+            href={`/direktori/?kategori=${data.id}`}
             onClick={onClose}
             className="inline-flex items-center gap-1 text-xs font-bold text-rosewood hover:underline"
           >
@@ -101,7 +101,12 @@ export function DirectoryModal({ isOpen, onClose, data }: DirectoryModalProps) {
 
               <div className="grid grid-cols-1 gap-5">
                 {group.places.map((place, pIdx) => {
-                  const placeWaUrl = `https://wa.me/6287883370039?text=${encodeURIComponent(
+                  const cleanDigits = place.contact.phone.replace(/[^0-9]/g, "");
+                  const isDirect =
+                    cleanDigits.startsWith("08") &&
+                    !place.contact.phone.includes("via Umma");
+                  const phoneTarget = isDirect ? `62${cleanDigits.slice(1)}` : "6287883370039";
+                  const placeWaUrl = `https://wa.me/${phoneTarget}?text=${encodeURIComponent(
                     place.waMessage
                   )}`;
 
@@ -123,7 +128,7 @@ export function DirectoryModal({ isOpen, onClose, data }: DirectoryModalProps) {
                         {place.description}
                       </p>
 
-                      {/* Location & Schedule summary */}
+                      {/* Location, Schedule, Focus, Price & Contact summary */}
                       <div className="p-3 rounded-lg bg-warm-sand/20 border border-line/60 space-y-1.5 mb-3.5 text-xs text-ink">
                         <div className="flex items-start gap-2">
                           <MapPin className="w-3.5 h-3.5 text-rosewood flex-shrink-0 mt-0.5" />
@@ -135,6 +140,22 @@ export function DirectoryModal({ isOpen, onClose, data }: DirectoryModalProps) {
                             <span className="text-muted">{place.schedule}</span>
                           </div>
                         )}
+                        {place.focus && (
+                          <div className="flex items-start gap-2">
+                            <Shield className="w-3.5 h-3.5 text-indigo-700 flex-shrink-0 mt-0.5" />
+                            <span className="text-muted"><strong className="text-ink">Fokus:</strong> {place.focus}</span>
+                          </div>
+                        )}
+                        {place.priceRange && (
+                          <div className="flex items-start gap-2">
+                            <Tag className="w-3.5 h-3.5 text-rosewood flex-shrink-0 mt-0.5" />
+                            <span className="text-rosewood font-bold"><strong className="text-ink">Tarif:</strong> {place.priceRange}</span>
+                          </div>
+                        )}
+                        <div className="flex items-start gap-2">
+                          <Phone className="w-3.5 h-3.5 text-rosewood flex-shrink-0 mt-0.5" />
+                          <span className="text-muted">{place.contact.person} ({place.contact.phone})</span>
+                        </div>
                       </div>
 
                       {/* Review snippet */}
@@ -150,7 +171,7 @@ export function DirectoryModal({ isOpen, onClose, data }: DirectoryModalProps) {
 
                       <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-line/50">
                         <Link
-                          href={`/direktori?kategori=${data.id}`}
+                          href={`/direktori/?kategori=${data.id}`}
                           onClick={onClose}
                           className="text-xs font-semibold text-ink hover:text-rosewood transition-colors inline-flex items-center gap-1"
                         >
@@ -165,7 +186,7 @@ export function DirectoryModal({ isOpen, onClose, data }: DirectoryModalProps) {
                           className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-[4px] bg-rosewood text-[#fffaf2] text-xs font-bold shadow-2xs hover:bg-[#9f5d54] transition-all"
                         >
                           <MessageCircle className="w-3.5 h-3.5" />
-                          <span>Hubungi via WA Umma</span>
+                          <span>{isDirect ? `Hubungi (${place.contact.person})` : "Hubungi via WA Umma"}</span>
                           <ArrowUpRight className="w-3.5 h-3.5 opacity-80" />
                         </a>
                       </div>
@@ -180,7 +201,7 @@ export function DirectoryModal({ isOpen, onClose, data }: DirectoryModalProps) {
         {/* Footer info */}
         <div className="mt-8 pt-4 border-t border-line flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted">
           <Link
-            href={`/direktori?kategori=${data.id}`}
+            href={`/direktori/?kategori=${data.id}`}
             onClick={onClose}
             className="inline-flex items-center gap-1 font-bold text-rosewood hover:underline"
           >

@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useMemo, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -21,27 +20,37 @@ import {
   Stethoscope,
   GraduationCap,
   ShoppingBag,
+  Scale,
+  Shield,
+  Tag,
   Megaphone,
 } from "lucide-react";
 
-type CategoryFilterKey = "semua" | "kesehatan" | "pendidikan" | "kebutuhan";
+type CategoryFilterKey = "semua" | "kesehatan" | "pendidikan" | "kebutuhan" | "hukum";
 
 const CATEGORY_TABS: { key: CategoryFilterKey; label: string; code?: string }[] = [
   { key: "semua", label: "Semua Kategori" },
   { key: "kesehatan", label: "Fasilitas Kesehatan", code: "A." },
   { key: "pendidikan", label: "Pendidikan & Anak", code: "B." },
   { key: "kebutuhan", label: "Kebutuhan Harian", code: "C." },
+  { key: "hukum", label: "Fasilitas Hukum", code: "D." },
 ];
 
-function DirectoryContent() {
-  const searchParams = useSearchParams();
-  const initialCategory = (searchParams.get("kategori") as CategoryFilterKey) || "semua";
-
-  const [activeCategory, setActiveCategory] = useState<CategoryFilterKey>(
-    CATEGORY_TABS.some((t) => t.key === initialCategory) ? initialCategory : "semua"
-  );
+export default function DirektoriPage() {
+  const [activeCategory, setActiveCategory] = useState<CategoryFilterKey>("semua");
   const [searchQuery, setSearchQuery] = useState("");
   const [isAdvertiseOpen, setIsAdvertiseOpen] = useState(false);
+
+  // Sync category from URL search params on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const cat = params.get("kategori") as CategoryFilterKey;
+      if (cat && CATEGORY_TABS.some((t) => t.key === cat)) {
+        setActiveCategory(cat);
+      }
+    }
+  }, []);
 
   // Flatten places with parent category information
   const allPlaces = useMemo(() => {
@@ -96,13 +105,17 @@ function DirectoryContent() {
         return <Stethoscope className="w-5 h-5 text-rosewood" />;
       case "pendidikan":
         return <GraduationCap className="w-5 h-5 text-moss" />;
+      case "hukum":
+        return <Scale className="w-5 h-5 text-indigo-700" />;
       default:
         return <ShoppingBag className="w-5 h-5 text-warm-cocoa" />;
     }
   };
 
   return (
-    <main className="min-h-screen bg-paper pb-20">
+    <>
+      <Navbar />
+      <main className="min-h-screen bg-paper pb-20">
       {/* Breadcrumb / Top Return Bar */}
       <div className="border-b border-line/60 bg-warm-sand/20 py-3.5">
         <div className="max-w-[1120px] w-[calc(100%-40px)] mx-auto flex items-center justify-between text-xs sm:text-sm">
@@ -210,7 +223,12 @@ function DirectoryContent() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {filteredPlaces.map((item) => {
-              const waUrl = `https://wa.me/6287883370039?text=${encodeURIComponent(
+              const cleanDigits = item.place.contact.phone.replace(/[^0-9]/g, "");
+              const isDirect =
+                cleanDigits.startsWith("08") &&
+                !item.place.contact.phone.includes("via Umma");
+              const phoneTarget = isDirect ? `62${cleanDigits.slice(1)}` : "6287883370039";
+              const waUrl = `https://wa.me/${phoneTarget}?text=${encodeURIComponent(
                 item.place.waMessage
               )}`;
 
@@ -245,7 +263,7 @@ function DirectoryContent() {
                       {item.place.description}
                     </p>
 
-                    {/* Location, Schedule & Contact Grid */}
+                    {/* Location, Schedule, Focus, Price & Contact Grid */}
                     <div className="p-4 rounded-xl bg-warm-sand/20 border border-line/70 space-y-2.5 mb-6 text-xs text-ink">
                       <div className="flex items-start gap-2.5">
                         <MapPin className="w-4 h-4 text-rosewood flex-shrink-0 mt-0.5" />
@@ -261,6 +279,28 @@ function DirectoryContent() {
                           <div>
                             <strong className="text-ink">Jadwal / Waktu:</strong>{" "}
                             <span className="text-muted">{item.place.schedule}</span>
+                          </div>
+                        </div>
+                      )}
+
+                      {item.place.focus && (
+                        <div className="flex items-start gap-2.5">
+                          <Shield className="w-4 h-4 text-indigo-700 flex-shrink-0 mt-0.5" />
+                          <div>
+                            <strong className="text-ink">Fokus Layanan:</strong>{" "}
+                            <span className="text-muted">{item.place.focus}</span>
+                          </div>
+                        </div>
+                      )}
+
+                      {item.place.priceRange && (
+                        <div className="flex items-start gap-2.5">
+                          <Tag className="w-4 h-4 text-rosewood flex-shrink-0 mt-0.5" />
+                          <div>
+                            <strong className="text-ink">Biaya / Tarif:</strong>{" "}
+                            <span className="text-rosewood font-bold">
+                              {item.place.priceRange}
+                            </span>
                           </div>
                         </div>
                       )}
@@ -304,7 +344,11 @@ function DirectoryContent() {
                       className="w-full inline-flex items-center justify-center gap-2.5 px-5 py-3 rounded-[4px] bg-rosewood text-[#fffaf2] text-xs sm:text-sm font-bold shadow-xs hover:bg-[#9f5d54] transition-all"
                     >
                       <MessageCircle className="w-4 h-4" />
-                      <span>Hubungi &amp; Minta Kontak via WA Umma</span>
+                      <span>
+                        {isDirect
+                          ? `Hubungi Langsung (${item.place.contact.person})`
+                          : "Hubungi & Minta Kontak via WA Umma"}
+                      </span>
                       <ArrowUpRight className="w-4 h-4 opacity-80" />
                     </a>
                   </div>
@@ -348,25 +392,7 @@ function DirectoryContent() {
         isOpen={isAdvertiseOpen}
         onClose={() => setIsAdvertiseOpen(false)}
       />
-    </main>
-  );
-}
-
-export default function DirektoriPage() {
-  return (
-    <>
-      <Navbar />
-      <Suspense
-        fallback={
-          <div className="min-h-screen bg-paper flex items-center justify-center p-8">
-            <div className="text-center font-serif text-muted">
-              Memuat Direktori Rekomendasi Cipanas...
-            </div>
-          </div>
-        }
-      >
-        <DirectoryContent />
-      </Suspense>
+      </main>
       <Footer />
     </>
   );

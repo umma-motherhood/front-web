@@ -76,7 +76,7 @@ export function DirectorySection() {
                       Buka rincian ({item.subgroups.reduce((acc, g) => acc + g.places.length, 0)} tempat) →
                     </span>
                     <Link
-                      href={`/direktori?kategori=${item.id}`}
+                      href={`/direktori/?kategori=${item.id}`}
                       onClick={(e) => e.stopPropagation()}
                       className="text-xs text-ink underline font-bold"
                     >
@@ -89,7 +89,7 @@ export function DirectorySection() {
                 </p>
                 <div className="flex items-center justify-end gap-2.5">
                   <Link
-                    href={`/direktori?kategori=${item.id}`}
+                    href={`/direktori/?kategori=${item.id}`}
                     onClick={(e) => e.stopPropagation()}
                     className="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 rounded-[4px] border border-line bg-paper text-ink text-xs font-bold hover:border-rosewood hover:text-rosewood transition-colors shadow-2xs"
                   >
