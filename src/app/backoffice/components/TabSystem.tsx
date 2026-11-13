@@ -525,24 +525,44 @@ export function TabSystem({
         </div>
       </div>
 
-      {/* Tombol Kunci Sesi / Logout */}
-      <div className="p-6 rounded-2xl bg-white border border-line shadow-xs flex items-center justify-between">
+      {/* Tombol Kunci Sesi / Logout & Reset */}
+      <div className="p-6 rounded-2xl bg-white border border-line shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h3 className="font-serif font-bold text-ink text-base">
-            Kunci Sesi Backoffice
+            Keamanan Sesi Backoffice
           </h3>
           <p className="text-xs text-muted">
-            Keluar dari sesi admin di peramban ini. Anda akan diminta memasukkan PIN kembali saat mengaksesnya.
+            Keluar dari sesi admin saat ini, atau reset kredensial lokal jika ingin mengganti PIN dan Token GitHub dari awal.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={onLogout}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-red-200 bg-red-50 hover:bg-red-100 text-red-700 text-xs font-bold transition"
-        >
-          <LogOut className="w-4 h-4" />
-          <span>Keluar Sesi</span>
-        </button>
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
+          <button
+            type="button"
+            onClick={() => {
+              if (
+                confirm(
+                  "Reset konfigurasi akan menghapus PIN dan Token tersimpan di browser ini. Anda perlu memasukkan ulang Token GitHub dan membuat PIN baru. Lanjutkan?"
+                )
+              ) {
+                localStorage.removeItem(STORAGE_KEY);
+                onLogout();
+              }
+            }}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-line bg-paper hover:bg-white text-muted hover:text-ink text-xs font-bold transition"
+          >
+            <KeyRound className="w-4 h-4" />
+            <span>Reset PIN &amp; Konfigurasi</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={onLogout}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-red-200 bg-red-50 hover:bg-red-100 text-red-700 text-xs font-bold transition"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>Keluar Sesi</span>
+          </button>
+        </div>
       </div>
     </div>
   );

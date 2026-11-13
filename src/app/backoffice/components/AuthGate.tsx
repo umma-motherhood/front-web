@@ -206,22 +206,6 @@ export function AuthGate({ onAuthenticated }: AuthGateProps) {
               )}
             </button>
           </form>
-
-          <div className="mt-6 pt-5 border-t border-line text-center">
-            <button
-              type="button"
-              onClick={() => {
-                if (confirm("Reset konfigurasi akan menghapus kredensial tersimpan di browser ini. Anda perlu memasukkan ulang Token GitHub. Lanjutkan?")) {
-                  localStorage.removeItem(STORAGE_KEY);
-                  setStoredData(null);
-                  setIsSetupDone(false);
-                }
-              }}
-              className="text-xs text-muted hover:text-rosewood underline underline-offset-4"
-            >
-              Ganti PIN / Reset Konfigurasi GitHub Token
-            </button>
-          </div>
         </div>
       </div>
     );
