@@ -148,6 +148,24 @@
                 "phone": "087883370039 (via Umma Shierly)"
               },
               "waMessage": "Halo Umma Shierly, saya ingin meminta info kontak Bidan Silvia Meilia di Praktek Bidan Mia Tarigu Cipanas."
+            },
+            {
+              "id": "sundari-care-cianjur",
+              "name": "Sundari Care (Cianjur)",
+              "categoryTag": "Layanan Kebidanan Komplementer",
+              "focus": "Kebidanan komplementer, baby & mommy care, pemulihan masalah menyusui (milk blister / saluran ASI tersumbat), serta pijat bayi dan anak.",
+              "description": "Sundari Care (Health Baby & Mommy Care) menghadirkan layanan kebidanan komplementer, perawatan ibu menyusui, serta baby dan kids spa di Cianjur. Suasana tempatnya nyaman dengan bidan dan staf yang ramah serta telaten mendampingi ibu dan anak. Layanan ini banyak membantu pemulihan keluhan menyusui seperti milk blister atau saluran ASI tersumbat, sekaligus menerima pijat bayi dan anak meski sedang rewel sehingga Si Kecil bisa kembali rileks dan tidur lebih pulas.",
+              "address": "Jl. Raya Cibeber No.KM 63, Sukasari, Kec. Cilaku, Kabupaten Cianjur, Jawa Barat 43285",
+              "review": {
+                "author": "Rangkuman Ulasan Ibu & Orang Tua (Google Review)",
+                "text": "Bidan dan stafnya ramah, tempatnya nyaman. Sangat terbantu mengatasi keluhan menyusui seperti milk blister atau saluran ASI tersumbat hingga sembuh, serta sabar melayani pijat anak meski rewel sampai Si Kecil tidur pulas.",
+                "rating": 5
+              },
+              "contact": {
+                "person": "Admin Sundari Care Cianjur",
+                "phone": "0851-1721-3203"
+              },
+              "waMessage": "Halo Sundari Care Cianjur, saya mendapat referensi dari Umma Motherhood Cipanas dan ingin bertanya mengenai layanan kebidanan komplementer."
             }
           ]
         }
@@ -616,6 +634,18 @@
       "title": "Asisten Rumah Tangga (ART) panggilan atau paruh waktu.",
       "href": "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20ingin%20info%20kontak%20ART%20panggilan%20paruh%20waktu.",
       "icon": "home"
+    },
+    {
+      "id": "jastip-hypermart",
+      "title": "Jastip Belanjaan Hypermart oleh Ibu Chisya (Fee Rp 10.000, ongkir mulai Rp 10.000).",
+      "href": "https://wa.me/6281959503936?text=Halo%20Ibu%20Chisya%2C%20saya%20dapat%20info%20dari%20Umma%20Motherhood%20Cipanas%20dan%20ingin%20memesan%20Jastip%20Belanjaan%20Hypermart.",
+      "icon": "shopping-bag"
+    },
+    {
+      "id": "pijat-panggilan",
+      "title": "Pijat Panggilan oleh Teh Isop (Tarif mulai Rp 60.000).",
+      "href": "https://wa.me/6281572439727?text=Halo%20Teh%20Isop%2C%20saya%20dapat%20info%20dari%20Umma%20Motherhood%20Cipanas%20dan%20ingin%20memesan%20layanan%20Pijat%20Panggilan.",
+      "icon": "heart-handshake"
     }
   ],
   "supportItems": [

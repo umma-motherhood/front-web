@@ -140,7 +140,7 @@ export interface HelpContactItem {
   id: string;
   title: string;
   href: string;
-  icon: "bike" | "sparkles" | "baby" | "home";
+  icon: "bike" | "sparkles" | "baby" | "home" | "shopping-bag" | "heart-handshake";
 }
 
 export interface SupportItem {
