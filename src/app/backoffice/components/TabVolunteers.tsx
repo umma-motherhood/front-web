@@ -24,6 +24,27 @@ export function TabVolunteers({ data, onChange, githubConfig }: TabVolunteersPro
   const [uploading, setUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [localPreviews, setLocalPreviews] = useState<Record<string, string>>({});
+
+  const getDisplayPhotoUrl = (url: string) => {
+    if (!url) return "/images/logo.png";
+    return localPreviews[url] || url;
+  };
+
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>, originalUrl: string) => {
+    const target = e.currentTarget;
+    if (!target.dataset.triedRaw && originalUrl.startsWith("/images/")) {
+      target.dataset.triedRaw = "1";
+      const owner = githubConfig?.owner || "umma-motherhood";
+      const repo = githubConfig?.repo || "front-web";
+      const branch = githubConfig?.branch || "main";
+      target.src = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/public${originalUrl}`;
+      return;
+    }
+    if (target.src !== window.location.origin + "/images/logo.png") {
+      target.src = "/images/logo.png";
+    }
+  };
 
   const startCreate = () => {
     setEditingId("NEW");
@@ -88,8 +109,11 @@ export function TabVolunteers({ data, onChange, githubConfig }: TabVolunteersPro
             `chore(media): upload volunteer photo for ${name || "relawan"}`
           );
           const finalUrl = `/${filePath.replace(/^public\//, "")}`;
+          setLocalPreviews((prev) => ({ ...prev, [finalUrl]: base64Data }));
           setPhotoUrl(finalUrl);
-          setUploadStatus("Foto berhasil diunggah ke repository.");
+          setUploadStatus(
+            "Foto berhasil diunggah ke GitHub! Pratinjau asli langsung ditampilkan di sini."
+          );
         } else {
           // Fallback ke data URL sementara jika belum tersambung ke GitHub
           setPhotoUrl(base64Data);
@@ -255,13 +279,10 @@ export function TabVolunteers({ data, onChange, githubConfig }: TabVolunteersPro
                   <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-rosewood shadow-sm bg-warm-sand/20 shrink-0 flex items-center justify-center">
                     {photoUrl ? (
                       <img
-                        src={photoUrl}
+                        src={getDisplayPhotoUrl(photoUrl)}
                         alt="Pratinjau foto relawan"
                         className="w-full h-full object-cover rounded-full"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = "/images/logo.png";
-                        }}
+                        onError={(e) => handleImageError(e, photoUrl)}
                       />
                     ) : (
                       <Users className="w-8 h-8 text-muted/50" />
@@ -364,13 +385,10 @@ export function TabVolunteers({ data, onChange, githubConfig }: TabVolunteersPro
             {/* Foto Lingkaran */}
             <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-rosewood/40 shadow-sm mb-3 bg-warm-sand/20 shrink-0">
               <img
-                src={vol.photoUrl || "/images/logo.png"}
+                src={getDisplayPhotoUrl(vol.photoUrl)}
                 alt={`Foto ${vol.name}`}
                 className="w-full h-full object-cover rounded-full"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = "/images/logo.png";
-                }}
+                onError={(e) => handleImageError(e, vol.photoUrl)}
               />
             </div>
 

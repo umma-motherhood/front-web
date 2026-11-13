@@ -38,6 +38,24 @@ export function TabUmkm({ data, onChange, githubConfig }: TabUmkmProps) {
 
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [localPreviews, setLocalPreviews] = useState<Record<string, string>>({});
+
+  const getDisplayPhotoUrl = (url: string) => {
+    if (!url) return "/images/logo.png";
+    return localPreviews[url] || url;
+  };
+
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>, originalUrl: string) => {
+    const target = e.currentTarget;
+    if (!target.dataset.triedRaw && originalUrl.startsWith("/images/")) {
+      target.dataset.triedRaw = "1";
+      const owner = githubConfig?.owner || "umma-motherhood";
+      const repo = githubConfig?.repo || "front-web";
+      const branch = githubConfig?.branch || "main";
+      target.src = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/public${originalUrl}`;
+      return;
+    }
+  };
 
   const startCreate = () => {
     setEditingId("NEW");
@@ -101,6 +119,7 @@ export function TabUmkm({ data, onChange, githubConfig }: TabUmkmProps) {
             `chore(media): upload umkm product image for ${name || "umkm"}`
           );
           const finalUrl = `/${filePath.replace(/^public\//, "")}`;
+          setLocalPreviews((prev) => ({ ...prev, [finalUrl]: base64Data }));
           setImages((prev) => [...prev, finalUrl]);
         } else {
           setImages((prev) => [...prev, base64Data]);
@@ -395,7 +414,12 @@ export function TabUmkm({ data, onChange, githubConfig }: TabUmkmProps) {
               <div className="flex flex-wrap gap-3">
                 {images.map((img, idx) => (
                   <div key={idx} className="relative w-24 h-24 rounded-lg overflow-hidden border border-line group">
-                    <img src={img} alt={`Foto ${idx + 1}`} className="w-full h-full object-cover" />
+                    <img
+                      src={getDisplayPhotoUrl(img)}
+                      alt={`Foto ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                      onError={(e) => handleImageError(e, img)}
+                    />
                     <button
                       type="button"
                       onClick={() => removeImage(idx)}
@@ -578,7 +602,12 @@ export function TabUmkm({ data, onChange, githubConfig }: TabUmkmProps) {
                 </div>
                 {item.images && item.images.length > 0 && (
                   <div className="w-14 h-14 rounded-lg overflow-hidden border border-line shrink-0">
-                    <img src={item.images[0]} alt={item.name} className="w-full h-full object-cover" />
+                    <img
+                      src={getDisplayPhotoUrl(item.images[0])}
+                      alt={item.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => handleImageError(e, item.images![0])}
+                    />
                   </div>
                 )}
               </div>
