@@ -169,6 +169,7 @@ export function TabHelp({ data, onChange }: TabHelpProps) {
                   <option value="shopping-bag">Ikon: Jastip / Belanja</option>
                   <option value="heart-handshake">Ikon: Pijat / Jasa Kesehatan</option>
                   <option value="wrench">Ikon: Servis / Perbaikan</option>
+                  <option value="graduation-cap">Ikon: Guru Les / Edukasi</option>
                 </select>
               </div>
             </div>
