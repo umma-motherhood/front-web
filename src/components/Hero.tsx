@@ -21,7 +21,7 @@ export function Hero() {
           <div>
             {/* Eyebrow */}
             <span className="inline-flex items-center gap-2.5 text-rosewood text-[0.76rem] font-bold tracking-[0.12em] uppercase before:content-[''] before:w-7 before:h-px before:bg-current">
-              {siteConfig.tagline}
+              {siteConfig.hero?.tagline || siteConfig.tagline}
             </span>
 
             {/* Heading */}
@@ -29,21 +29,19 @@ export function Hero() {
               id="hero-title"
               className="my-5 text-[clamp(2.5rem,6vw,4.5rem)] font-normal font-serif leading-[1.08] tracking-[-0.02em] text-ink"
             >
-              Selamat Datang di
+              {siteConfig.hero?.headingPrefix || "Selamat Datang di"}
               <br />
               <span className="font-semibold text-rosewood">
-                Umma Motherhood
+                {siteConfig.hero?.headingHighlight || "Umma Motherhood"}
               </span>{" "}
-              Cipanas
+              {siteConfig.hero?.headingSuffix || "Cipanas"}
             </h1>
 
             {/* Paragraph */}
             <p className="max-w-[62ch] text-muted text-[1.05rem] md:text-[1.12rem] leading-[1.75]">
-              {siteConfig.description} Kami percaya bahwa perjalanan mengasuh
-              anak tidak seharusnya dilalui sendirian. Komunitas ini hadir
-              dengan tujuan memfasilitasi edukasi parenting berkualitas,
-              menghubungkan ibu dengan para profesional, dan menggerakkan roda
-              ekonomi lokal melalui kolaborasi anggota.
+              {siteConfig.hero?.description || siteConfig.description}{" "}
+              {siteConfig.hero?.descriptionExtended ||
+                "Kami percaya bahwa perjalanan mengasuh anak tidak seharusnya dilalui sendirian. Komunitas ini hadir dengan tujuan memfasilitasi edukasi parenting berkualitas, menghubungkan ibu dengan para profesional, dan menggerakkan roda ekonomi lokal melalui kolaborasi anggota."}
             </p>
 
             {/* Actions */}
@@ -54,14 +52,14 @@ export function Hero() {
                 rel="noopener noreferrer"
                 className="inline-flex min-h-[48px] items-center justify-center gap-2 px-6 py-3 border border-rosewood rounded-[4px] bg-rosewood text-[#fffaf2] text-[0.95rem] font-bold no-underline transition-all duration-200 hover:bg-[#9f5d54] hover:-translate-y-0.5 active:translate-y-0 shadow-sm"
               >
-                <span>Gabung Grup WhatsApp</span>
+                <span>{siteConfig.hero?.ctaGroupText || "Gabung Grup WhatsApp"}</span>
                 <ArrowUpRight className="w-4 h-4" />
               </a>
               <a
                 href="#direktori"
                 className="inline-flex min-h-[48px] items-center justify-center gap-2 px-6 py-3 border border-line rounded-[4px] bg-transparent text-ink text-[0.95rem] font-bold no-underline transition-all duration-200 hover:bg-warm-sand/40 hover:-translate-y-0.5"
               >
-                <span>Lihat Direktori Cipanas</span>
+                <span>{siteConfig.hero?.ctaDirectoryText || "Lihat Direktori Cipanas"}</span>
                 <ArrowDown className="w-4 h-4 text-rosewood" />
               </a>
             </div>

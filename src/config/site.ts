@@ -1,3 +1,5 @@
+import rawSiteContent from "@/data/site-content.json";
+
 export interface NavItem {
   label: string;
   href: string;
@@ -148,40 +150,145 @@ export interface SupportItem {
   href: string;
 }
 
+export interface VolunteerItem {
+  id: string;
+  name: string;
+  role: string;
+  photoUrl: string;
+  quote?: string;
+  instagram?: string;
+  phone?: string;
+}
+
+export interface HeroConfig {
+  tagline: string;
+  headingPrefix: string;
+  headingHighlight: string;
+  headingSuffix: string;
+  description: string;
+  descriptionExtended: string;
+  ctaGroupText: string;
+  ctaDirectoryText: string;
+  cardBadge: string;
+  cardYear: string;
+}
+
+export interface GlobalSettings {
+  adminWhatsapp: string;
+  adminPhoneDisplay: string;
+  whatsappGroupUrl: string;
+  instagramUrl: string;
+  journalUmmaArchiveUrl: string;
+}
+
+export interface AdvertiseRequirement {
+  title: string;
+  desc: string;
+}
+
+export interface AdvertiseConfig {
+  bannerTitle: string;
+  bannerSubtitle: string;
+  price: string;
+  heroText: string;
+  requirements: AdvertiseRequirement[];
+  ctaButtonText: string;
+  waUrl?: string;
+}
+
+export interface HelpAdvertiseConfig {
+  bannerTitle: string;
+  bannerSubtitle: string;
+  price: string;
+  heroText: string;
+  requirements: AdvertiseRequirement[];
+  ctaButtonText: string;
+  waUrl?: string;
+}
+
+export interface FounderConfig {
+  name: string;
+  role: string;
+  story: string;
+}
+
+export interface SiteContentData {
+  hero: HeroConfig;
+  globalSettings: GlobalSettings;
+  classes: ClassItem[];
+  directory: DirectoryItem[];
+  umkmList: UmkmItem[];
+  communityArticles: CommunityArticle[];
+  helpContacts: HelpContactItem[];
+  supportItems: SupportItem[];
+  founder: FounderConfig;
+  advertise: AdvertiseConfig;
+  helpAdvertise: HelpAdvertiseConfig;
+  umkmAdvertise: AdvertiseConfig;
+  volunteers: VolunteerItem[];
+}
+
+export const siteContent = rawSiteContent as unknown as SiteContentData;
+
+const adminPhone = siteContent.globalSettings?.adminWhatsapp || "6287883370039";
+const cleanAdminPhone = adminPhone.replace(/\D/g, "");
+
+export function buildWaUrl(text: string, phone: string = cleanAdminPhone): string {
+  const target = phone.replace(/\D/g, "");
+  return `https://wa.me/${target}?text=${encodeURIComponent(text)}`;
+}
+
 export const siteConfig = {
   name: "Umma Motherhood Cipanas",
   shortName: "Umma",
-  tagline: "Ruang tumbuh bersama · Cipanas",
+  tagline: siteContent.hero?.tagline || "Ruang tumbuh bersama · Cipanas",
   domain: "ummamotherhood.my.id",
   description:
+    siteContent.hero?.description ||
     "Umma Motherhood Cipanas adalah ruang aman dan suportif bagi para ibu di area Cipanas dan sekitarnya untuk saling merangkul, bertumbuh, dan berdaya bersama.",
 
-  // Semua kontak utama diarahkan ke Umma Shierly (087883370039) & Grup WA resmi
+  hero: siteContent.hero,
+  globalSettings: siteContent.globalSettings,
+
   links: {
     whatsappGroup:
+      siteContent.globalSettings?.whatsappGroupUrl ||
       "https://chat.whatsapp.com/FTkoEa3rXxnHK9gy7wLPYK?s=cl&p=a&iam=2",
-    whatsappShierly: "https://wa.me/6287883370039",
-    instagram: "https://www.instagram.com/lindashirlyv/",
-    volunteerWa:
-      "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20tertarik%20untuk%20mendaftar%20sebagai%20Relawan%20di%20Umma%20Motherhood%20Cipanas.",
-    donationWa:
-      "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20ingin%20berdonasi%20/%20berbagi%20ilmu%20sebagai%20pengisi%20kelas%20di%20Umma%20Motherhood%20Cipanas.",
-    umkmCatalogWa:
-      "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20ingin%20melihat%20katalog%20Lapak%20UMKM%20Umma.",
-    umkmRegisterWa:
-      "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20ingin%20mendaftarkan%20usaha%20saya%20ke%20Lapak%20UMKM%20Umma%20Motherhood.",
-    advertiseWa:
-      "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20tertarik%20untuk%20mendaftarkan%20iklan%20bisnis/lembaga%20saya%20di%20Papan%20Rekomendasi%20Umma%20Motherhood%20Cipanas.",
-    helpAdvertiseWa:
-      "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20ingin%20mendaftarkan%20jasa%20harian%20saya%20di%20Direktori%20Bantuan%20Umma%20Motherhood%20Cipanas.",
-    whatsappOjek:
-      "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20ingin%20info%20kontak%20Ojek%20Perempuan%20di%20Cipanas.",
-    whatsappCleaning:
-      "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20ingin%20info%20Jasa%20Bersih-Bersih%20area%20Cipanas.",
-    whatsappNanny:
-      "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20membutuhkan%20info%20Nanny%20Harian%20/%20Babysitter%20Infal.",
-    whatsappArt:
-      "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20ingin%20info%20kontak%20ART%20panggilan%20paruh%20waktu.",
+    whatsappShierly: `https://wa.me/${cleanAdminPhone}`,
+    whatsappAdmin: `https://wa.me/${cleanAdminPhone}`,
+    instagram:
+      siteContent.globalSettings?.instagramUrl ||
+      "https://www.instagram.com/lindashirlyv/",
+    volunteerWa: buildWaUrl(
+      "Halo Umma Shierly, saya tertarik untuk mendaftar sebagai Relawan di Umma Motherhood Cipanas."
+    ),
+    donationWa: buildWaUrl(
+      "Halo Umma Shierly, saya ingin berdonasi / berbagi ilmu sebagai pengisi kelas di Umma Motherhood Cipanas."
+    ),
+    umkmCatalogWa: buildWaUrl(
+      "Halo Umma Shierly, saya ingin melihat katalog Lapak UMKM Umma."
+    ),
+    umkmRegisterWa: buildWaUrl(
+      "Halo Umma Shierly, saya ingin mendaftarkan usaha saya ke Lapak UMKM Umma Motherhood."
+    ),
+    advertiseWa: buildWaUrl(
+      "Halo Umma Shierly, saya tertarik untuk mendaftarkan iklan bisnis/lembaga saya di Papan Rekomendasi Umma Motherhood Cipanas."
+    ),
+    helpAdvertiseWa: buildWaUrl(
+      "Halo Umma Shierly, saya ingin mendaftarkan jasa harian saya di Direktori Bantuan Umma Motherhood Cipanas."
+    ),
+    whatsappOjek: buildWaUrl(
+      "Halo Umma Shierly, saya ingin info kontak Ojek Perempuan di Cipanas."
+    ),
+    whatsappCleaning: buildWaUrl(
+      "Halo Umma Shierly, saya ingin info Jasa Bersih-Bersih area Cipanas."
+    ),
+    whatsappNanny: buildWaUrl(
+      "Halo Umma Shierly, saya membutuhkan info Nanny Harian / Babysitter Infal."
+    ),
+    whatsappArt: buildWaUrl(
+      "Halo Umma Shierly, saya ingin info kontak ART panggilan paruh waktu."
+    ),
   },
 
   nav: [
@@ -193,752 +300,30 @@ export const siteConfig = {
     { label: "Dukung", href: "/#dukung" },
   ] as NavItem[],
 
-  classes: [
-    {
-      id: "kelas-profesional",
-      number: "01",
-      title: "Materi Kelas Profesional",
-      description:
-        "Akses rangkuman dan materi lengkap dari pakar, praktisi, dan ahli yang mengisi sesi edukasi di komunitas kami.",
-      detail: {
-        subtitle: "Edukasi Berbobot dari Para Ahli & Praktisi",
-        isEmpty: true,
-        emptyBadge: "Segera",
-        emptyTitle: "Segera Hadir",
-        emptyDescription:
-          "Materi dan rangkuman sesi kelas bersama para pakar dan praktisi akan segera diarsipkan di ruang ini.",
-        points: [],
-        note: "Materi kelas profesional bersama pakar dan praktisi segera hadir. Jadwal dan pengumuman akan dibagikan melalui grup WhatsApp komunitas.",
-      },
-    },
-    {
-      id: "arsip-diskusi",
-      number: "02",
-      title: "Arsip Diskusi Umma",
-      description:
-        "Rangkuman rapi dari sesi tanya-jawab dan diskusi grup WhatsApp agar wawasan berharga tidak tenggelam di ruang obrolan.",
-      detail: {
-        subtitle: "Intisari Tanya Jawab Grup WhatsApp Komunitas",
-        isEmpty: true,
-        emptyBadge: "Segera",
-        emptyTitle: "Segera Hadir",
-        emptyDescription:
-          "Sesi tanya jawab WhatsApp sedang dirangkum oleh tim komunitas agar wawasan berharga tidak tenggelam di ruang obrolan.",
-        points: [],
-        note: "Saat ini arsip tanya-jawab WhatsApp masih kosong. Tim kurasi komunitas sedang merangkum diskusi berbobot agar ilmu dan tips bermanfaat tidak tenggelam di ruang obrolan.",
-      },
-    },
-    {
-      id: "ruang-berbagi",
-      number: "03",
-      title: "Ruang Berbagi Sesama Ibu",
-      description:
-        "Artikel, tips praktis, dan pengalaman berharga yang ditulis langsung oleh anggota. Setiap tulisan akan mencantumkan nama penulis sebagai apresiasi.",
-      detail: {
-        subtitle: "Catatan & Tips Praktis Tulisan Asli Anggota Komunitas",
-        articles: [
-          {
-            title: "Ikhtiar Menjaga Keutuhan Cinta Saat Keluarga Bertumbuh",
-            date: "01 September 2026",
-            author: "Shierly",
-            slug: "ikhtiar-menjaga-keutuhan-cinta",
-            url: "https://shirlyv.github.io/2026/09/01/Ikhtiar-Menjaga-Keutuhan-Cinta-Saat-Keluarga-Bertumbuh/",
-            excerpt:
-              "Refleksi mendalam dan ikhtiar merawat rasa cinta, komunikasi pasangan, serta keharmonisan rumah tangga saat kehadiran buah hati menuntut adaptasi peran yang luar biasa.",
-          },
-          {
-            title: "Warisan Cinta untuk Masa Pubertas",
-            date: "02 Agustus 2026",
-            author: "Shierly",
-            slug: "warisan-cinta-untuk-masa-pubertas",
-            url: "https://shirlyv.github.io/2026/08/02/Warisan-Cinta-untuk-Masa-Pubertas/",
-            excerpt:
-              "Bekal cinta, pemahaman emosional, dan komunikasi terbuka bagi orang tua dalam mendampingi anak menyongsong masa akil baligh dan fase pubertas dengan tenang.",
-          },
-        ],
-        archiveUrl: "https://shirlyv.github.io/archive/?tag=journal-umma",
-        points: [
-          "Ikhtiar Menjaga Keutuhan Cinta Saat Keluarga Bertumbuh (Oleh Shierly)",
-          "Warisan Cinta untuk Masa Pubertas (Oleh Shierly)",
-          "Koleksi Lengkap Arsip Journal Umma di Blog",
-        ],
-        note: "Artikel di atas merupakan karya asli yang ditulis oleh Shierly di Journal Umma. Anggota komunitas yang ingin berbagi tulisan dan pengalaman parenting juga dapat mengirimkan naskah ke Umma Shierly.",
-      },
-    },
-  ] as ClassItem[],
-
-  directory: [
-    {
-      id: "kesehatan",
-      code: "A.",
-      title: "Fasilitas Kesehatan",
-      subtitle: "Dokter Spesialis Anak & Bidan",
-      description:
-        "Jadwal praktik dokter spesialis anak, obgyn, bidan, dan klinik terdekat di Cipanas dan sekitarnya.",
-      subgroups: [
-        {
-          title: "Dokter Spesialis Anak & Bidan Rekomendasi",
-          places: [
-            {
-              id: "dr-nina",
-              name: "Dr. Nina Apotek Panca Farma",
-              categoryTag: "Dokter Spesialis Anak",
-              description:
-                "Dokter Nina merupakan salah satu dokter spesialis anak yang berpraktik di Apotek Panca Farma, Cipanas. Beliau dikenal memiliki pendekatan yang ramah dan sabar saat memeriksa anak-anak, sehingga si kecil tidak mudah rewel. Ruang tunggunya cukup memadai bagi ibu dan anak yang sedang menunggu antrean pemeriksaan. Penjelasan yang diberikan mengenai kondisi kesehatan anak maupun resep obat selalu mudah dipahami oleh para orang tua. Jadwal praktiknya sangat bisa diandalkan untuk kebutuhan konsultasi rutin maupun penanganan sakit anak di area sekitar.",
-              address: "Apotek Panca Farma, Jl. Raya Cipanas No. 12, Cipanas, Cianjur",
-              schedule: "Senin, Selasa, Kamis: 15.00 – 20.00 WIB",
-              review: {
-                author: "Ibu Riana (Anggota Umma Cipanas)",
-                text: "Dokter Nina sangat ramah dan sabar saat memeriksa si kecil, penjelasannya detail dan resepnya sangat cocok. Tidak terburu-buru saat konsultasi.",
-                rating: 5,
-              },
-              contact: {
-                person: "Admin Apotek Panca Farma / Janji Temu",
-                phone: "087883370039 (via Umma Shierly)",
-              },
-              waMessage:
-                "Halo Umma Shierly, saya ingin meminta info kontak & jadwal praktik Dr. Nina di Apotek Panca Farma Cipanas.",
-            },
-            {
-              id: "dr-abdurahman",
-              name: "Dr. Abdurahman Apotek Ikana",
-              categoryTag: "Dokter Spesialis Anak",
-              description:
-                "Praktik Dokter Abdurahman di Apotek Ikana menjadi pilihan tepercaya bagi banyak ibu di Cipanas untuk memeriksakan kesehatan buah hati. Beliau sangat teliti dalam mendiagnosis keluhan penyakit anak dan memberikan penanganan medis yang tepat sasaran. Lokasi praktiknya yang menyatu dengan apotek memudahkan orang tua untuk langsung menebus resep obat setelah sesi konsultasi selesai. Beliau juga terbuka untuk berdiskusi mengenai tumbuh kembang anak dan jadwal imunisasi dasar. Kehadirannya memberikan ketenangan bagi warga lokal yang membutuhkan akses layanan kesehatan anak yang cepat.",
-              address: "Apotek Ikana, Jl. Raya Cipanas, Cipanas, Cianjur",
-              schedule: "Praktik Sore: Senin – Jumat (Janji Temu & Konsultasi)",
-              review: {
-                author: "Ibu Maya (Ibu 2 Anak, Cipanas)",
-                text: "Dokter Abdurahman sangat teliti mendiagnosis sakit anak. Tempatnya nyaman menyatu dengan apotek, obat langsung siap diambil.",
-                rating: 5,
-              },
-              contact: {
-                person: "Admin Apotek Ikana Cipanas",
-                phone: "087883370039 (via Umma Shierly)",
-              },
-              waMessage:
-                "Halo Umma Shierly, saya ingin meminta info kontak & jadwal praktik Dr. Abdurahman di Apotek Ikana Cipanas.",
-            },
-            {
-              id: "bidan-silvia",
-              name: "Bidan Silvia Meilia A.Md di Praktek Bidan Mia Tarigu",
-              categoryTag: "Bidan & Kesehatan Ibu-Anak",
-              description:
-                "Bidan Silvia Meilia menawarkan layanan kebidanan dan kesehatan ibu anak yang penuh kehangatan di Praktek Bidan Mia Tarigu. Pendekatannya yang personal dan kekeluargaan membuat para ibu merasa nyaman saat berkonsultasi mengenai kehamilan maupun pascapersalinan. Fasilitas praktiknya tertata rapi, bersih, dan mendukung kelancaran proses pemeriksaan kehamilan rutin. Beliau juga telaten dalam memberikan edukasi seputar ASI eksklusif dan perawatan bayi baru lahir bagi ibu baru. Keahliannya sangat membantu memastikan kesehatan ibu dan bayi di area Cipanas tetap terpantau dengan aman.",
-              address: "Praktek Bidan Mia Tarigu, Cipanas, Cianjur",
-              schedule: "Pemeriksaan Kehamilan, Nifas & Imunisasi Setiap Hari",
-              review: {
-                author: "Ibu Dinda (Ibu Baru, Cipanas)",
-                text: "Bidan Silvia sangat hangat dan kebapakan/keibuan sekali. Konsultasi seputar menyusui dan perawatan bayi baru lahir sangat menenangkan.",
-                rating: 5,
-              },
-              contact: {
-                person: "Bidan Silvia Meilia A.Md",
-                phone: "087883370039 (via Umma Shierly)",
-              },
-              waMessage:
-                "Halo Umma Shierly, saya ingin meminta info kontak Bidan Silvia Meilia di Praktek Bidan Mia Tarigu Cipanas.",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: "pendidikan",
-      code: "B.",
-      title: "Pendidikan & Anak",
-      subtitle: "Kegiatan Informal, Pop Up Class & Olahraga",
-      description:
-        "Daftar wadah belajar anak, pop up class stimulasi, serta komunitas olahraga seru di area sekitar.",
-      subgroups: [
-        {
-          title: "Kegiatan Informal & Pop Up Class",
-          places: [
-            {
-              id: "artima-edu",
-              name: "Artima Edu",
-              categoryTag: "Coding & English (Online)",
-              description:
-                "Artima Edu adalah inisiatif pendidikan inovatif yang dikelola langsung oleh Founder Umma Motherhood, Shierly, dan beroperasi sepenuhnya secara online. Layanan daring ini berfokus pada kelas coding anak menggunakan logika pemrograman visual, serta instruksi bahasa Inggris yang interaktif. Selain untuk anak-anak, tersedia juga program edukasi untuk mendukung keterampilan para ibu yang dapat diakses dari rumah. Pendekatannya sangat modern karena menggabungkan teknologi digital dengan metode belajar jarak jauh yang menyenangkan. Kehadiran layanan online ini memudahkan orang tua untuk memberikan stimulasi pendidikan berkualitas tanpa batasan ruang.",
-              address: "Layanan Daring / Online (Berpusat di Cipanas)",
-              schedule: "Kelas Akhir Pekan & Sore Hari (Jadwal Fleksibel)",
-              review: {
-                author: "Ibu Sarah (Cipanas)",
-                text: "Anak saya sangat senang belajar coding di Artima Edu! Metode visualnya mudah dicerna anak dan bahasa Inggrisnya sangat aplikatif.",
-                rating: 5,
-              },
-              contact: {
-                person: "Umma Shierly (Founder Artima Edu)",
-                phone: "087883370039",
-              },
-              waMessage:
-                "Halo Umma Shierly, saya ingin informasi pendaftaran dan jadwal kelas di Artima Edu.",
-            },
-            {
-              id: "tiny-roots",
-              name: "Tiny Roots",
-              categoryTag: "Pop Up Class & Sensori Motorik",
-              description:
-                "Tiny Roots merupakan wadah eksplorasi seru bagi anak-anak untuk mengembangkan kreativitas melalui kegiatan pop up class tatap muka. Program ini sering menghadirkan aktivitas sensorik dan motorik yang dirancang khusus untuk menstimulasi tumbuh kembang anak usia dini. Anak-anak diajak untuk bermain sambil belajar di lingkungan yang aman, menyenangkan, dan penuh warna. Setiap sesinya dipandu oleh fasilitator yang memahami kebutuhan psikologis serta tahap perkembangan anak balita. Kelas ini sangat cocok bagi ibu yang ingin memberikan variasi kegiatan edukatif akhir pekan di sekitar Cipanas.",
-              address: "Perumahan Griya Asri Cipanas, Cianjur",
-              schedule: "Sesi Tematik Akhir Pekan (Sabtu & Minggu Berjadwal)",
-              review: {
-                author: "Ibu Kartika (Anggota Komunitas Umma)",
-                text: "Kegiatan sensori motoriknya seru banget buat balita. Fasilitatornya ramah dan terlatih menghadapi anak yang aktif bereksplorasi.",
-                rating: 5,
-              },
-              contact: {
-                person: "Ibu Shofia",
-                phone: "0898-6279-287",
-              },
-              waMessage:
-                "Halo Ibu Shofia (Tiny Roots), saya ingin informasi jadwal pop up class dan kegiatan stimulasi anak di Tiny Roots Cipanas.",
-            },
-            {
-              id: "batutta",
-              name: "Batutta",
-              categoryTag: "Pendidikan Anak Informal & Praktik Nyata",
-              description:
-                "Batutta hadir sebagai penyelenggara kegiatan pendidikan anak informal yang mengedepankan pengalaman belajar langsung melalui praktik nyata. Berbagai tema pop up class yang diselenggarakan bertujuan untuk mengasah rasa ingin tahu dan kemandirian anak sedini mungkin. Lingkungan belajarnya dikemas dengan sangat santai agar anak tidak merasa terbebani seperti dalam sistem sekolah formal. Anak-anak bisa leluasa bereksplorasi, bersosialisasi dengan teman sebaya, dan membangun rasa percaya diri mereka di ruang publik. Kehadiran komunitas belajar ini menjadi angin segar bagi opsi aktivitas edukasi interaktif di wilayah Cipanas.",
-              address: "Perumahan Orchid Cipanas, Cianjur",
-              schedule: "Sesi Belajar Tematik Akhir Pekan",
-              review: {
-                author: "Ibu Nadia (Warga Cipanas)",
-                text: "Pengalaman belajar langsungnya membentuk kemandirian dan rasa ingin tahu anak. Belajar di luar ruang kelas membuat anak tidak jenuh.",
-                rating: 5,
-              },
-              contact: {
-                person: "Ibu Rizka",
-                phone: "0838-0324-5536",
-              },
-              waMessage:
-                "Halo Ibu Rizka (Batutta), saya ingin informasi kegiatan dan jadwal kelas bermain edukatif Batutta Cipanas.",
-            },
-          ],
-        },
-        {
-          title: "Kegiatan Olahraga Anak",
-          places: [
-            {
-              id: "push-bike",
-              name: "Push Bike Cipanas",
-              categoryTag: "Komunitas Sepeda Keseimbangan Balita",
-              description:
-                "Push Bike Cipanas adalah komunitas olahraga sepeda tanpa pedal yang sangat menyenangkan dan ramah bagi anak usia balita. Kegiatan ini sangat efektif untuk melatih keseimbangan, koordinasi motorik kasar, serta kelincahan anak sejak dini. Latihan rutin dilakukan di area yang aman dengan pengawasan langsung dari pelatih atau pendamping yang berpengalaman. Aktivitas fisik ini juga melatih mental keberanian dan sportivitas anak saat berinteraksi dengan teman-temannya di lintasan. Orang tua bisa menjadikan ajang ini sebagai momen bonding yang seru di sore hari atau akhir pekan.",
-              address: "Hotel Cipanas, Cianjur",
-              schedule: "Latihan Rutin: Sore Hari & Akhir Pekan",
-              review: {
-                author: "Ibu Farah (Cipanas)",
-                text: "Olahraga sepeda keseimbangan ini terbukti melatih keberanian dan koordinasi motorik kasar si kecil. Teman-temannya banyak dan seru!",
-                rating: 5,
-              },
-              contact: {
-                person: "Coach Rahman",
-                phone: "0856-2466-1779",
-              },
-              waMessage:
-                "Halo Coach Rahman, saya ingin info pendaftaran dan jadwal latihan Push Bike Cipanas.",
-            },
-            {
-              id: "dojo-katana",
-              name: "Dojo Katana Cipanas",
-              categoryTag: "Bela Diri Karate Anak",
-              description:
-                "Dojo Katana Cipanas menawarkan kelas bela diri karate yang dirancang khusus dengan pendekatan yang aman bagi anak-anak. Melalui latihan yang disiplin namun menyenangkan, anak-anak diajarkan teknik dasar perlindungan diri sekaligus melatih fokus konsentrasi. Para pelatih di sini sabar dalam membimbing karakter anak agar tumbuh menjadi individu yang tangguh, tangkas, dan santun. Olahraga ini sangat baik untuk menyalurkan energi aktif anak-anak ke arah yang positif dan terstruktur rapi. Ini adalah pilihan tepat bagi ibu yang ingin menanamkan nilai kedisiplinan dan kebugaran fisik pada buah hatinya.",
-              address: "GOR Cipanas Balakang, Cipanas, Cianjur",
-              schedule: "Latihan: Senin dan Sabtu",
-              review: {
-                author: "Ibu Wulan (Cipanas)",
-                text: "Anak saya jadi lebih disiplin, percaya diri, dan bisa menyalurkan energinya dengan sehat. Pelatihnya sabar dan berdedikasi.",
-                rating: 5,
-              },
-              contact: {
-                person: "Kang Sule",
-                phone: "0877-2121-4466",
-              },
-              waMessage:
-                "Halo Kang Sule, saya ingin info pendaftaran dan latihan karate anak di Dojo Katana Cipanas.",
-            },
-            {
-              id: "cipanas-archery",
-              name: "Cipanas Archery",
-              categoryTag: "Olahraga Panahan Anak & Remaja",
-              description:
-                "Cipanas Archery menyediakan fasilitas olahraga panahan yang melatih ketangkasan dan fokus pikiran bagi anak-anak maupun remaja. Kegiatan memanah ini sangat bermanfaat untuk melatih kesabaran, postur tubuh yang tegak, serta ketajaman mata. Fasilitas yang disediakan cukup memadai dan aman karena dipandu langsung oleh instruktur panahan yang terlatih. Anak-anak akan diajarkan teknik memegang busur dan melepaskan anak panah dengan presisi dalam suasana yang bersahabat. Olahraga ini bisa menjadi alternatif kegiatan fisik yang unik dan minim kontak tubuh di area Cipanas.",
-              address: "Villa Pink SPBU Ciherang, Cipanas, Cianjur",
-              schedule: "Sesi: Setiap Hari Minggu",
-              review: {
-                author: "Ibu Ratna (Cipanas)",
-                text: "Panahan sangat bagus untuk melatih ketenangan dan fokus konsentrasi anak. Fasilitasnya aman dan instrukturnya sabar membimbing.",
-                rating: 5,
-              },
-              contact: {
-                person: "Pak Rizal",
-                phone: "0856-2221-996",
-              },
-              waMessage:
-                "Halo Pak Rizal, saya ingin info sesi latihan panahan anak di Cipanas Archery.",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: "kebutuhan",
-      code: "C.",
-      title: "Kebutuhan Harian",
-      subtitle: "Belanja & Katering Keluarga",
-      description:
-        "Rekomendasi tempat belanja bulanan ternyaman, toko perlengkapan bayi tepercaya, dan vendor katering keluarga.",
-      subgroups: [
-        {
-          title: "Belanja & Katering Keluarga",
-          places: [
-            {
-              id: "shierenity-scribe",
-              name: "Shierenity Scribe",
-              categoryTag: "Distributor Pakaian Bayi & Anak (Online)",
-              description:
-                "Shierenity Scribe adalah layanan distributor pakaian bayi dan anak milik Shierly yang melayani pembelian sepenuhnya secara online melalui WhatsApp. Toko daring ini menyediakan beragam koleksi baju berkualitas dari berbagai brand lokal pilihan, merek Eropa, hingga Singapura. Para ibu bisa dengan mudah memilih pakaian harian yang nyaman, stylish, dan awet untuk buah hati tanpa perlu repot keluar rumah. Pemesanannya sangat praktis, dan barang akan langsung dikirimkan dengan rapi ke alamat tujuan masing-masing. Layanan online ini menjadi solusi belanja busana anak hemat waktu yang sangat memanjakan ibu dengan mobilitas tinggi.",
-              address: "Layanan Belanja Online / Pesan Antar Area Cipanas & Sekitarnya",
-              schedule: "Pemesanan Setiap Hari via WhatsApp (Pengiriman Cepat)",
-              review: {
-                author: "Ibu Shinta (Cipanas)",
-                text: "Koleksi pakaian bayi dan anaknya bagus-bagus banget, bahannya adem dan awet. Belanja online tinggal chat langsung dikirim rapi ke rumah.",
-                rating: 5,
-              },
-              contact: {
-                person: "Shierly (Owner Shierenity Scribe)",
-                phone: "087883370039",
-              },
-              waMessage:
-                "Halo Umma Shierly, saya ingin melihat katalog busana anak di Shierenity Scribe.",
-            },
-            {
-              id: "jan-baby-store",
-              name: "Jan Baby Store Cipanas",
-              categoryTag: "Toko Perlengkapan Bayi & Anak Terlengkap",
-              description:
-                "Jan Baby Store Cipanas merupakan toko fisik andalan warga lokal yang menyediakan aneka perlengkapan bayi dan anak secara komprehensif. Koleksi barang yang ditawarkan sangat lengkap, mulai dari pakaian harian, peralatan mandi, hingga perlengkapan makan dan MPASI. Susunan barang di tokonya tertata dengan rapi sehingga memudahkan para ibu dalam mencari barang yang sedang dibutuhkan. Pelayanan stafnya dikenal ramah dan responsif dalam membantu pelanggan memilihkan produk fisik terbaik untuk si kecil. Toko ini sangat bisa diandalkan untuk berbelanja kebutuhan bulanan bayi yang mendesak secara langsung.",
-              address: "Jl. Raya Cipanas No. 88, Cipanas, Cianjur",
-              schedule: "Buka Setiap Hari: 08.00 – 20.30 WIB",
-              review: {
-                author: "Ibu Gita (Cipanas)",
-                text: "Toko perlengkapan bayi paling komplit di Cipanas. Mulai dari sabun, botol susu, sampai perlengkapan MPASI semua ada. Harganya ramah dan pelayanannya sigap.",
-                rating: 5,
-              },
-              contact: {
-                person: "Admin Jan Baby Store Cipanas",
-                phone: "087883370039 (via Umma Shierly)",
-              },
-              waMessage:
-                "Halo Umma Shierly, saya ingin info lokasi dan kontak Jan Baby Store Cipanas.",
-            },
-            {
-              id: "dapur-sangkilang",
-              name: "Dapur Sangkilang",
-              categoryTag: "Katering Harian Keluarga Sehat",
-              description:
-                "Dapur Sangkilang menyediakan layanan katering keluarga yang lezat, higienis, dan sangat praktis untuk mendukung aktivitas warga Cipanas. Pilihan menu yang disajikan selalu bervariasi, memastikan keluarga tidak merasa bosan dengan hidangan rumahan yang disajikan. Bahan-bahan yang digunakan dipastikan segar dan diolah dengan bumbu matang yang aman dikonsumsi oleh anak-anak maupun orang dewasa. Layanan pesan antarnya sangat bisa diandalkan untuk meringankan beban tugas ibu yang sedang tidak sempat memasak. Ini adalah solusi katering harian yang tepat untuk menjaga asupan gizi keluarga tanpa harus repot di dapur.",
-              address: "Area Cipanas, Cianjur (Layanan Pesan Antar Makan Siang & Malam)",
-              schedule: "Senin – Sabtu (Pesanan Antar Langsung ke Rumah)",
-              review: {
-                author: "Ibu Fitri (Cipanas)",
-                text: "Katering penyelamat saat tidak sempat masak! Masakannya enak, rasanya rumahan asli, dan bumbunya aman tidak bikin batuk anak. Menunya ganti terus tiap hari.",
-                rating: 5,
-              },
-              contact: {
-                person: "Pengelola Dapur Sangkilang",
-                phone: "087883370039 (via Umma Shierly)",
-              },
-              waMessage:
-                "Halo Umma Shierly, saya ingin melihat menu dan berlangganan katering Dapur Sangkilang Cipanas.",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: "hukum",
-      code: "D.",
-      title: "Fasilitas Hukum",
-      subtitle: "Konseling & Advokasi Perempuan",
-      description:
-        "Layanan konseling hukum pernikahan, keluarga, advokasi perempuan penyintas KDRT, dan perlindungan hak anak di Cianjur & Cipanas.",
-      subgroups: [
-        {
-          title: "Konseling & Bantuan Hukum Perempuan",
-          places: [
-            {
-              id: "konseling-hukum-pekka",
-              name: "Konseling Hukum Pernikahan, Rumah Tangga dan Perempuan",
-              categoryTag: "Konseling & Bantuan Hukum",
-              focus:
-                "Siap mengawal isu-isu seputar perempuan penyintas KDRT, gugat cerai, isbat nikah, serta legalitas asal-usul anak.",
-              description:
-                "Layanan konseling dan bantuan hukum yang siap mengawal isu-isu krusial seputar perempuan penyintas KDRT, gugat cerai, isbat nikah, serta kejelasan asal-usul dan legalitas anak. Seluruh layanan berjalan secara amanah, solutif, menjaga kerahasiaan, dan berada di bawah pengawasan Serikat Pemberdayaan Perempuan Pekka Kab. Cianjur.",
-              address: "Jl. Mariwati Km. 5, Cipanas, Cianjur",
-              schedule: "Senin – Sabtu (Dengan Perjanjian / Konsultasi Langsung)",
-              priceRange: "Rp 50.000 – Rp 2.500.000",
-              review: {
-                author: "Klien Pendampingan Pekka (Cianjur)",
-                text: "Pendampingan yang sangat amanah, solutif, dan menguatkan hati perempuan dalam mencari keadilan serta kepastian hukum bagi keluarga dan anak.",
-                rating: 5,
-              },
-              contact: {
-                person: "Serikat Pemberdayaan Perempuan Pekka Kab. Cianjur",
-                phone: "083813711118",
-              },
-              waMessage:
-                "Halo, saya ingin berkonsultasi mengenai layanan Konseling Hukum Pernikahan, Rumah Tangga dan Perempuan di Cipanas.",
-            },
-          ],
-        },
-      ],
-    },
-  ] as DirectoryItem[],
-
+  classes: siteContent.classes,
+  directory: siteContent.directory,
+  umkmList: siteContent.umkmList,
+  communityArticles: siteContent.communityArticles,
+  helpContacts: siteContent.helpContacts.map((item) => ({
+    ...item,
+    href: item.href || buildWaUrl(item.title),
+  })),
+  supportItems: siteContent.supportItems,
+  founder: siteContent.founder,
+  volunteers: siteContent.volunteers || [],
   advertise: {
-    bannerTitle: "Iklankan bisnis atau lembagamu di sini!",
-    bannerSubtitle:
-      "Jangkau ratusan ibu di area Cipanas yang sedang mencari rekomendasi tepercaya untuk keluarga.",
-    price: "Rp 100.000 / Tahun",
-    heroText:
-      "Mari bertumbuh bersama Umma Motherhood Cipanas! Jangkau ratusan ibu di area Cipanas yang sedang mencari rekomendasi tepercaya untuk kebutuhan keluarga dan buah hati mereka.",
-    requirements: [
-      {
-        title: "Testimoni Teruji (Bukan Klaim Sepihak)",
-        desc: "Melampirkan minimal 5 (lima) tangkapan layar ulasan positif dan asli dari para ibu di area Cipanas yang sudah pernah merasakan langsung manfaat produk atau jasa Anda.",
-      },
-      {
-        title: "Relevansi Kebutuhan Ibu & Anak",
-        desc: "Bisnis, lembaga, atau jasa yang diiklankan harus berhubungan langsung dengan dunia keibuan, tumbuh kembang anak, pendidikan, kesehatan, atau kebutuhan rumah tangga keluarga.",
-      },
-      {
-        title: "Kejelasan Informasi & Area Layanan",
-        desc: "Memiliki identitas usaha yang jelas (seperti akun Instagram/Google Maps/Katalog WA) dan dipastikan beroperasi atau melayani area Cipanas dan sekitarnya agar mudah diakses oleh anggota komunitas.",
-      },
-    ],
-    ctaButtonText: "Klik di Sini untuk Mendaftar via WA Umma Shierly",
+    ...siteContent.advertise,
+    waUrl: siteContent.advertise?.waUrl || buildWaUrl("Halo Umma Shierly, saya tertarik mendaftar iklan rekomendasi di website Umma."),
   },
-
   helpAdvertise: {
-    bannerTitle: "Iklankan Jasa Harianmu Gratis di Sini",
-    bannerSubtitle:
-      "Kami membuka ruang bagi warga Cipanas yang menyediakan jasa bantuan operasional harian di rumah untuk bergabung dalam direktori ini tanpa biaya pengiklanan.",
-    price: "Gratis (0 Rupiah)",
-    heroText:
-      "Kami membuka ruang bagi warga Cipanas yang menyediakan jasa bantuan operasional harian di rumah untuk bergabung dalam direktori ini tanpa biaya pengiklanan.",
-    requirements: [
-      {
-        title: "Bukti Testimoni",
-        desc: "Wajib melampirkan tangkapan layar (screenshot) yang berisi ulasan atau testimoni positif dari pelanggan asli yang sudah pernah menggunakan jasa Anda.",
-      },
-      {
-        title: "Relevansi Jasa",
-        desc: "Layanan yang ditawarkan harus berkaitan langsung dengan kebutuhan harian ibu dan rumah tangga, seperti jasa bersih-bersih, ojek perempuan, atau asisten rumah tangga.",
-      },
-      {
-        title: "Verifikasi Identitas",
-        desc: "Bersedia memberikan foto kartu identitas (KTP) dan kejelasan domisili area Cipanas untuk verifikasi keamanan demi melindungi kenyamanan seluruh anggota Umma Motherhood.",
-      },
-    ],
-    ctaButtonText: "Klik di Sini untuk Mendaftar via WA Umma Shierly",
-    waUrl:
-      "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20ingin%20mendaftarkan%20jasa%20harian%20saya%20di%20Direktori%20Bantuan%20Umma%20Motherhood%20Cipanas.",
+    ...siteContent.helpAdvertise,
+    waUrl: siteContent.helpAdvertise?.waUrl || buildWaUrl("Halo Umma Shierly, saya ingin mendaftarkan jasa harian saya di Direktori Bantuan."),
   },
-
   umkmAdvertise: {
-    bannerTitle: "Iklankan UMKM-mu di Sini",
-    bannerSubtitle:
-      "Mari bertumbuh bersama dan jangkau lebih banyak pembeli di lingkungan komunitas kita sendiri!",
-    price: "Rp 55.000 / Tahun",
-    heroText:
-      "Mari bertumbuh bersama dan jangkau lebih banyak pembeli di lingkungan komunitas kita sendiri!",
-    requirements: [
-      {
-        title: "Domisili Lokal",
-        desc: "Pemilik usaha wajib berdomisili atau memiliki area operasional di wilayah Cipanas dan sekitarnya.",
-      },
-      {
-        title: "Kualitas & Relevansi",
-        desc: "Produk atau jasa yang ditawarkan dipastikan aman, berkualitas, dan relevan dengan kebutuhan sehari-hari keluarga, ibu, maupun anak.",
-      },
-      {
-        title: "Katalog & Informasi Jelas",
-        desc: "Wajib melampirkan foto produk yang jelas, deskripsi singkat, serta rentang harga untuk dimuat di dalam etalase website agar memudahkan calon pembeli.",
-      },
-    ],
-    ctaButtonText: "Daftarkan Usahamu via WA Umma Shierly",
-    waUrl:
-      "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20ingin%20mendaftarkan%20usaha%20UMKM%20saya%20ke%20Lapak%20Umma%20Motherhood%20Cipanas.",
+    ...siteContent.umkmAdvertise,
+    waUrl: siteContent.umkmAdvertise?.waUrl || buildWaUrl("Halo Umma Shierly, saya ingin mendaftarkan usaha UMKM saya ke Lapak Umma Motherhood."),
   },
-
-  helpContacts: [
-    {
-      id: "ojek",
-      title: "Ojek Perempuan untuk mobilitas ibu dan anak yang lebih aman.",
-      href: "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20ingin%20info%20kontak%20Ojek%20Perempuan%20di%20Cipanas.",
-      icon: "bike",
-    },
-    {
-      id: "cleaning",
-      title: "Jasa Bersih-Bersih (panggilan area Cipanas).",
-      href: "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20ingin%20info%20Jasa%20Bersih-Bersih%20area%20Cipanas.",
-      icon: "sparkles",
-    },
-    {
-      id: "nanny",
-      title: "Nanny Harian dan Babysitter Infal.",
-      href: "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20membutuhkan%20info%20Nanny%20Harian%20/%20Babysitter%20Infal.",
-      icon: "baby",
-    },
-    {
-      id: "art",
-      title: "Asisten Rumah Tangga (ART) panggilan atau paruh waktu.",
-      href: "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20ingin%20info%20kontak%20ART%20panggilan%20paruh%20waktu.",
-      icon: "home",
-    },
-  ] as HelpContactItem[],
-
-  founder: {
-    name: "Shierly",
-    role: "Founder Umma Motherhood Cipanas",
-    story:
-      "Halo, saya Shierly. Berawal dari keinginan menciptakan support system yang solid untuk sesama ibu, saya mendirikan komunitas ini pada tahun 2024. Sebagai pendidik yang juga berkecimpung di dunia parenting dan literasi, saya menyadari betapa pentingnya akses edukasi dan lingkungan yang saling menguatkan bagi seorang ibu. Halaman ini bukan sekadar tentang saya, melainkan tentang dedikasi untuk memastikan tidak ada ibu di Cipanas yang merasa berjuang sendirian.",
-  },
-
-  supportItems: [
-    {
-      title: "Pendaftaran Relawan",
-      description:
-        "Ingin berkontribusi memajukan komunitas? Kami membuka kesempatan bagi yang ingin mengabdi sebagai Admin Website, Admin Media Sosial, atau Admin Grup.",
-      ctaText: "Daftar Jadi Relawan",
-      href: "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20tertarik%20untuk%20mendaftar%20sebagai%20Relawan%20di%20Umma%20Motherhood%20Cipanas.",
-    },
-    {
-      title: "Ruang Donasi & Pengisi Kelas",
-      description:
-        "Dukung operasional website dan penyelenggaraan kelas edukasi ibu di Cipanas. Anda bisa berdonasi dalam bentuk dana operasional, atau berdonasi 'Ilmu' dengan mendaftar sebagai pengisi kelas.",
-      ctaText: "Donasi / Jadi Pengisi Kelas",
-      href: "https://wa.me/6287883370039?text=Halo%20Umma%20Shierly,%20saya%20ingin%20berdonasi%20/%20berbagi%20ilmu%20sebagai%20pengisi%20kelas%20di%20Umma%20Motherhood%20Cipanas.",
-    },
-  ] as SupportItem[],
-
-  umkmList: [
-    {
-      id: "opat-kadeudeuh",
-      name: "Opat Kadeudeuh",
-      tagline: "Jajanan jadul, rasa mantul",
-      category: "kuliner",
-      categoryLabel: "Kuliner & Jajanan Jadul",
-      owner: "Opat Kadeudeuh",
-      phone: "083813711118",
-      priceRange: "Rp 5.000 – Rp 65.000",
-      location:
-        "Jl. Mariwati km. 5 kp. Kawungluwuk tengah Rt. 02/Rw.07 (Juga tersedia di Toserba Selamat)",
-      description:
-        "Menjual berbagai macam jajanan jadul dengan cita rasa mantul: mulai dari Brownies Coklat lezat (Uk. 10x20), Brownies Kunafa Pistachio premium, aneka ukuran Mie Kremes gurih (Mini, Pouch, 1/4 kg, 1 kg), hingga Cireng isi aneka rasa favorit keluarga (Ayam Suwir Original, Pedas, dan Keju).",
-      waMessage:
-        "Halo Opat Kadeudeuh, saya tertarik memesan jajanan jadul (Brownies / Mie Kremes / Cireng). Boleh minta info katalog dan cara pemesanannya?",
-      images: [
-        "/images/umkm/opat-kadeudeuh/mie-kremes-display.jpg",
-        "/images/umkm/opat-kadeudeuh/cireng-kadeudeuh.jpg",
-        "/images/umkm/opat-kadeudeuh/mie-kremes-kemasan.jpg",
-        "/images/umkm/opat-kadeudeuh/brownies-coklat.jpg",
-        "/images/umkm/opat-kadeudeuh/brownies-kunafa-pistachio.jpg",
-      ],
-      products: [
-        {
-          name: "Mie Kremes Opat Kadeudeuh (Renyahnya Bikin Nagih)",
-          price: "Tersedia kemasan Mini, Pouch, 1/4 kg & 1 kg",
-          desc: "Mie kremes gurih renyah legendaris rasa original yang selalu bikin nagih.",
-        },
-        {
-          name: "Cireng Opat Kadeudeuh (Camilan Favorit Keluarga)",
-          price: "Isi: Ayam Suwir Original, Pedas & Keju",
-          desc: "Cireng hangat renyah di luar, lembut dengan isian gurih melimpah di dalam.",
-        },
-        {
-          name: "Brownies Coklat (Uk. 10 x 20)",
-          price: "Varian Loyang Uk. 10x20",
-          desc: "Brownies coklat legit manis pas dengan siraman saus coklat lumer dan buah ceri segar.",
-        },
-        {
-          name: "Brownies Kunafa Pistachio",
-          price: "Kemasan Box Premium",
-          desc: "Sensasi perpaduan mewah brownies panggang premium dilapisi kunafa krispi dan limpahan kacang pistachio asli.",
-        },
-      ],
-    },
-    {
-      id: "toshierba",
-      name: "Toshierba (Toko Shierly Serba Ada)",
-      tagline: "Sembako murah meriah, serba ada",
-      category: "toserba",
-      categoryLabel: "Toko Serba Ada & Sembako",
-      owner: "Shierly",
-      phone: "087883370039",
-      priceRange: "Mulai Rp 2.500 – Rp 70.000",
-      location:
-        "Perumahan Cipanas Regency blok C no. 5 (Sistem pre-order H-1, stok barang tidak ready)",
-      description:
-        "Toko serba ada dan sembako online milik Shierly yang melayani berbagai kebutuhan pokok dan rumah tangga warga Cipanas dengan harga bersahabat. Menyediakan aneka sembako harian seperti beras, gas 3kg, minyak goreng, telur ayam fresh, telur omega 3, mentega, mie instan, aneka deterjen pakaian, hingga nugget dan makanan beku siap olah.",
-      waMessage:
-        "Halo Umma Shierly, saya ingin memesan kebutuhan sembako & rumah tangga di Toshierba (pre-order H-1).",
-      images: [
-        "/images/umkm/toshierba/katalog-sembako-1.jpg",
-        "/images/umkm/toshierba/katalog-sembako-2.jpg",
-        "/images/umkm/toshierba/katalog-sembako-3.jpg",
-        "/images/umkm/toshierba/katalog-sembako-4.jpg",
-        "/images/umkm/toshierba/katalog-sembako-5.jpg",
-      ],
-      orderNotes: [
-        "Sistem pre-order H-1 (stok barang tidak ready di tempat).",
-        "Kirim list pesanan via WhatsApp ke 087883370039 (Umma Shierly) atau 085117000603 (Uje).",
-        "Setelah pesanan siap, boleh diambil langsung ke rumah atau diantar ke alamat.",
-        "Belanja di atas Rp 50.000 gratis ongkir untuk delivery sekitar Perumahan Cipanas Regency.",
-      ],
-      products: [
-        {
-          name: "Beras Berkualitas",
-          price: "Rp 12.500 – Rp 13.000 / Liter",
-          desc: "Beras pulen bersih untuk konsumsi keluarga.",
-        },
-        {
-          name: "Gas Elpiji 3 Kg",
-          price: "Rp 25.000 / Tabung",
-          desc: "Tabung gas melon isi ulang resmi dan aman.",
-        },
-        {
-          name: "Minyak Goreng Kemasan (Rizki 800ml)",
-          price: "Rp 19.500",
-          desc: "Minyak goreng jernih hemat untuk keperluan dapur sehari-hari.",
-        },
-        {
-          name: "Telur Ayam Fresh & Telur Omega 3",
-          price: "Fresh: Rp 28.000/kg · Omega 3: Rp 3.000/butir",
-          desc: "Telur ayam segar pilihan langsung dari peternak.",
-        },
-        {
-          name: "Paket Hemat Mie Instan",
-          price: "Indomie: Rp 10.000/3 bks · Mie Sedaap: Rp 14.000/5 bks",
-          desc: "Pilihan rasa lengkap: Ayam Bawang, Soto Mie, Soto Koya, Goreng, Mie Tip-Top.",
-        },
-        {
-          name: "Mentega Palmia, Filma & Forvita (200gr)",
-          price: "Rp 7.500",
-          desc: "Margarin dan mentega serbaguna untuk memasak dan olesan roti.",
-        },
-        {
-          name: "Deterjen Cair Botol & Refill 700ml",
-          price: "Refill: Rp 15.000 · Botol: Rp 17.000",
-          desc: "Merk So Klin, Gentle Gen, dan So Soft wangi tahan lama.",
-        },
-        {
-          name: "Deterjen Ukuran Jerigen 4,5L – 5 Liter",
-          price: "Sayang 5L: Rp 60.000 · So Klin 5L: Rp 70.000",
-          desc: "Ukuran jumbo super hemat untuk kebutuhan mencuci rumah tangga.",
-        },
-        {
-          name: "Chicken Nugget (BenFarm & So Good)",
-          price: "Rp 25.000 – Rp 35.000",
-          desc: "Nugget ayam lezat, varian Mac & Cheese dan crispy praktis untuk lauk anak.",
-        },
-        {
-          name: "Tepung Bumbu Praktis (Perkedel, Bakso Goreng, Cireng Rujak)",
-          price: "Rp 9.000 / bks",
-          desc: "Tepung bumbu praktis siap olah untuk camilan keluarga.",
-        },
-        {
-          name: "Bandeng Cabut Duri",
-          price: "Rp 50.000",
-          desc: "Ikan bandeng segar bersih tanpa duri, higienis siap goreng/masak.",
-        },
-      ],
-    },
-  ] as UmkmItem[],
-
-  journalUmmaArchiveUrl: "https://shirlyv.github.io/archive/?tag=journal-umma",
-
-  communityArticles: [
-    {
-      id: "ikhtiar-menjaga-keutuhan-cinta",
-      title: "Ikhtiar Menjaga Keutuhan Cinta Saat Keluarga Bertumbuh",
-      subtitle:
-        "Catatan Reflektif & Peta Jalan Mempersiapkan Buah Hati Menyambut Kehadiran Adik Tanpa Merasa Tersisihkan",
-      author: "Shierly",
-      authorRole: "Founder Umma Motherhood Cipanas & Penulis Journal Umma",
-      authorInstagram: "https://www.instagram.com/lindashirlyv/",
-      date: "01 September 2026",
-      readingTime: "±8 Menit Baca di Naskah Asli",
-      category: "ruang-berbagi",
-      categoryLabel: "Ruang Berbagi Sesama Ibu",
-      tags: ["Journal Umma", "Pernikahan & Keluarga", "Parenting", "Sibling Without Rivalry"],
-      excerpt:
-        "Refleksi mendalam dan ikhtiar merawat rasa cinta, komunikasi pasangan, serta keharmonisan rumah tangga saat kehadiran buah hati menuntut adaptasi peran yang luar biasa.",
-      quote:
-        "Cinta saja tidak cukup; cinta membutuhkan ilmu dan strategi agar pesan kasih sayang kita sampai dengan utuh ke dalam tangki emosi anak.",
-      overviewParagraphs: [
-        "Pernahkah sebuah pertanyaan hening tiba-tiba melintas di kepala saat menatap wajah anak yang tertidur pulas: 'Nanti, kalau ada anggota keluarga baru, anakku akan merasa aku tidak adil tidak, ya?'",
-        "Pertanyaan itu tampak sederhana di permukaan, namun menyimpan beban emosional yang sangat dalam. Tidak sedikit dari kita yang masih menyimpan serpihan luka masa kecil karena pernah merasa dibandingkan atau merasa tergeser di dalam rumah sendiri. Secara naluriah, kita tentu tidak ingin mewariskan rasa sakit yang sama kepada anak-anak kita.",
-        "Kesadaran itulah yang menjadi titik tolak bagi Shierly dan suami (Huzair) untuk belajar dengan sangat serius. Membaca literatur psikologi perkembangan, mendalami konsep Sibling Without Rivalry, hingga berkonsultasi dengan psikolog serta praktisi pengasuhan anak. Persiapan tersebut diterjemahkan ke dalam langkah nyata yang dijalani dari hari ke hari.",
-      ],
-      keyTakeaways: [
-        "Melibatkan anak pertama sejak hari pertama kehamilan, bukan memberi kejutan mendadak di akhir.",
-        "Membangun pemahaman konkret lewat media buku cerita bergambar, sentuhan perut, dan obrolan ramah balita.",
-        "Menjaga tangki emosi anak pertama tetap penuh agar rasa aman tidak terkikis oleh kehadiran adik bayi.",
-        "Komunikasi terbuka dan pembagian peran yang sadar antara suami dan istri demi menjaga keharmonisan rumah tangga.",
-      ],
-      outsideReference: {
-        platform: "Blog Pribadi Shierly (Journal Umma)",
-        url: "https://shirlyv.github.io/2026/09/01/Ikhtiar-Menjaga-Keutuhan-Cinta-Saat-Keluarga-Bertumbuh/",
-        description:
-          "Naskah utuh dan lengkap dari tulisan ini dipublikasikan secara mandiri di blog pribadi Shierly. Anda dapat membaca seluruh paparan 4 langkah ikhtiar dan pengalaman personal keluarga Shierly melalui tautan referensi resmi berikut:",
-        buttonLabel: "Buka & Baca Artikel Lengkap di Blog Penulis",
-      },
-      url: "https://shirlyv.github.io/2026/09/01/Ikhtiar-Menjaga-Keutuhan-Cinta-Saat-Keluarga-Bertumbuh/",
-      isExternal: true,
-      status: "published",
-    },
-    {
-      id: "warisan-cinta-untuk-masa-pubertas",
-      title: "Warisan Cinta untuk Masa Pubertas",
-      subtitle:
-        "Mempersiapkan Bekal Menghadapi Akil Baligh dan Pendidikan Seksualitas Sehat dengan Kehangatan Hati",
-      author: "Shierly",
-      authorRole: "Founder Umma Motherhood Cipanas & Penulis Journal Umma",
-      authorInstagram: "https://www.instagram.com/lindashirlyv/",
-      date: "02 Agustus 2026",
-      readingTime: "±10 Menit Baca di Naskah Asli",
-      category: "ruang-berbagi",
-      categoryLabel: "Ruang Berbagi Sesama Ibu",
-      tags: ["Journal Umma", "Parenting Anak & Remaja", "Pubertas", "Edukasi Tubuh"],
-      excerpt:
-        "Bekal cinta, pemahaman emosional, dan komunikasi terbuka bagi orang tua dalam mendampingi anak menyongsong masa akil baligh dan fase pubertas dengan tenang tanpa kecanggungan.",
-      quote:
-        "Pendidikan tentang tubuh dan kehormatan diri tidak boleh ditunda sampai anak belasan tahun. Semuanya harus ditanamkan sejak hari ini melalui kebiasaan sehari-hari di dalam rumah.",
-      overviewParagraphs: [
-        "Di tengah keheningan malam saat menatap wajah anak-anak yang tertidur lelap, sebuah kecemasan eksistensial bisa menyergap dada orang tua: 'Bagaimana jika umurku tidak sampai untuk mendampingi mereka memasuki gerbang kedewasaan? Siapa yang akan memeluk kebingungan dan menjawab rasa malu mereka saat tubuh mereka mulai berubah?'",
-        "Pertanyaan sunyi itu mengingatkan kita bahwa usia adalah rahasia semesta. Di samping menyiapkan dana pendidikan dan warisan materi, pernahkah kita menyiapkan warisan ilmu tentang tubuh dan benteng adab saat anak-anak menghadapi pubertas?",
-        "Bagi Shierly dan suami (Huzair), rasa takut tersebut diubah menjadi bahan bakar untuk bertindak sedini mungkin. Mereka merancang empat ikhtiar besar kurikulum pendidikan tubuh dan persiapan pubertas yang berakar pada nilai agama, sains biologis, dan kehangatan komunikasi di meja makan.",
-      ],
-      keyTakeaways: [
-        "Menghapus tabu komunikasi tubuh: mengganti rasa canggung dengan percakapan ilmiah yang santun dan jujur.",
-        "Mengenalkan konsep batasan privasi fisik (consent dan bodily autonomy) sejak balita.",
-        "Menyiapkan perangkat panduan tertulis dan arsip cinta yang bisa dibaca anak saat memasuki masa akil baligh.",
-        "Menjadikan rumah sebagai tempat pertama dan paling aman bagi anak untuk bertanya seputar perubahan tubuhnya.",
-      ],
-      outsideReference: {
-        platform: "Blog Pribadi Shierly (Journal Umma)",
-        url: "https://shirlyv.github.io/2026/08/02/Warisan-Cinta-untuk-Masa-Pubertas/",
-        description:
-          "Naskah komprehensif yang memaparkan 4 ikhtiar kurikulum pendidikan tubuh dan persiapan pubertas ini tersedia lengkap di blog pribadi Shierly. Silakan jelajahi tulisan aslinya melalui tautan referensi resmi berikut:",
-        buttonLabel: "Buka & Baca Artikel Lengkap di Blog Penulis",
-      },
-      url: "https://shirlyv.github.io/2026/08/02/Warisan-Cinta-untuk-Masa-Pubertas/",
-      isExternal: true,
-      status: "published",
-    },
-  ] as CommunityArticle[],
+  journalUmmaArchiveUrl:
+    siteContent.globalSettings?.journalUmmaArchiveUrl ||
+    "https://shirlyv.github.io/archive/?tag=journal-umma",
 };

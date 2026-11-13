@@ -2,6 +2,8 @@ import { siteConfig } from "@/config/site";
 import { ArrowUpRight, HeartHandshake } from "lucide-react";
 
 export function SupportSection() {
+  const volunteers = siteConfig.volunteers || [];
+
   return (
     <section
       id="dukung"
@@ -65,6 +67,76 @@ export function SupportSection() {
             </div>
           </div>
         </div>
+
+        {/* Daftar Relawan Komunitas (Lingkaran / Circle Avatar Required) */}
+        {volunteers.length > 0 && (
+          <div className="mt-14 pt-12 border-t border-line">
+            <div className="max-w-2xl mb-8">
+              <span className="inline-flex items-center gap-2 text-rosewood text-[0.76rem] font-bold tracking-[0.12em] uppercase">
+                Para Penggerak
+              </span>
+              <h3 className="mt-1.5 text-2xl sm:text-3xl font-serif text-ink">
+                Relawan Umma Motherhood Cipanas
+              </h3>
+              <p className="mt-2 text-muted text-[0.95rem] leading-relaxed">
+                Para ibu berdedikasi yang meluangkan waktu dan tenaganya untuk menggerakkan berbagai kegiatan serta layanan komunitas di Cipanas.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {volunteers.map((vol) => {
+                const igUrl = vol.instagram
+                  ? vol.instagram.startsWith("http")
+                    ? vol.instagram
+                    : `https://instagram.com/${vol.instagram.replace("@", "")}`
+                  : null;
+
+                return (
+                  <div
+                    key={vol.id}
+                    className="p-6 rounded-2xl bg-paper border border-line flex flex-col items-center text-center transition-all duration-200 hover:border-rosewood/40 hover:shadow-sm"
+                  >
+                    {/* Foto Relawan Wajib Berbentuk Lingkaran / Circle */}
+                    <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-rosewood/40 shadow-sm mb-4 bg-warm-sand/30 shrink-0">
+                      <img
+                        src={vol.photoUrl || "/images/logo.png"}
+                        alt={`Foto relawan ${vol.name}`}
+                        className="w-full h-full object-cover rounded-full"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <h4 className="text-ink font-serif text-xl font-semibold leading-snug">
+                      {vol.name}
+                    </h4>
+
+                    <span className="mt-1 inline-block text-rosewood text-xs font-bold uppercase tracking-wider">
+                      {vol.role}
+                    </span>
+
+                    {vol.quote && (
+                      <p className="mt-3 text-muted text-sm leading-relaxed italic">
+                        &ldquo;{vol.quote}&rdquo;
+                      </p>
+                    )}
+
+                    {igUrl && (
+                      <a
+                        href={igUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-4 inline-flex items-center gap-1.5 text-xs text-muted hover:text-rosewood font-medium"
+                      >
+                        <span>Instagram Profil</span>
+                        <ArrowUpRight className="w-3.5 h-3.5" />
+                      </a>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

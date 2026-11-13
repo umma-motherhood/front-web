@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import logoMark from "../../public/images/logo-mark.png";
 import { siteConfig } from "@/config/site";
 import { ArrowUpRight } from "lucide-react";
@@ -58,9 +59,16 @@ export function Footer() {
 
         <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[#e2d2bf]/70 text-xs">
           <p>© 2024–{new Date().getFullYear()} Umma Motherhood Cipanas. Hak Cipta Dilindungi.</p>
-          <p className="text-right">
-            Dibuat dengan Next.js &amp; Tailwind CSS
-          </p>
+          <div className="flex items-center gap-4 text-right">
+            <span>Dibuat dengan Next.js &amp; Tailwind CSS</span>
+            <span aria-hidden="true">•</span>
+            <Link
+              href="/backoffice"
+              className="text-[#e2d2bf]/60 hover:text-white transition-colors"
+            >
+              Backoffice
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
