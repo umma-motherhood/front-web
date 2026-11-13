@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Lock, KeyRound, ShieldCheck, AlertCircle, Eye, EyeOff, ExternalLink } from "lucide-react";
-import { hashPin, verifyPin, encryptData, decryptData, EncryptedPayload } from "@/lib/crypto";
+import { hashPin, verifyPin, encryptData, decryptData, EncryptedPayload, PinHashAlg } from "@/lib/crypto";
 import { GitHubConfig } from "@/lib/github";
 
 interface AuthGateProps {
@@ -12,6 +12,7 @@ interface AuthGateProps {
 interface StoredAuth {
   pinHash: string;
   pinSalt: string;
+  pinAlg?: PinHashAlg;
   payload: EncryptedPayload;
   owner: string;
   repo: string;
@@ -61,7 +62,12 @@ export function AuthGate({ onAuthenticated }: AuthGateProps) {
 
     setLoading(true);
     try {
-      const isValid = await verifyPin(pin, storedData.pinHash, storedData.pinSalt);
+      const isValid = await verifyPin(
+        pin,
+        storedData.pinHash,
+        storedData.pinSalt,
+        storedData.pinAlg
+      );
       if (!isValid) {
         setError("PIN atau kata sandi tidak cocok. Silakan coba lagi.");
         setLoading(false);
@@ -69,6 +75,29 @@ export function AuthGate({ onAuthenticated }: AuthGateProps) {
       }
 
       const decryptedToken = await decryptData(storedData.payload, pin);
+
+      // Upgrade hash/encryption algorithm to PBKDF2-HMAC-SHA512 transparently
+      if (
+        storedData.pinAlg !== "pbkdf2-sha512" ||
+        storedData.payload.kdfAlg !== "pbkdf2-sha512"
+      ) {
+        try {
+          const { hash, salt, alg } = await hashPin(pin);
+          const reEncrypted = await encryptData(decryptedToken, pin);
+          const upgraded: StoredAuth = {
+            ...storedData,
+            pinHash: hash,
+            pinSalt: salt,
+            pinAlg: alg,
+            payload: reEncrypted,
+          };
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(upgraded));
+          setStoredData(upgraded);
+        } catch {
+          // Non-fatal if upgrade skipped
+        }
+      }
+
       onAuthenticated({
         owner: storedData.owner || "umma-motherhood",
         repo: storedData.repo || "front-web",
@@ -101,12 +130,13 @@ export function AuthGate({ onAuthenticated }: AuthGateProps) {
 
     setLoading(true);
     try {
-      const { hash, salt } = await hashPin(pin);
+      const { hash, salt, alg } = await hashPin(pin);
       const encrypted = await encryptData(tokenInput.trim(), pin);
 
       const authRecord: StoredAuth = {
         pinHash: hash,
         pinSalt: salt,
+        pinAlg: alg,
         payload: encrypted,
         owner: ownerInput.trim() || "umma-motherhood",
         repo: repoInput.trim() || "front-web",

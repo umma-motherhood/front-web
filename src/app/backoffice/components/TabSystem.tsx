@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { SiteContentData } from "@/config/site";
 import { GitHubConfig, fetchWorkflowRuns, WorkflowRunInfo, testTokenPermissions } from "@/lib/github";
-import { encryptData, verifyPin } from "@/lib/crypto";
+import { encryptData, decryptData, hashPin, verifyPin } from "@/lib/crypto";
 import {
   Settings,
   Download,
@@ -13,8 +13,10 @@ import {
   Clock,
   ExternalLink,
   ShieldAlert,
+  ShieldCheck,
   LogOut,
   KeyRound,
+  Lock,
   AlertCircle,
   HelpCircle,
 } from "lucide-react";
@@ -55,6 +57,15 @@ export function TabSystem({
   const [updateError, setUpdateError] = useState<string | null>(null);
   const [updateSuccess, setUpdateSuccess] = useState<string | null>(null);
   const [updatingToken, setUpdatingToken] = useState(false);
+
+  // Change PIN form states
+  const [showChangePin, setShowChangePin] = useState(false);
+  const [oldPinInput, setOldPinInput] = useState("");
+  const [newPinInput, setNewPinInput] = useState("");
+  const [confirmNewPinInput, setConfirmNewPinInput] = useState("");
+  const [pinError, setPinError] = useState<string | null>(null);
+  const [pinSuccess, setPinSuccess] = useState<string | null>(null);
+  const [changingPin, setChangingPin] = useState(false);
 
   const loadWorkflowRuns = async () => {
     if (!githubConfig) return;
@@ -142,7 +153,7 @@ export function TabSystem({
       }
 
       const stored = JSON.parse(rawStored);
-      const isPinValid = await verifyPin(verifyPinInput, stored.pinHash, stored.pinSalt);
+      const isPinValid = await verifyPin(verifyPinInput, stored.pinHash, stored.pinSalt, stored.pinAlg);
       if (!isPinValid) {
         setUpdateError("PIN salah. Masukkan PIN admin yang saat ini digunakan.");
         setUpdatingToken(false);
@@ -164,10 +175,18 @@ export function TabSystem({
         return;
       }
 
-      // Encrypt with current PIN
+      // Encrypt with current PIN and ensure hash uses PBKDF2-SHA512
       const encrypted = await encryptData(cleanToken, verifyPinInput);
+      const pinUpdate =
+        stored.pinAlg === "pbkdf2-sha512"
+          ? {}
+          : await (async () => {
+              const { hash, salt, alg } = await hashPin(verifyPinInput);
+              return { pinHash: hash, pinSalt: salt, pinAlg: alg };
+            })();
       const updatedRecord = {
         ...stored,
+        ...pinUpdate,
         payload: encrypted,
       };
 
@@ -186,6 +205,62 @@ export function TabSystem({
       setUpdateError(err?.message || "Gagal memperbarui token.");
     } finally {
       setUpdatingToken(false);
+    }
+  };
+
+  const handleSaveNewPin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPinError(null);
+    setPinSuccess(null);
+
+    if (newPinInput.length < 4) {
+      setPinError("PIN baru minimal harus terdiri dari 4 karakter.");
+      return;
+    }
+
+    if (newPinInput !== confirmNewPinInput) {
+      setPinError("Konfirmasi PIN baru tidak cocok.");
+      return;
+    }
+
+    setChangingPin(true);
+    try {
+      const rawStored = localStorage.getItem(STORAGE_KEY);
+      if (!rawStored) {
+        setPinError("Data kredensial lokal tidak ditemukan.");
+        return;
+      }
+
+      const stored = JSON.parse(rawStored);
+      const isOldValid = await verifyPin(oldPinInput, stored.pinHash, stored.pinSalt, stored.pinAlg);
+      if (!isOldValid) {
+        setPinError("PIN lama salah. Masukkan PIN admin yang saat ini digunakan.");
+        return;
+      }
+
+      const decryptedToken = await decryptData(stored.payload, oldPinInput);
+      const { hash, salt, alg } = await hashPin(newPinInput);
+      const encryptedPayload = await encryptData(decryptedToken, newPinInput);
+
+      const updatedRecord = {
+        ...stored,
+        pinHash: hash,
+        pinSalt: salt,
+        pinAlg: alg,
+        payload: encryptedPayload,
+      };
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedRecord));
+
+      setPinSuccess("PIN admin berhasil diperbarui (hash PBKDF2-HMAC-SHA512 & enkripsi ulang token).");
+      setOldPinInput("");
+      setNewPinInput("");
+      setConfirmNewPinInput("");
+      setShowChangePin(false);
+    } catch (err: any) {
+      setPinError(err?.message || "Gagal mengganti PIN admin.");
+    } finally {
+      setChangingPin(false);
     }
   };
 
@@ -339,6 +414,20 @@ export function TabSystem({
           </div>
         </div>
 
+        {updateSuccess && (
+          <div className="mt-4 p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2">
+            <CheckCircle className="w-4 h-4 shrink-0 text-emerald-600" />
+            <span>{updateSuccess}</span>
+          </div>
+        )}
+
+        {pinSuccess && (
+          <div className="mt-4 p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2">
+            <CheckCircle className="w-4 h-4 shrink-0 text-emerald-600" />
+            <span>{pinSuccess}</span>
+          </div>
+        )}
+
         {/* Modal / Form Update Token */}
         {showUpdateToken && (
           <form onSubmit={handleSaveNewToken} className="mt-6 p-5 rounded-xl bg-paper border-2 border-rosewood space-y-4">
@@ -350,7 +439,7 @@ export function TabSystem({
               <button
                 type="button"
                 onClick={() => setShowUpdateToken(false)}
-                className="text-xs text-muted hover:text-ink font-medium"
+                className="text-xs text-muted hover:text-ink font-medium min-h-[44px] px-2"
               >
                 Batal
               </button>
@@ -372,7 +461,7 @@ export function TabSystem({
                 onChange={(e) => setNewToken(e.target.value)}
                 placeholder="ghp_... atau github_pat_..."
                 required
-                className="w-full h-10 px-3 text-xs font-mono rounded-lg border border-line bg-white text-ink"
+                className="w-full h-11 px-3 text-xs font-mono rounded-lg border border-line bg-white text-ink"
               />
             </div>
 
@@ -386,22 +475,22 @@ export function TabSystem({
                 onChange={(e) => setVerifyPinInput(e.target.value)}
                 placeholder="Masukkan PIN yang Anda pakai untuk login"
                 required
-                className="w-full h-10 px-3 text-xs rounded-lg border border-line bg-white text-ink"
+                className="w-full h-11 px-3 text-xs rounded-lg border border-line bg-white text-ink"
               />
             </div>
 
-            <div className="flex justify-end gap-2 pt-2">
+            <div className="flex flex-wrap justify-end gap-2 pt-2">
               <button
                 type="button"
                 onClick={() => setShowUpdateToken(false)}
-                className="px-4 py-2 rounded-lg border border-line bg-white text-xs font-bold"
+                className="min-h-[44px] px-4 py-2 rounded-lg border border-line bg-white text-xs font-bold"
               >
                 Batal
               </button>
               <button
                 type="submit"
                 disabled={updatingToken}
-                className="px-5 py-2 rounded-lg bg-rosewood text-white text-xs font-bold hover:bg-[#9f5d54] disabled:opacity-50"
+                className="min-h-[44px] px-5 py-2 rounded-lg bg-rosewood text-white text-xs font-bold hover:bg-[#9f5d54] disabled:opacity-50"
               >
                 {updatingToken ? "Menguji & Menyimpan..." : "Uji & Simpan Token Baru"}
               </button>
@@ -409,18 +498,134 @@ export function TabSystem({
           </form>
         )}
 
-        {!showUpdateToken && (
-          <div className="mt-4 flex justify-end">
+        {/* Form Ganti PIN Admin */}
+        {showChangePin && (
+          <form onSubmit={handleSaveNewPin} className="mt-6 p-5 rounded-xl bg-paper border-2 border-rosewood space-y-4">
+            <div className="flex items-center justify-between pb-2 border-b border-line">
+              <h3 className="font-serif font-bold text-ink text-sm flex items-center gap-2">
+                <Lock className="w-4 h-4 text-rosewood" />
+                <span>Ganti PIN Admin Backoffice</span>
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowChangePin(false)}
+                className="text-xs text-muted hover:text-ink font-medium min-h-[44px] px-2"
+              >
+                Batal
+              </button>
+            </div>
+
+            {pinError && (
+              <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs">
+                {pinError}
+              </div>
+            )}
+
+            <div>
+              <label className="block text-xs font-semibold text-ink uppercase tracking-wider mb-1">
+                PIN Admin Saat Ini
+              </label>
+              <input
+                type="password"
+                value={oldPinInput}
+                onChange={(e) => setOldPinInput(e.target.value)}
+                placeholder="Masukkan PIN yang sekarang aktif"
+                required
+                className="w-full h-11 px-3 text-xs rounded-lg border border-line bg-white text-ink"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold text-ink uppercase tracking-wider mb-1">
+                  PIN Admin Baru (Min. 4 Karakter)
+                </label>
+                <input
+                  type="password"
+                  value={newPinInput}
+                  onChange={(e) => setNewPinInput(e.target.value)}
+                  placeholder="Masukkan PIN baru"
+                  required
+                  minLength={4}
+                  className="w-full h-11 px-3 text-xs rounded-lg border border-line bg-white text-ink"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-ink uppercase tracking-wider mb-1">
+                  Konfirmasi PIN Baru
+                </label>
+                <input
+                  type="password"
+                  value={confirmNewPinInput}
+                  onChange={(e) => setConfirmNewPinInput(e.target.value)}
+                  placeholder="Ulangi PIN baru"
+                  required
+                  minLength={4}
+                  className="w-full h-11 px-3 text-xs rounded-lg border border-line bg-white text-ink"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-wrap justify-end gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => setShowChangePin(false)}
+                className="min-h-[44px] px-4 py-2 rounded-lg border border-line bg-white text-xs font-bold"
+              >
+                Batal
+              </button>
+              <button
+                type="submit"
+                disabled={changingPin}
+                className="min-h-[44px] px-5 py-2 rounded-lg bg-rosewood text-white text-xs font-bold hover:bg-[#9f5d54] disabled:opacity-50"
+              >
+                {changingPin ? "Mengenkripsi Ulang..." : "Simpan PIN Baru"}
+              </button>
+            </div>
+          </form>
+        )}
+
+        {!showUpdateToken && !showChangePin && (
+          <div className="mt-4 flex flex-wrap justify-end gap-2.5">
             <button
               type="button"
-              onClick={() => setShowUpdateToken(true)}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-line bg-paper hover:bg-white text-xs font-semibold text-ink transition"
+              onClick={() => {
+                setShowChangePin(true);
+                setShowUpdateToken(false);
+                setPinError(null);
+                setPinSuccess(null);
+              }}
+              className="min-h-[44px] inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-line bg-paper hover:bg-white text-xs font-semibold text-ink transition"
+            >
+              <Lock className="w-3.5 h-3.5 text-rosewood" />
+              <span>Ganti PIN Admin</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setShowUpdateToken(true);
+                setShowChangePin(false);
+                setUpdateError(null);
+                setUpdateSuccess(null);
+              }}
+              className="min-h-[44px] inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-line bg-paper hover:bg-white text-xs font-semibold text-ink transition"
             >
               <KeyRound className="w-3.5 h-3.5 text-rosewood" />
               <span>Ganti / Perbarui Token GitHub</span>
             </button>
           </div>
         )}
+
+        <div className="mt-4 p-3.5 rounded-xl bg-paper border border-line text-xs text-muted flex items-start gap-2.5">
+          <ShieldCheck className="w-4 h-4 text-rosewood shrink-0 mt-0.5" />
+          <p className="leading-relaxed">
+            <strong className="text-ink">Penyimpanan Kredensial Aman:</strong> PIN Admin dan Token GitHub tidak pernah disimpan ke dalam folder{" "}
+            <code className="px-1 py-0.5 rounded bg-white border border-line text-[11px]">src/data/</code> maupun repository Git.
+            PIN di-hash secara lokal di browser dengan <strong className="text-ink">PBKDF2-HMAC-SHA512</strong> (150.000 iterasi + salt acak) dan Token dienkripsi dengan{" "}
+            <strong className="text-ink">AES-GCM 256-bit</strong>.
+          </p>
+        </div>
 
         {/* Status Deploy GitHub Actions */}
         <div className="mt-8 pt-5 border-t border-line">
