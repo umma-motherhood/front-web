@@ -2,20 +2,59 @@
 
 import { useState, useEffect } from "react";
 import { SiteContentData } from "@/config/site";
-import { GitHubConfig, fetchWorkflowRuns, WorkflowRunInfo } from "@/lib/github";
-import { Settings, Download, Upload, RefreshCw, CheckCircle, Clock, ExternalLink, ShieldAlert, LogOut } from "lucide-react";
+import { GitHubConfig, fetchWorkflowRuns, WorkflowRunInfo, testTokenPermissions } from "@/lib/github";
+import { encryptData, verifyPin } from "@/lib/crypto";
+import {
+  Settings,
+  Download,
+  Upload,
+  RefreshCw,
+  CheckCircle,
+  Clock,
+  ExternalLink,
+  ShieldAlert,
+  LogOut,
+  KeyRound,
+  AlertCircle,
+  HelpCircle,
+} from "lucide-react";
 
 interface TabSystemProps {
   data: SiteContentData;
   onChange: (updated: SiteContentData) => void;
   githubConfig: GitHubConfig | null;
+  onUpdateGithubConfig?: (newConfig: GitHubConfig) => void;
   onLogout: () => void;
 }
 
-export function TabSystem({ data, onChange, githubConfig, onLogout }: TabSystemProps) {
+const STORAGE_KEY = "umma_backoffice_credentials";
+
+export function TabSystem({
+  data,
+  onChange,
+  githubConfig,
+  onUpdateGithubConfig,
+  onLogout,
+}: TabSystemProps) {
   const [runs, setRuns] = useState<WorkflowRunInfo[]>([]);
   const [loadingRuns, setLoadingRuns] = useState(false);
   const [importStatus, setImportStatus] = useState<string | null>(null);
+
+  // Token testing state
+  const [testingToken, setTestingToken] = useState(false);
+  const [testResult, setTestResult] = useState<{
+    valid: boolean;
+    canPush: boolean;
+    message: string;
+  } | null>(null);
+
+  // Update token form states
+  const [showUpdateToken, setShowUpdateToken] = useState(false);
+  const [newToken, setNewToken] = useState("");
+  const [verifyPinInput, setVerifyPinInput] = useState("");
+  const [updateError, setUpdateError] = useState<string | null>(null);
+  const [updateSuccess, setUpdateSuccess] = useState<string | null>(null);
+  const [updatingToken, setUpdatingToken] = useState(false);
 
   const loadWorkflowRuns = async () => {
     if (!githubConfig) return;
@@ -30,8 +69,21 @@ export function TabSystem({ data, onChange, githubConfig, onLogout }: TabSystemP
     }
   };
 
+  const handleTestToken = async () => {
+    if (!githubConfig) return;
+    setTestingToken(true);
+    setTestResult(null);
+    try {
+      const res = await testTokenPermissions(githubConfig);
+      setTestResult(res);
+    } finally {
+      setTestingToken(false);
+    }
+  };
+
   useEffect(() => {
     loadWorkflowRuns();
+    handleTestToken();
   }, [githubConfig]);
 
   const handleDownloadBackup = () => {
@@ -69,9 +121,77 @@ export function TabSystem({ data, onChange, githubConfig, onLogout }: TabSystemP
     reader.readAsText(file);
   };
 
+  const handleSaveNewToken = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setUpdateError(null);
+    setUpdateSuccess(null);
+
+    const cleanToken = newToken.trim();
+    if (!cleanToken) {
+      setUpdateError("Token baru tidak boleh kosong.");
+      return;
+    }
+
+    setUpdatingToken(true);
+    try {
+      const rawStored = localStorage.getItem(STORAGE_KEY);
+      if (!rawStored) {
+        setUpdateError("Data kredensial lokal tidak ditemukan.");
+        setUpdatingToken(false);
+        return;
+      }
+
+      const stored = JSON.parse(rawStored);
+      const isPinValid = await verifyPin(verifyPinInput, stored.pinHash, stored.pinSalt);
+      if (!isPinValid) {
+        setUpdateError("PIN salah. Masukkan PIN admin yang saat ini digunakan.");
+        setUpdatingToken(false);
+        return;
+      }
+
+      // Test token access first
+      const testConfig: GitHubConfig = {
+        owner: stored.owner || "umma-motherhood",
+        repo: stored.repo || "front-web",
+        branch: stored.branch || "main",
+        token: cleanToken,
+      };
+
+      const testRes = await testTokenPermissions(testConfig);
+      if (!testRes.canPush) {
+        setUpdateError(testRes.message);
+        setUpdatingToken(false);
+        return;
+      }
+
+      // Encrypt with current PIN
+      const encrypted = await encryptData(cleanToken, verifyPinInput);
+      const updatedRecord = {
+        ...stored,
+        payload: encrypted,
+      };
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedRecord));
+
+      if (onUpdateGithubConfig) {
+        onUpdateGithubConfig(testConfig);
+      }
+
+      setUpdateSuccess("Token GitHub berhasil diperbarui dan tersambung!");
+      setTestResult(testRes);
+      setNewToken("");
+      setVerifyPinInput("");
+      setShowUpdateToken(false);
+    } catch (err: any) {
+      setUpdateError(err?.message || "Gagal memperbarui token.");
+    } finally {
+      setUpdatingToken(false);
+    }
+  };
+
   return (
     <div className="space-y-8">
-      {/* Informasi Koneksi GitOps */}
+      {/* Informasi Koneksi GitOps & Status Izin Token */}
       <div className="p-6 rounded-2xl bg-white border border-line shadow-xs">
         <div className="flex items-center gap-3 mb-6 pb-4 border-b border-line">
           <div className="w-10 h-10 rounded-lg bg-warm-sand/50 text-rosewood flex items-center justify-center">
@@ -102,17 +222,208 @@ export function TabSystem({ data, onChange, githubConfig, onLogout }: TabSystemP
             </span>
           </div>
 
-          <div className="p-4 rounded-xl bg-paper border border-line">
-            <span className="text-muted block text-[11px] mb-1">Token Status</span>
-            <span className="inline-flex items-center gap-1.5 font-bold text-emerald-700">
-              <CheckCircle className="w-3.5 h-3.5" />
-              <span>Tersambung & Terenkripsi</span>
-            </span>
+          <div className="p-4 rounded-xl bg-paper border border-line flex flex-col justify-between">
+            <div>
+              <span className="text-muted block text-[11px] mb-1">Status Hak Akses Token</span>
+              {testResult ? (
+                testResult.canPush ? (
+                  <span className="inline-flex items-center gap-1 font-bold text-emerald-700">
+                    <CheckCircle className="w-3.5 h-3.5 shrink-0" />
+                    <span>Izin Tulis Aktif (Siap Publish)</span>
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 font-bold text-red-600">
+                    <ShieldAlert className="w-3.5 h-3.5 shrink-0" />
+                    <span>Akses Ditolak</span>
+                  </span>
+                )
+              ) : (
+                <span className="text-muted">Memeriksa izin...</span>
+              )}
+            </div>
+
+            <button
+              type="button"
+              onClick={handleTestToken}
+              disabled={testingToken}
+              className="mt-2 text-[11px] text-rosewood hover:underline flex items-center gap-1"
+            >
+              <RefreshCw className={`w-3 h-3 ${testingToken ? "animate-spin" : ""}`} />
+              <span>Cek Ulang Izin Token</span>
+            </button>
           </div>
         </div>
 
+        {/* Diagnostic alert jika token belum ada izin */}
+        {testResult && !testResult.canPush && (
+          <div className="mt-4 p-4 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs space-y-2">
+            <div className="flex items-start gap-2">
+              <ShieldAlert className="w-4 h-4 shrink-0 mt-0.5 text-red-600" />
+              <div>
+                <p className="font-bold">Kendala Izin Token GitHub:</p>
+                <p className="mt-0.5 leading-relaxed">{testResult.message}</p>
+              </div>
+            </div>
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => setShowUpdateToken(true)}
+                className="px-3 py-1.5 rounded-md bg-red-700 text-white font-bold text-xs hover:bg-red-800"
+              >
+                Ganti Token GitHub Sekarang
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Panduan Pembuatan Token yang Benar */}
+        <div className="mt-6 p-4 rounded-xl bg-warm-sand/30 border border-line text-xs space-y-3">
+          <div className="flex items-center gap-2 font-bold text-ink">
+            <HelpCircle className="w-4 h-4 text-rosewood" />
+            <span>Panduan: Cara Membuat GitHub Token yang Memiliki Izin Publish</span>
+          </div>
+
+          <div className="space-y-2 text-muted leading-relaxed">
+            <p>
+              Karena repository berada di bawah Organisasi <strong>umma-motherhood</strong>, GitHub memerlukan token dengan izin tulis:
+            </p>
+
+            <div className="p-3 rounded-lg bg-white border border-line space-y-1">
+              <p className="font-bold text-ink">Cara Paling Mudah: Token Classic (ghp_...)</p>
+              <ol className="list-decimal list-inside space-y-1 text-[11px]">
+                <li>
+                  Buka{" "}
+                  <a
+                    href="https://github.com/settings/tokens/new"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-rosewood underline font-medium"
+                  >
+                    https://github.com/settings/tokens/new
+                  </a>
+                </li>
+                <li>Beri Note: &ldquo;Umma Backoffice&rdquo;</li>
+                <li>
+                  Pada bagian <strong>Select scopes</strong>: Wajib centang kotak <strong><code>repo</code></strong> (Full control of private repositories).
+                </li>
+                <li>Klik tombol hijau <strong>Generate token</strong> di bawah, lalu salin tokennya.</li>
+              </ol>
+            </div>
+
+            <div className="p-3 rounded-lg bg-white border border-line space-y-1">
+              <p className="font-bold text-ink">Cara Alternatif: Fine-grained Token (github_pat_...)</p>
+              <ol className="list-decimal list-inside space-y-1 text-[11px]">
+                <li>
+                  Buka{" "}
+                  <a
+                    href="https://github.com/settings/personal-access-tokens/new"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-rosewood underline font-medium"
+                  >
+                    Fine-grained Token Generator
+                  </a>
+                </li>
+                <li>
+                  Pada <strong>Resource owner</strong>: Pilih dropdown <strong>umma-motherhood</strong> (bukan personal account).
+                </li>
+                <li>
+                  Pada <strong>Repository access</strong>: Pilih <em>Only select repositories</em> &rarr; pilih <strong>front-web</strong>.
+                </li>
+                <li>
+                  Pada <strong>Repository permissions</strong>: Cari <strong>Contents</strong> &rarr; ubah menjadi <strong>Access: Read and write</strong>.
+                </li>
+                <li>Generate token dan salin.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
+        {/* Modal / Form Update Token */}
+        {showUpdateToken && (
+          <form onSubmit={handleSaveNewToken} className="mt-6 p-5 rounded-xl bg-paper border-2 border-rosewood space-y-4">
+            <div className="flex items-center justify-between pb-2 border-b border-line">
+              <h3 className="font-serif font-bold text-ink text-sm flex items-center gap-2">
+                <KeyRound className="w-4 h-4 text-rosewood" />
+                <span>Perbarui Token GitHub di Backoffice</span>
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowUpdateToken(false)}
+                className="text-xs text-muted hover:text-ink font-medium"
+              >
+                Batal
+              </button>
+            </div>
+
+            {updateError && (
+              <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs">
+                {updateError}
+              </div>
+            )}
+
+            <div>
+              <label className="block text-xs font-semibold text-ink uppercase tracking-wider mb-1">
+                Token GitHub Baru (Classic atau Fine-grained)
+              </label>
+              <input
+                type="password"
+                value={newToken}
+                onChange={(e) => setNewToken(e.target.value)}
+                placeholder="ghp_... atau github_pat_..."
+                required
+                className="w-full h-10 px-3 text-xs font-mono rounded-lg border border-line bg-white text-ink"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-ink uppercase tracking-wider mb-1">
+                PIN Admin Anda (Untuk enkripsi ulang)
+              </label>
+              <input
+                type="password"
+                value={verifyPinInput}
+                onChange={(e) => setVerifyPinInput(e.target.value)}
+                placeholder="Masukkan PIN yang Anda pakai untuk login"
+                required
+                className="w-full h-10 px-3 text-xs rounded-lg border border-line bg-white text-ink"
+              />
+            </div>
+
+            <div className="flex justify-end gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => setShowUpdateToken(false)}
+                className="px-4 py-2 rounded-lg border border-line bg-white text-xs font-bold"
+              >
+                Batal
+              </button>
+              <button
+                type="submit"
+                disabled={updatingToken}
+                className="px-5 py-2 rounded-lg bg-rosewood text-white text-xs font-bold hover:bg-[#9f5d54] disabled:opacity-50"
+              >
+                {updatingToken ? "Menguji & Menyimpan..." : "Uji & Simpan Token Baru"}
+              </button>
+            </div>
+          </form>
+        )}
+
+        {!showUpdateToken && (
+          <div className="mt-4 flex justify-end">
+            <button
+              type="button"
+              onClick={() => setShowUpdateToken(true)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-line bg-paper hover:bg-white text-xs font-semibold text-ink transition"
+            >
+              <KeyRound className="w-3.5 h-3.5 text-rosewood" />
+              <span>Ganti / Perbarui Token GitHub</span>
+            </button>
+          </div>
+        )}
+
         {/* Status Deploy GitHub Actions */}
-        <div className="mt-6 pt-5 border-t border-line">
+        <div className="mt-8 pt-5 border-t border-line">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-xs font-bold text-ink uppercase tracking-wider">
               Riwayat Deploy GitHub Pages Terakhir

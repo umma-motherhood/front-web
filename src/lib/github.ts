@@ -53,11 +53,12 @@ export async function fetchFileFromRepo(
   config: GitHubConfig,
   path: string
 ): Promise<FileDataResult | null> {
+  const cleanToken = config.token.trim();
   const url = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${path}?ref=${config.branch}`;
   const res = await fetch(url, {
     headers: {
       Accept: "application/vnd.github+json",
-      Authorization: `Bearer ${config.token}`,
+      Authorization: `Bearer ${cleanToken}`,
       "X-GitHub-Api-Version": "2022-11-28",
     },
     cache: "no-store",
@@ -81,12 +82,68 @@ export async function fetchFileFromRepo(
   };
 }
 
+export async function testTokenPermissions(
+  config: GitHubConfig
+): Promise<{ valid: boolean; canPush: boolean; message: string }> {
+  try {
+    const cleanToken = config.token.trim();
+    const url = `https://api.github.com/repos/${config.owner}/${config.repo}`;
+    const res = await fetch(url, {
+      headers: {
+        Accept: "application/vnd.github+json",
+        Authorization: `Bearer ${cleanToken}`,
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+      cache: "no-store",
+    });
+
+    if (res.status === 401) {
+      return {
+        valid: false,
+        canPush: false,
+        message: "Token tidak valid atau sudah kadaluarsa (401 Unauthorized).",
+      };
+    }
+    if (res.status === 403 || res.status === 404) {
+      return {
+        valid: false,
+        canPush: false,
+        message:
+          "Token tidak dapat mengakses repository umma-motherhood/front-web. Pastikan token memiliki izin 'repo' (Classic) atau Resource Owner dipilih 'umma-motherhood' dengan izin Contents: Read & write (Fine-grained).",
+      };
+    }
+
+    const data = await res.json();
+    if (!data.permissions?.push) {
+      return {
+        valid: true,
+        canPush: false,
+        message:
+          "Token hanya memiliki izin baca (Read-only). Diperlukan izin tulis/push (Contents: Read & write).",
+      };
+    }
+
+    return {
+      valid: true,
+      canPush: true,
+      message: "Token valid dan memiliki izin tulis ke repository!",
+    };
+  } catch (err: any) {
+    return {
+      valid: false,
+      canPush: false,
+      message: err?.message || "Gagal menghubungi GitHub API.",
+    };
+  }
+}
+
 export async function commitFileToRepo(
   config: GitHubConfig,
   path: string,
   contentStr: string,
   commitMessage: string
 ): Promise<CommitResult> {
+  const cleanToken = config.token.trim();
   const existingFile = await fetchFileFromRepo(config, path).catch(() => null);
   const base64Content = utf8ToBase64(contentStr);
 
@@ -105,7 +162,7 @@ export async function commitFileToRepo(
     method: "PUT",
     headers: {
       Accept: "application/vnd.github+json",
-      Authorization: `Bearer ${config.token}`,
+      Authorization: `Bearer ${cleanToken}`,
       "X-GitHub-Api-Version": "2022-11-28",
       "Content-Type": "application/json",
     },
@@ -114,9 +171,13 @@ export async function commitFileToRepo(
 
   if (!res.ok) {
     const errorData = await res.json().catch(() => ({}));
-    throw new Error(
-      errorData.message || `Gagal melakukan commit (${res.status})`
-    );
+    const rawMsg = errorData.message || `Gagal melakukan commit (${res.status})`;
+    if (rawMsg.includes("Resource not accessible by personal access token")) {
+      throw new Error(
+        "Resource not accessible by personal access token. Token Anda belum memiliki izin tulis (write) ke organisasi umma-motherhood. Gunakan Personal Access Token (Classic) dengan mencentang scope 'repo', atau Fine-grained token dengan Resource Owner 'umma-motherhood' dan izin Contents: Read and write."
+      );
+    }
+    throw new Error(rawMsg);
   }
 
   const responseData = await res.json();

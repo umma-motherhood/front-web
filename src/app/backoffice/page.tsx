@@ -79,6 +79,10 @@ export default function BackofficePage() {
     checkRemoteContent(config);
   };
 
+  const handleUpdateGithubConfig = (newConfig: GitHubConfig) => {
+    setGithubConfig(newConfig);
+  };
+
   const handleLogout = () => {
     setGithubConfig(null);
   };
@@ -274,6 +278,7 @@ export default function BackofficePage() {
             data={data}
             onChange={handleDataChange}
             githubConfig={githubConfig}
+            onUpdateGithubConfig={handleUpdateGithubConfig}
             onLogout={handleLogout}
           />
         )}
@@ -282,7 +287,7 @@ export default function BackofficePage() {
       {/* Publish Result Modal / Dialog */}
       {publishResult && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-xs">
-          <div className="w-full max-w-md p-6 rounded-2xl bg-white border border-line shadow-2xl space-y-4">
+          <div className="w-full max-w-lg p-6 rounded-2xl bg-white border border-line shadow-2xl space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-line">
               <h3 className="font-serif font-bold text-ink text-base flex items-center gap-2">
                 {publishResult.success ? (
@@ -306,11 +311,13 @@ export default function BackofficePage() {
               </button>
             </div>
 
-            <p className="text-xs text-muted leading-relaxed">
-              {publishResult.success
-                ? "Commit telah berhasil dikirim ke repository GitHub. Pipeline GitHub Actions otomatis berjalan untuk merilis website ke GitHub Pages dalam rentang waktu sekitar 60 sampai 90 detik."
-                : publishResult.message}
-            </p>
+            <div className="text-xs text-muted leading-relaxed space-y-2">
+              <p>
+                {publishResult.success
+                  ? "Commit telah berhasil dikirim ke repository GitHub. Pipeline GitHub Actions otomatis berjalan untuk merilis website ke GitHub Pages dalam rentang waktu sekitar 60 sampai 90 detik."
+                  : publishResult.message}
+              </p>
+            </div>
 
             {publishResult.commitUrl && (
               <div className="p-3 rounded-lg bg-paper border border-line text-xs font-mono">
@@ -327,7 +334,19 @@ export default function BackofficePage() {
               </div>
             )}
 
-            <div className="flex justify-end gap-2 pt-2">
+            <div className="flex flex-wrap items-center justify-end gap-2 pt-2 border-t border-line">
+              {!publishResult.success && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPublishResult(null);
+                    setActiveTab("system");
+                  }}
+                  className="px-4 py-2.5 rounded-lg border border-rosewood text-rosewood text-xs font-bold hover:bg-warm-sand/30 transition"
+                >
+                  Buka Tab Sistem &amp; Ganti Token
+                </button>
+              )}
               <button
                 type="button"
                 onClick={() => setPublishResult(null)}
