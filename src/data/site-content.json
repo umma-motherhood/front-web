@@ -646,6 +646,18 @@
       "title": "Pijat Panggilan oleh Teh Isop (Tarif mulai Rp 60.000).",
       "href": "https://wa.me/6281572439727?text=Halo%20Teh%20Isop%2C%20saya%20dapat%20info%20dari%20Umma%20Motherhood%20Cipanas%20dan%20ingin%20memesan%20layanan%20Pijat%20Panggilan.",
       "icon": "heart-handshake"
+    },
+    {
+      "id": "ojek-panggilan-mang-dupet",
+      "title": "Ojek Panggilan oleh Mang Dupet (Fee tergantung jarak).",
+      "href": "https://wa.me/6287720003849?text=Halo%20Mang%20Dupet%2C%20saya%20dapat%20info%20dari%20Umma%20Motherhood%20Cipanas%20dan%20ingin%20memesan%20layanan%20Ojek%20Panggilan.",
+      "icon": "bike"
+    },
+    {
+      "id": "service-elektronik-mang-husen",
+      "title": "Service Elektronik Serba Bisa oleh Mang Husen Kodok (Seluler: 0878-7030-2555, fee tergantung barang & jasa).",
+      "href": "https://wa.me/6287870302555?text=Halo%20Mang%20Husen%2C%20saya%20dapat%20info%20dari%20Umma%20Motherhood%20Cipanas%20dan%20ingin%20bertanya%20mengenai%20jasa%20Service%20Elektronik.",
+      "icon": "wrench"
     }
   ],
   "supportItems": [

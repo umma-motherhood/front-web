@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { siteConfig } from "@/config/site";
-import { Bike, Sparkles, Baby, Home, ShoppingBag, HeartHandshake, MessageSquare, ArrowUpRight } from "lucide-react";
+import { Bike, Sparkles, Baby, Home, ShoppingBag, HeartHandshake, Wrench, MessageSquare, ArrowUpRight } from "lucide-react";
 import { HelpAdvertiseModal } from "@/components/HelpAdvertiseModal";
 
 export function HelpSection() {
@@ -22,6 +22,8 @@ export function HelpSection() {
         return <ShoppingBag className="w-5 h-5 text-rosewood" />;
       case "heart-handshake":
         return <HeartHandshake className="w-5 h-5 text-rosewood" />;
+      case "wrench":
+        return <Wrench className="w-5 h-5 text-rosewood" />;
       default:
         return <MessageSquare className="w-5 h-5 text-rosewood" />;
     }
