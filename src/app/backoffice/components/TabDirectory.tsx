@@ -106,24 +106,26 @@ export function TabDirectory({ data, onChange }: TabDirectoryProps) {
     const updatedDirectory = directory.map((cat) => {
       if (cat.id !== activeCategory.id) return cat;
 
-      const defaultSubgroup = cat.subgroups[0] || { title: "Daftar Rekomendasi", places: [] };
-      let updatedPlaces: DirectoryPlaceItem[];
-
       if (editingPlaceId === "NEW") {
-        updatedPlaces = [...defaultSubgroup.places, newPlace];
-      } else {
-        updatedPlaces = defaultSubgroup.places.map((p) => (p.id === editingPlaceId ? newPlace : p));
+        const defaultSubgroup = cat.subgroups[0] || { title: "Daftar Rekomendasi", places: [] };
+        return {
+          ...cat,
+          subgroups: [
+            {
+              ...defaultSubgroup,
+              places: [...defaultSubgroup.places, newPlace],
+            },
+            ...cat.subgroups.slice(1),
+          ],
+        };
       }
 
       return {
         ...cat,
-        subgroups: [
-          {
-            ...defaultSubgroup,
-            places: updatedPlaces,
-          },
-          ...cat.subgroups.slice(1),
-        ],
+        subgroups: cat.subgroups.map((sg) => ({
+          ...sg,
+          places: sg.places.map((p) => (p.id === editingPlaceId ? newPlace : p)),
+        })),
       };
     });
 

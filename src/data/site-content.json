@@ -302,8 +302,8 @@
       "id": "kebutuhan",
       "code": "C.",
       "title": "Kebutuhan Harian",
-      "subtitle": "Belanja & Katering Keluarga",
-      "description": "Rekomendasi tempat belanja bulanan ternyaman, toko perlengkapan bayi tepercaya, dan vendor katering keluarga.",
+      "subtitle": "Belanja, Katering & Laundry Keluarga",
+      "description": "Rekomendasi tempat belanja bulanan ternyaman, toko perlengkapan bayi tepercaya, vendor katering keluarga, hingga laundry rumahan.",
       "subgroups": [
         {
           "title": "Belanja & Katering Keluarga",
@@ -361,6 +361,28 @@
                 "phone": "087883370039 (via Umma Shierly)"
               },
               "waMessage": "Halo Umma Shierly, saya ingin melihat menu dan berlangganan katering Dapur Sangkilang Cipanas."
+            }
+          ]
+        },
+        {
+          "title": "Laundry & Jasa Rumah Tangga",
+          "places": [
+            {
+              "id": "kinar-laundry",
+              "name": "Kinar Laundry",
+              "categoryTag": "Usaha Laundry Rumahan",
+              "description": "Kinar Laundry merupakan usaha laundry rumahan yang berlokasi strategis di kawasan Cipendawa, Pacet, tepat di samping Ema Lotek. Pengelolaannya dikenal telaten dengan hasil cucian yang bersih, setrikaan rapi, serta aroma wangi yang awet sehingga sangat membantu meringankan rutinitas harian para ibu dan keluarga di sekitar Cipanas dan Pacet.",
+              "address": "Jl. Aswanda No. 24, Cipendawa, Kec. Pacet, Kab. Cianjur (Pinggir Ema Lotek)",
+              "review": {
+                "author": "Umma Shierly (Langganan & Founder Umma Cipanas)",
+                "text": "Sebagai pelanggan tetap di Kinar Laundry, hasil cuciannya selalu bersih, lipatannya rapi, dan wanginya tahan lama. Benar-benar membantu meringankan urusan rumah saat jadwal mengurus anak dan komunitas sedang padat.",
+                "rating": 5
+              },
+              "contact": {
+                "person": "Admin Kinar Laundry",
+                "phone": "0838-7518-4200"
+              },
+              "waMessage": "Halo Kinar Laundry, saya mendapat rekomendasi dari Umma Motherhood Cipanas dan ingin bertanya mengenai layanan laundry."
             }
           ]
         }
@@ -765,6 +787,14 @@
       "role": "Pengelola Situs",
       "photoUrl": "/images/relawan/artimaedu-1794540352894.png",
       "instagram": "https://www.instagram.com/artima_edu/"
+    },
+    {
+      "id": "relawan-chisya",
+      "name": "Chisya",
+      "role": "Admin WhatsApp",
+      "photoUrl": "/images/logo.png",
+      "quote": "Ibu perantau dari pulau seberang yang bersemangat merajut kehangatan, saling menguatkan, dan menjalin kebersamaan sesama ibu di sini.",
+      "instagram": "https://www.instagram.com/chis_ya?rpxt=MXJvcXBnc2VnejM4cA=="
     }
   ]
 }
