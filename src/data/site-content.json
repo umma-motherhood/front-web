@@ -548,6 +548,22 @@
           "desc": "Ikan bandeng segar bersih tanpa duri, higienis siap goreng/masak."
         }
       ]
+    },
+    {
+      "id": "keiko-sushi",
+      "name": "Keiko Sushi",
+      "tagline": "jajanan, sushi, sushi satuan",
+      "category": "kuliner",
+      "categoryLabel": "Kuliner & Jajanan",
+      "owner": "Ibu Lani",
+      "priceRange": "Menyesuaikan pesanan",
+      "location": "Jl Mariwati No 11 ( komplek SD Cipanas)",
+      "description": "Keiko Sushi, menerima order / pesanan utk berbagai acara ataupun pribadi ya... Biasa berjualan di CAR FREE DAY PLUT GADOG, atau kunjungi kios sushi kami di Jl Mariwati No 11 ( komplek SD Cipanas),",
+      "waMessage": "Halo Umma, saya tertarik untuk memesan produk di Keiko Sushi.",
+      "phone": "087776241528",
+      "images": [
+        "/images/umkm/keiko-sushi-1795494547490.jpeg"
+      ]
     }
   ],
   "communityArticles": [
